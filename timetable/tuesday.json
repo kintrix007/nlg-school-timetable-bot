@@ -1,0 +1,73 @@
+{
+	"kemia": [{
+		"start": {
+			"h": 8,
+			"m": 0
+		},
+		"length": 45,
+		"elective": 1
+	}],
+	"olasz": [{
+		"start": {
+			"h": 8,
+			"m": 0
+		},
+		"length": 45,
+		"elective": 0
+	}],
+	"magyar": [{
+		"start": {
+			"h": 8,
+			"m": 55
+		},
+		"length": 45,
+		"elective": 0
+	}],
+	"tori": [{
+		"start": {
+			"h": 9,
+			"m": 55
+		},
+		"length": 45,
+		"elective": 0
+	}],
+	"fizika": [{
+		"start": {
+			"h": 10,
+			"m": 50
+		},
+		"length": 45,
+		"elective": 1
+	}],
+	"matek": [{
+		"start": {
+			"h": 11,
+			"m": 45
+		},
+		"length": 45,
+		"elective": 0
+	}, {
+		"start": {
+			"h": 13,
+			"m": 55
+		},
+		"length": 45,
+		"elective": 1
+	}],
+	"angol1": [{
+		"start": {
+			"h": 11,
+			"m": 45
+		},
+		"length": 45,
+		"elective": 0
+	}],
+	"angol2": [{
+		"start": {
+			"h": 12,
+			"m": 50
+		},
+		"length": 45,
+		"elective": 0
+	}]
+}
