@@ -2,7 +2,7 @@ const fs = require("fs");
 const Time = require("../classes/time.js");
 const Utilz = require("../classes/utilz.js");
 
-const prefsDirPath = "../prefs";
+const prefsDirPath = "prefs";
 const prefsFilePath = `${prefsDirPath}/bell.json`;
 
 let bell = {};
