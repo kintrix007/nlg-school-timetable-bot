@@ -2,23 +2,26 @@ const fs = require("fs");
 const Time = require("../classes/time.js");
 const Utilz = require("../classes/utilz.js");
 
+const prefsDirPath = "../prefs";
+const prefsFilePath = `${prefsDirPath}/bell.json`;
+
 let bell = {};
 let checkInterval;
 
 let checkBell = function(timetable){}; // C-style prototyping the function :P
 
-function cmdBell(client, timetable) {
+function cmdBell(client, timetable, students) {
     loadPrefs();
 
     // Admin permission required
-    cmdSetBellCh(client, timetable);
+    cmdSetBellCh(client);
     // Admin permission required
     cmdRemoveBellCh(client);
     
     checkInterval = setInterval(checkBell, 900 * 60, client, timetable);
 }
 
-function cmdSetBellCh(client, timetable) {
+function cmdSetBellCh(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
         const cont = msg.content;
@@ -41,10 +44,10 @@ function cmdSetBellCh(client, timetable) {
             }
             bell[guildId]["readableName"] = msg.guild.name;
             bell[guildId]["channelID"] = msg.channel.id;
+            savePrefs();
             msg.channel.send(`${msg.channel} kiválaszva, mint csengetési csatorna.`);
             // console.log(bell);
             console.log(`${msg.channel.name} was set as bell channel`);
-            savePrefs();
         }
     });
 }
@@ -69,12 +72,16 @@ function cmdRemoveBellCh(client) {
                 msg.channel.send("Nincs bekapcsolva csengetés.");
                 return;
             }
-            const channel = bell[guildID]["channelID"]
+            const channelID = bell[guildID]["channelID"];
             bell[guildID]["channelID"] = undefined;
-            msg.channel.send(`Csengetések leállítva a ${channel} csatornában.`);
-            // console.log(bell);
-            console.log(`${msg.channel.name} is bell channel no more`);
             savePrefs();
+            client.channels.fetch(channelID)
+                           .then(channel => {
+                                msg.channel.send(`Csengetés leállítva a(z) ${channel} csatornában.`);
+                                console.log(`${channel.name} is bell channel no more`);
+                           })
+                           .catch(err => console.log(err));
+            // console.log(bell);
         }
     });
 }
@@ -114,19 +121,24 @@ checkBell = (function() {
 }());
 
 function savePrefs() { // save
-    console.log("saved prefs for './cmds/bell.js'");
     const saveData = bell;
-    console.log(saveData);
-    fs.writeFile("prefs/bell.json", JSON.stringify(saveData, undefined, 4), err => {if (err) console.log(err)});
+    // console.log(saveData);
+    if (!fs.existsSync(prefsDirPath)) {
+        console.log(`created dir '${prefsDirPath}' because it did not exist`);
+        fs.mkdirSync(prefsDirPath);
+    }
+    fs.writeFile(prefsFilePath, JSON.stringify(saveData, undefined, 4), err => {if (err) console.log(err)});
+    console.log(`saved prefs for '${prefsFilePath}'`);
 }
 
 function loadPrefs() { // load
-    console.log("loaded prefs for './cmds/bell.js'");
-    let loadDataRaw = fs.readFileSync("prefs/bell.json", err => {if (err) console.log(err)});
-    if (!loadDataRaw) {
-        let loadData = JSON.parse(loadDataRaw);
-        bell = loadData || bell;
-    }
+    if (!fs.existsSync(prefsFilePath)) return;
+    let loadDataRaw = fs.readFileSync(prefsFilePath, err => {if (err) console.log(err)});
+    
+    let loadData = JSON.parse(loadDataRaw);
+    bell = loadData;
+    console.log(`loaded prefs for '${prefsFilePath}'`);
+    console.log(loadData);
 }
 
 module.exports = cmdBell;
