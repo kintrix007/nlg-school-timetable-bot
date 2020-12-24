@@ -4,15 +4,14 @@ const Time = require("../classes/time.js");
 function cmdNextClass(client, timetable, students) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!következő\s*([a-z\.áéíóöőúüű]+)/i;
+        const regex = /!k[öo]vetkez[őo]\s*([a-z0-9\._áéíóöőúüű]+)\s*/i; // következő [diák neve]
         const match = msg.content.match(regex);
         if (!match) return;
 
         const targetStudentStr = match[1];
-        const targetStudent = Utilz.removeAccents(targetStudentStr.toLowerCase());
+        const targetStudent = Utilz.lookupNameFromAlias(students, targetStudentStr);
         if ( // check if classmate exists
-            !students.roster.map(a => Utilz.removeAccents(a.toLowerCase()))
-                            .includes(targetStudent)
+            !students.roster.includes(targetStudent)
         ) { // return if doesn't exist
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but they aren't a student`);
             msg.channel.send(`Nincs rögzítve ${targetStudentStr} nevű tagja az osztálynak`);
@@ -30,7 +29,7 @@ function cmdNextClass(client, timetable, students) {
         const reply = ((classesNow.length ? "**MOST:**\n" + classesNow[0].subj + (classesNow[0].data.elective ? " (fakt)" : "")
                       + "\n" : "") +
                       (classesLeft.length ? "**KÖVETKEZŐ:**\n" + classesLeft[0].subj + (classesLeft[0].data.elective ? " (fakt)" : "") : "")
-                      ) || `${targetStudentStr} nevű tanulónak ma már nem lesz több órája`;
+                      ) || `**${targetStudent}** nevű tanulónak ma már nem lesz több órája`;
         
         msg.channel.send(reply);
     });
@@ -43,7 +42,7 @@ function getStudentsClasses(students, targetStudent) {
         // Add the lesson to list if student has it as obligatory
         let isTrue = false;
         for (var student of lessons[lesson]["obligatory"]) {
-            if (Utilz.removeAccents(student.toLowerCase()) == targetStudent) {
+            if (student == Utilz.lookupNameFromAlias(students, targetStudent)) {
                 isTrue = true;
                 break;
             }
@@ -53,7 +52,7 @@ function getStudentsClasses(students, targetStudent) {
         // Add the lesson to list if student has it as elective
         isTrue = false;
         for (var student of lessons[lesson]["elective"]) {
-            if (Utilz.removeAccents(student.toLowerCase()) == targetStudent) {
+            if (student == Utilz.lookupNameFromAlias(students, targetStudent)) {
                 isTrue = true;
                 break;
             }

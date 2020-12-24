@@ -3,15 +3,14 @@ const Utilz = require("../classes/utilz.js");
 function cmdStudentClasses(client, timetable, students) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!órák\s*([a-z\.áéíóöőúüű]+)/i
+        const regex = /![óo]r[áa]k\s*([a-z0-9\._áéíóöőúüű]+)\s*/i // !órák [diák neve]
         const match = msg.content.match(regex);
         if (!match) return;
 
         const targetStudentStr = match[1];
-        const targetStudent = Utilz.removeAccents(targetStudentStr.toLowerCase());
+        const targetStudent = Utilz.lookupNameFromAlias(students, targetStudentStr);
         if ( // check if classmate exists
-            !students.roster.map(a => Utilz.removeAccents(a.toLowerCase()))
-                            .includes(targetStudent)
+            !students.roster.includes(targetStudent)
         ) { // return if doesn't exist
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s classes, but they aren't a student`);
             msg.channel.send(`Nincs rögzítve ${targetStudentStr} nevű tagja az osztálynak.`);
@@ -25,7 +24,7 @@ function cmdStudentClasses(client, timetable, students) {
             // Add the lesson to list if student has it as obligatory
             let isTrue = false;
             for (var student of lessons[lesson]["obligatory"]) {
-                if (Utilz.removeAccents(student.toLowerCase()) == targetStudent) {
+                if (student == Utilz.lookupNameFromAlias(students, targetStudent)) {
                     isTrue = true;
                     break;
                 }
@@ -35,7 +34,7 @@ function cmdStudentClasses(client, timetable, students) {
             // Add the lesson to list if student has it as elective
             isTrue = false;
             for (var student of lessons[lesson]["elective"]) {
-                if (Utilz.removeAccents(student.toLowerCase()) == targetStudent) {
+                if (student == Utilz.lookupNameFromAlias(students, targetStudent)) {
                     isTrue = true;
                     break;
                 }
@@ -48,7 +47,7 @@ function cmdStudentClasses(client, timetable, students) {
                       (studentClasses[1].length ? studentClasses[1].map(a => a + " (fakt)")
                                        .sort().reduce((a, b) => a + ", " + b) : "");
 
-        msg.channel.send(`**${targetStudentStr.toUpperCase()} ÓRÁI:**\n` + reply);
+        msg.channel.send(`**${targetStudent} órái:**\n` + reply);
     })
 }
 

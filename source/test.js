@@ -31,3 +31,18 @@ client.on("ready", () => {
 */
 
 // fs.writeFileSync("prefs/bell.json", JSON.stringify({"asd" : 10, "haha" : 20}));
+
+function loadStudentData() {
+    const roster = JSON.parse(fs.readFileSync("students/roster.json"));
+    const studentsClasses = JSON.parse(fs.readFileSync("students/classes.json"));
+    const studentsAliases = JSON.parse(fs.readFileSync("students/aliases.json"));
+    return {
+        "roster" : roster,
+        "classes" : studentsClasses,
+        "aliases" : studentsAliases
+    };
+}
+
+const Utilz = require("./classes/utilz.js");
+
+console.log(Utilz.lookupNameFromAlias(loadStudentData(), "cigistudo"));

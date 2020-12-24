@@ -1,90 +1,90 @@
 {
 	"biosz": {
 		"elective": [
-			"Bálint","Emese","Molli","I.Lili","Zsófi","Detti"
+			"B.Bálint","F.Emese","F.Imola","I.Lili","K.Zsófia","Sz.Bernadett"
 		],
 		"obligatory": [
-			"Olivér","Peti","Kristóf","Kari","Bálint","Kinga","Emese","Molli","G.Balázs","Zoli","I.Lili","Milán","Boldi","Zsófi","Toncsi","Laci","M.Lili","Krisztián","Ábel","Dóri","Isti","Blanka","P.István","Andris","Detti","Csilla","T.Balázs","Dávid","Dorka"
+			"A.Olivér","B.Péter","B.Kristóf","B.Karolina","B.Bálint","D.Kinga","F.Emese","F.Imola","G.Balázs","H.Zoltán","I.Lili","K.Milán","K.Boldizsár","K.Zsófia","L.Antónia","M.László","M.Lili","N.Krisztián","N.Ábel","N.Dóra","N.István","O.Blanka","P.István","Sz.András","Sz.Bernadett","T.Csilla","T.Balázs","V.Dávid","V.Dorottya"
 		]
 	},
 	"angol1": {
 		"elective": [],
 		"obligatory": [
-			"Ábel","Bálint","Dorka","G.Balázs","I.Lili","Kari","Kristóf","M.Lili","Olivér","P.István","T.Balázs","Toncsi"
+			"N.Ábel","B.Bálint","V.Dorottya","G.Balázs","I.Lili","B.Karolina","B.Kristóf","M.Lili","A.Olivér","P.István","T.Balázs","L.Antónia"
 		]
 	},
 	"angol2": {
 		"elective": [],
 		"obligatory": [
-			"Blanka","Csilla","Dávid","Detti","Dóri","Emese","Kinga","Krisztián","Laci","Milán","Molli","Olivér","Peti","Andris","Zoli","Zsófi"
+			"O.Blanka","T.Csilla","V.Dávid","Sz.Bernadett","N.Dóra","F.Emese","D.Kinga","N.Krisztián","M.László","K.Milán","F.Imola","A.Olivér","B.Péter","Sz.András","H.Zoltán","K.Zsófia"
 		]
 	},
 	"nemet_hm": {
 		"elective": [],
 		"obligatory": [
-			"Ábel","Detti","Dorka","Emese","Kristóf","Olivér","T.Balázs"
+			"N.Ábel","Sz.Bernadett","V.Dorottya","F.Emese","B.Kristóf","A.Olivér","T.Balázs"
 		]
 	},
 	"nemet_kl": {
 		"elective": [],
 		"obligatory": [
-			"G.Balázs","Dávid","Laci","Peti","Toncsi"
+			"G.Balázs","V.Dávid","M.László","B.Péter","L.Antónia"
 		]
 	},
 	"francia": {
 		"elective": [],
 		"obligatory": [
-			"Andris","Zsófi","M.Lili","Isti"
+			"Sz.András","K.Zsófia","M.Lili","N.István"
 		]
 	},
 	"orosz": {
 		"elective": [],
 		"obligatory": [
-			"Bálint","Blanka","Boldi","I.Lili","Kari","Molli","P.István","Zoli"
+			"B.Bálint","O.Blanka","K.Boldizsár","I.Lili","B.Karolina","F.Imola","P.István","H.Zoltán"
 		]
 	},
 	"olasz": {
 		"elective": [],
 		"obligatory": [
-			"Csilla","Dóri","Kinga","Milán"
+			"T.Csilla","N.Dóra","D.Kinga","K.Milán"
 		]
 	},
 	"magyar": {
 		"elective": [
-			"Detti","Csilla","Zoli","Andris"
+			"Sz.Bernadett","T.Csilla","H.Zoltán","Sz.András"
 		],
 		"obligatory": [
-			"Olivér","Peti","Kristóf","Kari","Bálint","Kinga","Emese","Molli","G.Balázs","Zoli","I.Lili","Milán","Boldi","Zsófi","Toncsi","Laci","M.Lili","Krisztián","Ábel","Dóri","Isti","Blanka","P.István","Andris","Detti","Csilla","T.Balázs","Dávid","Dorka"
+			"A.Olivér","B.Péter","B.Kristóf","B.Karolina","B.Bálint","D.Kinga","F.Emese","F.Imola","G.Balázs","H.Zoltán","I.Lili","K.Milán","K.Boldizsár","K.Zsófia","L.Antónia","M.László","M.Lili","N.Krisztián","N.Ábel","N.Dóra","N.István","O.Blanka","P.István","Sz.András","Sz.Bernadett","T.Csilla","T.Balázs","V.Dávid","V.Dorottya"
 		]
 	},
 	"matek": {
 		"elective": [
-			"Ábel","Bálint","Boldi","Dorka","G.Balázs","I.Lili","Kari","Kristóf","M.Lili","Olivér","P.István","T.Balázs","Toncsi"
+			"N.Ábel","B.Bálint","K.Boldizsár","V.Dorottya","G.Balázs","I.Lili","B.Karolina","B.Kristóf","M.Lili","A.Olivér","P.István","T.Balázs","L.Antónia"
 		],
 		"obligatory": [
-			"Kinga","Emese","Molli","Zoli","Milán","Zsófi","Laci","Krisztián","Dóri","Isti","Blanka","Andris","Detti","Csilla","Dávid"
+			"D.Kinga","F.Emese","F.Imola","H.Zoltán","K.Milán","K.Zsófia","M.László","N.Krisztián","N.Dóra","N.István","O.Blanka","Sz.András","Sz.Bernadett","T.Csilla","V.Dávid"
 		]
 	},
 	"kemia": {
 		"elective": [
-			"Kari","Bálint","Emese","Molli","Boldi","Zsófi","Toncsi","Blanka","Olivér","Isti"
+			"B.Karolina","B.Bálint","F.Emese","F.Imola","K.Boldizsár","K.Zsófia","L.Antónia","O.Blanka","A.Olivér","N.István"
 		],
 		"obligatory": []
 	},
 	"tori": {
 		"elective": [
-			"Csilla","Dávid","Dóri","G.Balázs"
+			"T.Csilla","V.Dávid","N.Dóra","G.Balázs"
 		],
 		"obligatory": [
-			"Olivér","Peti","Kristóf","Kari","Bálint","Kinga","Emese","Molli","Zoli","I.Lili","Milán","Boldi","Zsófi","Toncsi","Laci","M.Lili","Krisztián","Ábel","Isti","Blanka","P.István","Andris","Detti","T.Balázs","Dorka"
+			"A.Olivér","B.Péter","B.Kristóf","B.Karolina","B.Bálint","D.Kinga","F.Emese","F.Imola","H.Zoltán","I.Lili","K.Milán","K.Boldizsár","K.Zsófia","L.Antónia","M.László","M.Lili","N.Krisztián","N.Ábel","N.István","O.Blanka","P.István","Sz.András","Sz.Bernadett","T.Balázs","V.Dorottya"
 		]
 	},
 	"fizika": {
 		"elective": [
-			"Ábel","Dorka","Kristóf","P.István","Isti","Boldi"
+			"N.Ábel","V.Dorottya","B.Kristóf","P.István","N.István","K.Boldizsár"
 		],
 		"obligatory": [
-			"Olivér","Peti","Kari","Bálint","Kinga","Emese","Molli","G.Balázs","Zoli","I.Lili","Milán","Zsófi","Toncsi","Laci","M.Lili","Krisztián","Dóri","Blanka","Andris","Detti","Csilla","T.Balázs","Dávid"
+			"A.Olivér","B.Péter","B.Karolina","B.Bálint","D.Kinga","F.Emese","F.Imola","G.Balázs","H.Zoltán","I.Lili","K.Milán","K.Zsófia","L.Antónia","M.László","M.Lili","N.Krisztián","N.Dóra","O.Blanka","Sz.András","Sz.Bernadett","T.Csilla","T.Balázs","V.Dávid"
 		]
 	},
 	"info": {
@@ -95,7 +95,7 @@
 	},
 	"foci": {
 		"elective": [
-			"Dóri","Dávid","Milán","G.Balázs"
+			"N.Dóra","V.Dávid","K.Milán","G.Balázs"
 		],
 		"obligatory": []
 	}

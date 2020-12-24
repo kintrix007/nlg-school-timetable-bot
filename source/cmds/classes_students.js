@@ -3,7 +3,7 @@ const Utilz = require("../classes/utilz.js");
 function cmdClassStudents(client, timetable, students) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!tanulók\s*([a-z_12áéíóöőúüű]+)/i
+        const regex = /!tanul[óo]k\s*([a-z0-9_áéíóöőúüű]+)\s*/i; // !tanulók [óra neve]
         const match = msg.content.match(regex);
         if (!match) return;
 
@@ -19,9 +19,9 @@ function cmdClassStudents(client, timetable, students) {
         console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the students of class ${targetLesson}`);
 
         let studentClasses = [students.classes[targetLesson]["obligatory"], students.classes[targetLesson]["elective"]];
-        let reply = (studentClasses[0].length ? "**ALAP:**\n" + studentClasses[0].sort().reduce((a, b) => a + ", " + b)
+        let reply = (studentClasses[0].length ? "**ALAP:**\n" + Utilz.properHunNameSort(studentClasses[0]).reduce((a, b) => a + ", " + b)
                     + "\n" : "") +
-                    (studentClasses[1].length ? "**FAKT:**\n" + studentClasses[1].sort().reduce((a, b) => a + ", " + b) : "");
+                    (studentClasses[1].length ? "**FAKT:**\n" + Utilz.properHunNameSort(studentClasses[1]).reduce((a, b) => a + ", " + b) : "");
         msg.channel.send(reply);
     });
 }
