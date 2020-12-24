@@ -105,3 +105,6 @@ dist
 
 # Discord.js bot token
 *.token
+
+# Preferences files
+source/prefs/
