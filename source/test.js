@@ -1,5 +1,9 @@
 const fs = require("fs");
-/*const DC = require("discord.js");
+const Utilz = require("./classes/utilz.js");
+const Time = require("./classes/time.js");
+
+/*
+const DC = require("discord.js");
 
 const client = new DC.Client();
 
@@ -25,13 +29,12 @@ client.on("ready", () => {
             .catch(console.error);
     })
     .catch(console.error);
-})
-
-// 547488894052990979/768144541931929620/790543022718320671
+});
 */
 
 // fs.writeFileSync("prefs/bell.json", JSON.stringify({"asd" : 10, "haha" : 20}));
 
+/*
 function loadStudentData() {
     const roster = JSON.parse(fs.readFileSync("students/roster.json"));
     const studentsClasses = JSON.parse(fs.readFileSync("students/classes.json"));
@@ -43,6 +46,6 @@ function loadStudentData() {
     };
 }
 
-const Utilz = require("./classes/utilz.js");
 
 console.log(Utilz.lookupNameFromAlias(loadStudentData(), "cigistudo"));
+*/

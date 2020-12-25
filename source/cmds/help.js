@@ -17,7 +17,6 @@ function cmdHelp(client, timetable, students) {
         ) {
             let reply = cmdList.reduce((a, b) => a + "\n"+ b);
             msg.channel.send("\`\`\`fix\n" + reply + "\`\`\`");
-            console.log(msg);
         }
     });
 }
