@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 class Utilz {
     constructor() {
         this.getDayString = (function() {
@@ -44,6 +46,8 @@ class Utilz {
             }
         }());
 
+        this.capitalize = (str) => (str[0].toUpperCase() + str.slice(1));
+
         this.properHunNameSort = function(arr) {
             return arr.sort((str1, str2) => {
                 const a = this.removeAccents(str1);
@@ -54,21 +58,22 @@ class Utilz {
             });
         };
 
-
-        this.lookupNameFromAlias = function(students, lookupName) {
-            const aliases = students.aliases;
-            if (aliases[lookupName] !== undefined) return lookupName;
-            for (var name in aliases) {
-                if (this.removeAccents(name.toLowerCase()) === this.removeAccents(lookupName.toLowerCase())) {
-                    return name;
+        this.lookupNameFromAlias = (function () {
+            const studentsAliases = JSON.parse(fs.readFileSync("students/aliases.json"));
+        
+            return function(lookupName) {
+                if (studentsAliases[lookupName] !== undefined) return lookupName;
+                for (var name in studentsAliases) {
+                    if (this.removeAccents(name.toLowerCase()) === this.removeAccents(lookupName.toLowerCase())) {
+                        return name;
+                    }
+                    const names = studentsAliases[name].map(x => this.removeAccents(x.toLowerCase()));
+                    if (names.includes(this.removeAccents(lookupName.toLowerCase()))) {
+                        return name;
+                    }
                 }
-                const names = aliases[name].map(x => this.removeAccents(x.toLowerCase()));
-                if (names.includes(this.removeAccents(lookupName.toLowerCase()))) {
-                    return name;
-                }
-            }
-        };
-
+            };
+        })();
     }
 }
 

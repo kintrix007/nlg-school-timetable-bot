@@ -1,5 +1,6 @@
 const Utilz = require("../classes/utilz.js");
 const Time = require("../classes/time.js");
+const { MessageEmbed } = require("discord.js");
 
 function cmdNextClass(client, timetable, students) {
     client.on("message", (msg) => {
@@ -9,7 +10,7 @@ function cmdNextClass(client, timetable, students) {
         if (!match) return;
 
         const targetStudentStr = match[1];
-        const targetStudent = Utilz.lookupNameFromAlias(students, targetStudentStr);
+        const targetStudent = Utilz.lookupNameFromAlias(targetStudentStr);
         if ( // check if classmate exists
             !students.roster.includes(targetStudent)
         ) { // return if doesn't exist
@@ -22,16 +23,24 @@ function cmdNextClass(client, timetable, students) {
         const studentClasses = getStudentsClasses(students, targetStudent);
         const today = timetable[Utilz.getDayString()];
         const now = new Time(new Date().getHours(), new Date().getMinutes());
+        // const now = new Time(9, 20);
         const classesLeft = today.filter(x => now.compare(x.data.start) < 0)
                                  .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
         const classesNow  = today.filter(x => now.compare(x.data.start) >= 0 && now.compare(x.data.start.add(new Time(x.data.length))) <= 0)
                                  .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
-        const reply = ((classesNow.length ? "**MOST:**\n" + classesNow[0].subj + (classesNow[0].data.elective ? " (fakt)" : "")
-                      + "\n" : "") +
-                      (classesLeft.length ? "**KÖVETKEZŐ:**\n" + classesLeft[0].subj + (classesLeft[0].data.elective ? " (fakt)" : "") : "")
-                      ) || `**${targetStudent}** nevű tanulónak ma már nem lesz több órája`;
         
-        msg.channel.send(reply);
+        const reply = ((classesNow.length ? "**MOST:**\n" +
+                      "\`\`\`c\n" + classesNow[0].data.start.toString() + " - " + classesNow[0].data.start.add(new Time(classesNow[0].data.length)).toString() + " | "
+                      + classesNow[0].subj + (classesNow[0].data.elective ? " (fakt)" : "") + "\`\`\`\n" : "") +
+                      (classesLeft.length ? "**KÖVETKEZŐ:**\n" +
+                      "\`\`\`c\n" + classesLeft[0].data.start.toString() + " - " + classesLeft[0].data.start.add(new Time(classesLeft[0].data.length)).toString() + " | " 
+                      + classesLeft[0].subj + (classesLeft[0].data.elective ? " (fakt)" : "") + "\`\`\`" : "")
+                      )
+                      || `**${targetStudent}** nevű tanulónak ma már nem lesz több órája`;
+        const embed = new MessageEmbed()
+            .setColor(0x00bb00)
+            .setDescription(reply);
+        msg.channel.send(embed);
     });
 }
 
@@ -42,7 +51,7 @@ function getStudentsClasses(students, targetStudent) {
         // Add the lesson to list if student has it as obligatory
         let isTrue = false;
         for (var student of lessons[lesson]["obligatory"]) {
-            if (student == Utilz.lookupNameFromAlias(students, targetStudent)) {
+            if (student == Utilz.lookupNameFromAlias(targetStudent)) {
                 isTrue = true;
                 break;
             }
@@ -52,7 +61,7 @@ function getStudentsClasses(students, targetStudent) {
         // Add the lesson to list if student has it as elective
         isTrue = false;
         for (var student of lessons[lesson]["elective"]) {
-            if (student == Utilz.lookupNameFromAlias(students, targetStudent)) {
+            if (student == Utilz.lookupNameFromAlias(targetStudent)) {
                 isTrue = true;
                 break;
             }

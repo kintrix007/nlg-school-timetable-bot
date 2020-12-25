@@ -88,11 +88,9 @@ function loadTimetableData() {
 function loadStudentData() {
     const roster = JSON.parse(fs.readFileSync("students/roster.json"));
     const studentsClasses = JSON.parse(fs.readFileSync("students/classes.json"));
-    const studentsAliases = JSON.parse(fs.readFileSync("students/aliases.json"));
     return {
         "roster" : roster,
-        "classes" : studentsClasses,
-        "aliases" : studentsAliases
+        "classes" : studentsClasses
     };
 }
 

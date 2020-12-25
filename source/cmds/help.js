@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js");
+
 const cmdList = [
     "!help",
     "!csengetés [be/ki]",
@@ -15,8 +17,12 @@ function cmdHelp(client, timetable, students) {
         if (
             cont.startsWith("!help")
         ) {
-            let reply = cmdList.reduce((a, b) => a + "\n"+ b);
-            msg.channel.send("\`\`\`fix\n" + reply + "\`\`\`");
+            const reply = cmdList.reduce((a, b) => a + "\n"+ b);
+            const embed = new MessageEmbed()
+                .setColor(0x00bb00)
+                .setTitle("**Help:**")
+                .setDescription(`\`\`\`\n${reply}\`\`\``);
+            msg.channel.send(embed);
         }
     });
 }

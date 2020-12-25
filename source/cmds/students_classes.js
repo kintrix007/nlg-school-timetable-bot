@@ -8,7 +8,7 @@ function cmdStudentClasses(client, timetable, students) {
         if (!match) return;
 
         const targetStudentStr = match[1];
-        const targetStudent = Utilz.lookupNameFromAlias(students, targetStudentStr);
+        const targetStudent = Utilz.lookupNameFromAlias(targetStudentStr);
         if ( // check if classmate exists
             !students.roster.includes(targetStudent)
         ) { // return if doesn't exist
@@ -24,7 +24,7 @@ function cmdStudentClasses(client, timetable, students) {
             // Add the lesson to list if student has it as obligatory
             let isTrue = false;
             for (var student of lessons[lesson]["obligatory"]) {
-                if (student == Utilz.lookupNameFromAlias(students, targetStudent)) {
+                if (student == Utilz.lookupNameFromAlias(targetStudent)) {
                     isTrue = true;
                     break;
                 }
@@ -34,7 +34,7 @@ function cmdStudentClasses(client, timetable, students) {
             // Add the lesson to list if student has it as elective
             isTrue = false;
             for (var student of lessons[lesson]["elective"]) {
-                if (student == Utilz.lookupNameFromAlias(students, targetStudent)) {
+                if (student == Utilz.lookupNameFromAlias(targetStudent)) {
                     isTrue = true;
                     break;
                 }

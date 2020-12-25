@@ -1,5 +1,6 @@
 const Utilz = require("../classes/utilz.js");
 const Time = require("../classes/time.js");
+const { MessageEmbed } = require("discord.js");
 
 function cmdTimetable(client, timetable, students) {
     client.on("message", (msg) => {
@@ -12,7 +13,10 @@ function cmdTimetable(client, timetable, students) {
             const today = timetable[Utilz.getDayString()];
             if (!today) {
                 console.log(`${msg.author} tried getting the timetable for ${Utilz.getDayString()}`);
-                msg.channel.send("Erre a napra nincsenek órák rögzítve.");
+                const embed = new MessageEmbed()
+                    .setColor(0xbb0000)
+                    .setDescription("Erre a napra nincsenek órák rögzítve.");
+                msg.channel.send(embed);
                 return;
             }
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the timetable for ${Utilz.getDayString()}`);
@@ -35,7 +39,11 @@ function cmdTimetable(client, timetable, students) {
             
             const reply = table.map((a) => a[0] + " | " + a[1] + " | " + a[2])
                                .reduce((a, b) => a + "\n" + b);
-            msg.channel.send(`**${Utilz.getDayStringHun().toUpperCase()}:**\n\`\`\`c\n${reply}\`\`\``);
+            const embed = new MessageEmbed()
+                .setColor(0x00bb00)
+                .setTitle(`**${Utilz.capitalize(Utilz.getDayStringHun())}:**`)
+                .setDescription(`\`\`\`c\n${reply}\`\`\``);
+            msg.channel.send(embed);
         }
     });
 }
