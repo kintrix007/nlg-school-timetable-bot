@@ -1,6 +1,6 @@
 # NLG School Timatable Bot
 
-### This bot is for personal use, directly made for Németh László Gimnázium's 11/a grade's timetable.
+### This bot script is made for personal use, directly for Németh László Gimnázium's 11/a grade.
 
 The concept of the bot is applicable for different schools and timetables as well, since it reads all the school specific data from JSON files.
 
