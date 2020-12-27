@@ -1,3 +1,4 @@
+const { MessageEmbed } = require("discord.js");
 const fs = require("fs");
 const Time = require("../classes/time.js");
 const Utilz = require("../classes/utilz.js");
@@ -104,16 +105,21 @@ checkBell = (function() {
         if (lessonsStart.length == 0) return;
 
         lastRingIn = 2;
-        let reply = "@everyone, csöngő van."
-                    + "\n**" +
-                    lessonsStart.reduce((a, b) => a + ", " + b)
-                    + `** ${lessonsStart.length > 1 ? "órák kezdődnek" : "óra kezdődik"}.`
+        const reply =
+            "**" + lessonsStart.map(Utilz.capitalize)
+                               .reduce((a, b) => a + "**,\n**" + b)
+            + `**\n${lessonsStart.length > 1 ? "órák kezdődnek" : "óra kezdődik"}.`;
+        const embed = new MessageEmbed()
+            .setColor(0x00bb00)
+            .setTitle("**Csöngő van!**")
+            .setDescription(reply);
         for (var guildId in bell) {
             const channelID = bell[guildId]["channelID"];
             client.channels.fetch(channelID)
                            .then(channel => {
-                                channel.send(reply);
-                                console.log(`rang the bell in ${bellCh.name} for classes ${lessonsStart}`);
+                               channel.send(embed);
+                               channel.send("@everyone");
+                                console.log(`rang the bell in ${channel.name} for classes ${lessonsStart}`);
                            })
                            .catch(err => console.log(err));
         }

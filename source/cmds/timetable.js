@@ -15,7 +15,7 @@ function cmdTimetable(client, timetable, students) {
                 console.log(`${msg.author} tried getting the timetable for ${Utilz.getDayString()}`);
                 const embed = new MessageEmbed()
                     .setColor(0xbb0000)
-                    .setDescription("Erre a napra nincsenek órák rögzítve.");
+                    .setDescription("**A mai napra nincsenek rögzítve órák.**");
                 msg.channel.send(embed);
                 return;
             }
