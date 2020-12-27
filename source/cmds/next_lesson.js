@@ -15,28 +15,39 @@ function cmdNextClass(client, timetable, students) {
             !students.roster.includes(targetStudent)
         ) { // return if doesn't exist
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but they aren't a student`);
-            msg.channel.send(`Nincs rögzítve ${targetStudentStr} nevű tagja az osztálynak`);
+            const embed = new MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription(`Nincs rögzítve ${targetStudentStr} nevű tagja az osztálynak.`)
+            msg.channel.send(embed);
             return;
         }
-        console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried ${targetStudentStr}'s next class`);
         
         const studentClasses = getStudentsClasses(students, targetStudent);
         const today = timetable[Utilz.getDayString()];
         const now = new Time(new Date().getHours(), new Date().getMinutes());
-        // const now = new Time(9, 20);
+        if (!today) {
+            console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but there are no classes on ${Utilz.getDayString()}`);
+            const embed = new MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription(`**${targetStudent}** nevű tanulónak ma nincsenek órái.`);
+            msg.channel.send(embed);
+            return;
+        }
         const classesLeft = today.filter(x => now.compare(x.data.start) < 0)
-                                 .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
+        .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
         const classesNow  = today.filter(x => now.compare(x.data.start) >= 0 && now.compare(x.data.start.add(new Time(x.data.length))) <= 0)
-                                 .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
+        .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
         
         const reply = ((classesNow.length ? "**MOST:**\n" +
-                      "\`\`\`c\n" + classesNow[0].data.start.toString() + " - " + classesNow[0].data.start.add(new Time(classesNow[0].data.length)).toString() + " | "
-                      + classesNow[0].subj + (classesNow[0].data.elective ? " (fakt)" : "") + "\`\`\`\n" : "") +
-                      (classesLeft.length ? "**KÖVETKEZŐ:**\n" +
-                      "\`\`\`c\n" + classesLeft[0].data.start.toString() + " - " + classesLeft[0].data.start.add(new Time(classesLeft[0].data.length)).toString() + " | " 
-                      + classesLeft[0].subj + (classesLeft[0].data.elective ? " (fakt)" : "") + "\`\`\`" : "")
-                      )
-                      || `**${targetStudent}** nevű tanulónak ma már nem lesz több órája`;
+            "\`\`\`c\n" + classesNow[0].data.start.toString() + " - " + classesNow[0].data.start.add(new Time(classesNow[0].data.length)).toString() + " | "
+            + classesNow[0].subj + (classesNow[0].data.elective ? " (fakt)" : "") + "\`\`\`\n" : "") +
+            (classesLeft.length ? "**KÖVETKEZŐ:**\n" +
+            "\`\`\`c\n" + classesLeft[0].data.start.toString() + " - " + classesLeft[0].data.start.add(new Time(classesLeft[0].data.length)).toString() + " | " 
+            + classesLeft[0].subj + (classesLeft[0].data.elective ? " (fakt)" : "") + "\`\`\`" : "")
+            )
+            || `**${targetStudent}** nevű tanulónak ma már nem lesz több órája.`;
+        
+        console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried ${targetStudentStr}'s next class`);
         const embed = new MessageEmbed()
             .setColor(0x00bb00)
             .setDescription(reply);

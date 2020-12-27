@@ -1,5 +1,5 @@
-const { MessageEmbed } = require("discord.js");
 const Utilz = require("../classes/utilz.js");
+const { MessageEmbed } = require("discord.js");
 
 function cmdRoster(client, timetable, students) {
     client.on("message", (msg) => {

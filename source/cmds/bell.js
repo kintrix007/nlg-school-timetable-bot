@@ -91,11 +91,13 @@ checkBell = (function() {
     let lastRingIn = 0;
     
     return function(client, timetable) {
+        console.log("ring tick");
         lastRingIn = Math.max(lastRingIn - 1, 0);
         if (lastRingIn > 0) return;
         
         const today = timetable[Utilz.getDayString()];
         const now = new Time(new Date().getHours(), new Date().getMinutes());
+        if (!today) return;
         let lessonsStart = [];
         for (var lesson of today) {
             if (lesson.data.start.compare(now.add(new Time(1))) == 0) {

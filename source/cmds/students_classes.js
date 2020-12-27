@@ -1,4 +1,5 @@
 const Utilz = require("../classes/utilz.js");
+const { MessageEmbed } = require("discord.js");
 
 function cmdStudentClasses(client, timetable, students) {
     client.on("message", (msg) => {
@@ -13,7 +14,10 @@ function cmdStudentClasses(client, timetable, students) {
             !students.roster.includes(targetStudent)
         ) { // return if doesn't exist
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s classes, but they aren't a student`);
-            msg.channel.send(`Nincs rögzítve ${targetStudentStr} nevű tagja az osztálynak.`);
+            const embed = new MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription(`Nincs rögzítve ${targetStudentStr} nevű tagja az osztálynak.`);
+            msg.channel.send(embed);
             return;
         }
 
@@ -41,13 +45,18 @@ function cmdStudentClasses(client, timetable, students) {
             }
             if (isTrue) studentClasses[1].push(lesson);
         }
-
-        const reply = (studentClasses[0].length ? studentClasses[0].sort().reduce((a, b) => a + ", " + b)
+        const reply = (studentClasses[0].length ? studentClasses[0].sort()
+                                                                   .map(Utilz.capitalize)
+                                                                   .reduce((a, b) => a + ", " + b)
                       + "\n" : "") +
-                      (studentClasses[1].length ? studentClasses[1].map(a => a + " (fakt)")
-                                       .sort().reduce((a, b) => a + ", " + b) : "");
-
-        msg.channel.send(`**${targetStudent} órái:**\n` + reply);
+                      (studentClasses[1].length ? studentClasses[1].sort()
+                                                                   .map(a => Utilz.capitalize(a) + " (fakt)")
+                                                                   .reduce((a, b) => a + ", " + b) : "");
+        const embed = new MessageEmbed()
+            .setColor(0x00bb00)
+            .setTitle(`**${targetStudent} órái:**`)
+            .setDescription(reply);
+        msg.channel.send(embed);
     })
 }
 

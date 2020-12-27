@@ -1,4 +1,5 @@
 const Utilz = require("../classes/utilz.js");
+const { MessageEmbed } = require("discord.js");
 
 function cmdClassStudents(client, timetable, students) {
     client.on("message", (msg) => {
@@ -13,16 +14,25 @@ function cmdClassStudents(client, timetable, students) {
         if (!(targetLesson in students["classes"])) {
             // return if class doesn't exist
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query the students of class ${targetLesson}, but this class doesn't exist`);
-            msg.channel.send(`Nincs rögzítve ${targetLesson} nevű tantárgy.`);
+            const embed = new MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription(`Nincs rögzítve ${targetLesson} nevű tantárgy.`);
+            msg.channel.send(embed);
             return;
         }
         console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the students of class ${targetLesson}`);
 
-        let studentClasses = [students.classes[targetLesson]["obligatory"], students.classes[targetLesson]["elective"]];
-        let reply = (studentClasses[0].length ? "**ALAP:**\n" + Utilz.properHunNameSort(studentClasses[0]).reduce((a, b) => a + ", " + b)
-                    + "\n" : "") +
-                    (studentClasses[1].length ? "**FAKT:**\n" + Utilz.properHunNameSort(studentClasses[1]).reduce((a, b) => a + ", " + b) : "");
-        msg.channel.send(reply);
+        const studentClasses = [
+            students.classes[targetLesson]["obligatory"],
+            students.classes[targetLesson]["elective"]
+        ];
+        const reply = (studentClasses[0].length ? "**Alap:**\n" + Utilz.properHunNameSort(studentClasses[0]).reduce((a, b) => a + "\n" + b)
+                    + "\n\n" : "") +
+                    (studentClasses[1].length ? "**Fakt:**\n" + Utilz.properHunNameSort(studentClasses[1]).reduce((a, b) => a + "\n" + b) : "");
+        const embed = new MessageEmbed()
+            .setColor(0x00bb00)
+            .setDescription(reply)
+        msg.channel.send(embed);
     });
 }
 
