@@ -75,6 +75,7 @@ function cmdRemoveBellCh(client) {
             }
             const channelID = bell[guildID]["channelID"];
             bell[guildID]["channelID"] = undefined;
+            bell[guildID]["readableName"] = undefined;
             savePrefs();
             client.channels.fetch(channelID)
                            .then(channel => {
@@ -91,7 +92,7 @@ checkBell = (function() {
     let lastRingIn = 0;
     
     return function(client, timetable) {
-        console.log("ring tick");
+        // console.log("ring tick");
         lastRingIn = Math.max(lastRingIn - 1, 0);
         if (lastRingIn > 0) return;
         
