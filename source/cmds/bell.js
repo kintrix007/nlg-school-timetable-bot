@@ -82,7 +82,7 @@ function cmdRemoveBellCh(client) {
                                 msg.channel.send(`Csengetés leállítva a(z) ${channel} csatornában.`);
                                 console.log(`${channel.name} is bell channel no more`);
                            })
-                           .catch(err => console.log(err));
+                           .catch(err => console.log(`error happened bell.js:85 -\t${err}`));
             // console.log(bell);
         }
     });
@@ -118,13 +118,15 @@ checkBell = (function() {
             .setDescription(reply);
         for (var guildId in bell) {
             const channelID = bell[guildId]["channelID"];
+            if (!channelID) continue;
+
             client.channels.fetch(channelID)
                            .then(channel => {
                                channel.send(embed);
                                channel.send("@everyone");
                                 console.log(`rang the bell in ${channel.name} for classes ${lessonsStart}`);
                            })
-                           .catch(err => console.log(err));
+                           .catch(err => console.log(`error happened bell.js:129 -\t${err}`));
         }
     };
 }());
