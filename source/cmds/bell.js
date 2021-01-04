@@ -25,15 +25,18 @@ function cmdBell(client, timetable, students) {
 function cmdSetBellCh(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
+        const regex = /!csenget[ée]s\s+be\s*/i; // !csengetés be
         const cont = msg.content;
         if (
-            cont.startsWith("!csengetés be") ||
-            cont.startsWith("!csengetes be")
+            regex.test(msg.content)
         ) {
             const guildId = msg.guild.id;
             const member = msg.guild.member(msg.author); // same as `msg.member`
             if (!member.hasPermission("ADMINISTRATOR")) {
-                msg.channel.send("Nincs jogod ehhez. (Adminisztrátor rang szükséges)");
+                const embed = new MessageEmbed()
+                    .setColor(0xbb0000)
+                    .setDescription("Nincs jogod ehhez. (Adminisztrátor rang szükséges)");
+                msg.channel.send(embed);
                 console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried turning off the bell in ${msg.guild.name}, but they don't have administrator permission`);
                 return
             }
@@ -56,15 +59,17 @@ function cmdSetBellCh(client) {
 function cmdRemoveBellCh(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const cont = msg.content;
+        const regex = /!csenget[ée]s\s+ki\s*/i;  // !csengetés ki
         if (
-            cont.startsWith("!csengetés ki") ||
-            cont.startsWith("!csengetes ki")
+            regex.test(msg.content)
         ) {
             const guildID = msg.guild.id;
             const member = msg.guild.member(msg.author); // same as `msg.member`
             if (!member.hasPermission("ADMINISTRATOR")) {
-                msg.channel.send("Nincs jogod ehhez. (Adminisztrátor rang szükséges)");
+                const embed = new MessageEmbed()
+                    .setColor(0xbb0000)
+                    .setDescription("Nincs jogod ehhez. (Adminisztrátor rang szükséges)");
+                msg.channel.send(embed);
                 console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried turning off the bell in ${msg.guild.name}, but they don't have administrator permission`);
                 return
             }

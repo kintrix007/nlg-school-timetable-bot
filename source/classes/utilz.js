@@ -11,6 +11,14 @@ class Utilz {
             });
         })();
 
+        this.getDayStringFromNum = (function() {
+            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+            
+            return (function (dayNum) {
+                return days[(dayNum + 999*7) % 7];
+            });
+        })();
+
         this.getDayStringHun = (function() {
             const days = ["vasárnap", "hétfő", "kedd", "szerda", "csütörtök", "péntek", "szombat"];
             
