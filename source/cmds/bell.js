@@ -32,12 +32,12 @@ function cmdSetBellCh(client) {
         ) {
             const guildId = msg.guild.id;
             const member = msg.guild.member(msg.author); // same as `msg.member`
-            if (!member.hasPermission("ADMINISTRATOR")) {
+            if (!member.hasPermission("MANAGE_GUILD")) {
                 const embed = new MessageEmbed()
                     .setColor(0xbb0000)
-                    .setDescription("Nincs jogod ehhez. (Adminisztrátor rang szükséges)");
+                    .setDescription("Nincs jogod ehhez. (\`Manage Server\` hozzáférés szükséges)");
                 msg.channel.send(embed);
-                console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried turning off the bell in ${msg.guild.name}, but they don't have administrator permission`);
+                console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried turning off the bell in ${msg.guild.name}, but they don't have MANAGE_GUILD permission`);
                 return
             }
 
@@ -65,12 +65,12 @@ function cmdRemoveBellCh(client) {
         ) {
             const guildID = msg.guild.id;
             const member = msg.guild.member(msg.author); // same as `msg.member`
-            if (!member.hasPermission("ADMINISTRATOR")) {
+            if (!member.hasPermission("MANAGE_GUILD")) {
                 const embed = new MessageEmbed()
                     .setColor(0xbb0000)
-                    .setDescription("Nincs jogod ehhez. (Adminisztrátor rang szükséges)");
+                    .setDescription("Nincs jogod ehhez. (\`Manage Server\` hozzáférés szükséges)");
                 msg.channel.send(embed);
-                console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried turning off the bell in ${msg.guild.name}, but they don't have administrator permission`);
+                console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried turning off the bell in ${msg.guild.name}, but they don't have MANAGE_GUILD permission`);
                 return
             }
 
