@@ -107,4 +107,4 @@ dist
 *.token
 
 # Preferences files
-prefs/
+prefs/**/
