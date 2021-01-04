@@ -13,7 +13,7 @@ function cmdTimetable(client, timetable, students) {
 
         const targetDayStr = match[1];
         let targetDay = Utilz.removeAccents(targetDayStr?.toLowerCase() ?? "ma");
-        console.log(targetDay);
+        console.log(`querying for '${targetDay}'...`);
         if (targetDay == "ma") {
             sendTodayTimetable(msg, timetable);
             return;

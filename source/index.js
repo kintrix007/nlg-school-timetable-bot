@@ -22,7 +22,7 @@ function main() {
 }
 
 function loginBot() {
-    fs.readFile(".token", "ascii", (err, data) => {
+    fs.readFile("token", "ascii", (err, data) => {
         if (err) {
             throw new Error(err);
         }
