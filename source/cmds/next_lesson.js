@@ -39,10 +39,10 @@ function cmdNextClass(client, timetable, students) {
         .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
         
         const reply = ((classesNow.length ? "**MOST:**\n" +
-            "\`\`\`c\n" + classesNow[0].data.start.toString() + " - " + classesNow[0].data.start.add(new Time(classesNow[0].data.length)).toString() + " | "
+            "\`\`\`c\n" + classesNow[0].data.start.toString() + " - " + classesNow[0].data.start.add(new Time(classesNow[0].data.length)).toString() + " ║ "
             + classesNow[0].subj + (classesNow[0].data.elective ? " (fakt)" : "") + "\`\`\`\n" : "") +
             (classesLeft.length ? "**KÖVETKEZŐ:**\n" +
-            "\`\`\`c\n" + classesLeft[0].data.start.toString() + " - " + classesLeft[0].data.start.add(new Time(classesLeft[0].data.length)).toString() + " | " 
+            "\`\`\`c\n" + classesLeft[0].data.start.toString() + " - " + classesLeft[0].data.start.add(new Time(classesLeft[0].data.length)).toString() + " ║ " 
             + classesLeft[0].subj + (classesLeft[0].data.elective ? " (fakt)" : "") + "\`\`\`" : "")
             )
             || `**${targetStudent}** nevű tanulónak ma már nem lesz több órája.`;
@@ -50,6 +50,7 @@ function cmdNextClass(client, timetable, students) {
         console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried ${targetStudentStr}'s next class`);
         const embed = new MessageEmbed()
             .setColor(0x00bb00)
+            .setTitle(targetStudent)
             .setDescription(reply);
         msg.channel.send(embed);
     });
