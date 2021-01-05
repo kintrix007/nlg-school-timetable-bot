@@ -18,6 +18,8 @@ function cmdBell(client, timetable, students) {
     cmdSetBellCh(client);
     // Admin permission required
     cmdRemoveBellCh(client);
+    // Admin permission required
+    setBellRole(client);
     
     checkInterval = setInterval(checkBell, 300 * 60, client, timetable);
 }
@@ -25,7 +27,7 @@ function cmdBell(client, timetable, students) {
 function cmdSetBellCh(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!csenget[ée]s\s+be\s*/i; // !csengetés be
+        const regex = /!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+be\s*/i; // !csengetés be
         const cont = msg.content;
         if (
             regex.test(msg.content)
@@ -59,7 +61,7 @@ function cmdSetBellCh(client) {
 function cmdRemoveBellCh(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!csenget[ée]s\s+ki\s*/i;  // !csengetés ki
+        const regex = /!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+ki\s*/i;  // !csengetés ki
         if (
             regex.test(msg.content)
         ) {
@@ -81,6 +83,7 @@ function cmdRemoveBellCh(client) {
             const channelID = bell[guildID]["channelID"];
             bell[guildID]["channelID"] = undefined;
             bell[guildID]["readableName"] = undefined;
+            bell[guildID]["ringRole"] = undefined;
             savePrefs();
             client.channels.fetch(channelID)
                            .then(channel => {
@@ -89,6 +92,47 @@ function cmdRemoveBellCh(client) {
                            })
                            .catch(err => console.log(`error happened bell.js:85 -\t${err}`));
             // console.log(bell);
+        }
+    });
+}
+
+function setBellRole(client) {
+    client.on("message", (msg) => {
+        if (msg.author.bot) return;
+        const regex = /!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+(?:role|rang)\s+<@&(\d+)>\s*/i;  // !csengetés rang @Csengetés
+        const match = msg.content.match(regex);
+        if (!match) return;
+        
+        const roleID = match[1];
+        const guildID = msg.guild.id;
+        const member = msg.guild.member(msg.author); // same as `msg.member`
+        if (!member.hasPermission("MANAGE_GUILD")) {
+            const embed = new MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription("Nincs jogod ehhez. (\`Manage Server\` hozzáférés szükséges)");
+            msg.channel.send(embed);
+            console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried turning off the bell in ${msg.guild.name}, but they don't have MANAGE_GUILD permission`);
+            return;
+        }
+
+        let roleExists = true;
+        // console.log(msg.guild.roles);
+        msg.guild.roles.fetch(roleID)
+                       .then(role => {roleExists = true;})
+                       .catch(err => {roleExists = false;});
+        if (roleExists) {
+            bell[guildID]["ringRole"] = roleID;
+            savePrefs();
+            const embed = new MessageEmbed()
+                .setColor(0x00bb00)
+                .setDescription(`<@&${roleID}> kiválasztva, mint csengetési role.`)
+            msg.channel.send(embed);
+            console.log(`${msg.member.user.username}#${msg.member.user.discriminator} set <@&${roleID}> as ring role`);
+        } else {
+            const embed = new MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription("Nem találtam ilyen nevű rangot.");
+            msg.channel.send(embed);
         }
     });
 }
@@ -121,17 +165,21 @@ checkBell = (function() {
             .setColor(0x00bb00)
             .setTitle("**Csöngő van!**")
             .setDescription(reply);
-        for (var guildId in bell) {
-            const channelID = bell[guildId]["channelID"];
+        for (var guildID in bell) {
+            const channelID = bell[guildID]["channelID"];
             if (!channelID) continue;
 
             client.channels.fetch(channelID)
                            .then(channel => {
                                channel.send(embed);
-                               channel.send("@everyone");
-                                console.log(`rang the bell in ${channel.name} for classes ${lessonsStart}`);
+                               if (bell[guildID]["ringRole"] === undefined) {
+                                   channel.send("@everyone");
+                               } else {
+                                   channel.send(`<@&${bell[guildID]["ringRole"]}>`);
+                               }
+                               console.log(`rang the bell in ${channel.name} for classes ${lessonsStart}`);
                            })
-                           .catch(err => console.log(`error happened bell.js:129 -\t${err}`));
+                           .catch(err => console.log(`error happened in checkBell: -\t${err}`));
         }
     };
 }());
