@@ -3,12 +3,12 @@ const { MessageEmbed } = require("discord.js");
 
 const cmdList = {
     "!help [parancs neve]" : "Megadja az adott parancs használati módját.\n\n**pl. `!help órák`**",
-    "!órarend" : "Megadja a napi órarendet.\n\n**pl. `!órarend`**",
+    "!órarend [nap]" : "Megadja a napi órarendet. Opcionálisan választható, hogy melyik napot\n\n**pl. `!órarend`, `!órarend holnap`, `!órarend csütörtök`**",
     "!névsor" : "Kiírja a névsort.\n\n**pl. `!névsor`**",
     "!következő [diák neve]" : "Megadja, hogy mi lesz az adott diák következő órája.\n\n**pl. `!következő Ábel`**",
     "!órák [diák neve]" : "Listázza az összes órát amire az adott diák jár.\n\n**pl. `!órák Ábel`**",
     "!tanulók [óra neve]" : "Listázza az összes diákot, aki részt vesz az adott órán.\n\n**pl. `!tanulók fizika`**",
-    "!csengetés [be/ki]" : "Be, illetve kikapcsolja a csengetést az adott csatornán. (csak **adminok** használhatják)\n\n**pl. `!csengetés be`**"
+    "!csengetés [be/ki]" : "Be, illetve kikapcsolja a csengetést az adott csatornán. (használatához `Manage Server` jog szükséges)\n\n**pl. `!csengetés be`**"
 };
 
 function cmdHelp(client, timetable, students) {

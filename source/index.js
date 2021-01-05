@@ -14,6 +14,7 @@ function main() {
     
     client.on("ready", () => {
         console.log("-- bot ready --");
+        console.log(`Current time is: ${new Time(new Date().getHours(), new Date().getMinutes())}`);
     });
 
     loadCmds(timetable, students);

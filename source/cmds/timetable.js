@@ -50,14 +50,13 @@ function sendTodayTimetable(msg, timetable) {
         table.push([
             `${startTime.toString()} - ${endTime.toString()}`,
             `${lesson.subj}${lesson.data["elective"] ? " (fakt)" : ""}`,
-            now.add(new Time(5)).compare(startTime) >= 0 && now.compare(endTime) <= 0 ?
-            "<-- most" : ""
+            now.add(new Time(5)).compare(startTime) >= 0 && now.compare(endTime) <= 0 ? " <-- most" : ""
         ]);
     }
     const subjMaxWidth = table.reduce((a, b) => a[1].length >= b[1].length ? a : b)[1].length;
     table = table.map((a) => [`║ ${a[0]}`, `${a[1]}${" ".repeat(subjMaxWidth - a[1].length)}`, a[2]]);
     
-    const reply = table.map((a) => a[0] + " ║ " + a[1] + " ║ " + a[2])
+    const reply = table.map((a) => a[0] + " ║ " + a[1] + " ║" + a[2])
                         .reduce((a, b) => a + "\n" + b);
     const embed = new MessageEmbed()
         .setColor(0x00bb00)

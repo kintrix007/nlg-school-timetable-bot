@@ -19,7 +19,7 @@ function cmdBell(client, timetable, students) {
     // Admin permission required
     cmdRemoveBellCh(client);
     
-    checkInterval = setInterval(checkBell, 900 * 60, client, timetable);
+    checkInterval = setInterval(checkBell, 300 * 60, client, timetable);
 }
 
 function cmdSetBellCh(client) {
@@ -112,7 +112,7 @@ checkBell = (function() {
         }
         if (lessonsStart.length == 0) return;
 
-        lastRingIn = 2;
+        lastRingIn = 4; // After the bell range, it can NOT ring for this many ticks.
         const reply =
             "**" + lessonsStart.map(Utilz.capitalize)
                                .reduce((a, b) => a + "**,\n**" + b)
