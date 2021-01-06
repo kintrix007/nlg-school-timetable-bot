@@ -125,7 +125,7 @@ function setBellRole(client) {
             savePrefs();
             const embed = new MessageEmbed()
                 .setColor(0x00bb00)
-                .setDescription(`<@&${roleID}> kiválasztva, mint csengetési role.`)
+                .setDescription(`<@&${roleID}> kiválasztva, mint csengetési \`role\`.`);
             msg.channel.send(embed);
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} set <@&${roleID}> as ring role`);
         } else {
@@ -151,7 +151,7 @@ checkBell = (function() {
         let lessonsStart = [];
         for (var lesson of today) {
             if (lesson.data.start.compare(now.add(new Time(1))) == 0) {
-                lessonsStart.push(lesson.subj);
+                lessonsStart.push(lesson.subj + (lesson.data.elective ? " (fakt)" : ""));
             }
         }
         if (lessonsStart.length == 0) return;

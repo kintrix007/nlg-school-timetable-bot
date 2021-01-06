@@ -108,3 +108,4 @@ dist
 
 # Preferences files
 **/prefs/*
+source/prefs/bell.json
