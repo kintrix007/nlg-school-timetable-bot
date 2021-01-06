@@ -48,7 +48,7 @@ class Utilz {
             return function(string) {
                 let result = string+"";
                 accents.forEach((accent, index) => {
-                    result = result.replace(accent, non_accents[index]);
+                    result = result.replace(new RegExp(accent, "g"), non_accents[index]);
                 })
                 return result;
             }

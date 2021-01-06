@@ -5,7 +5,7 @@ function cmdFather(client, timetable, students) {
         if (msg.author.bot) return;
         const cont = Utilz.removeAccents(msg.content.toLowerCase());
         if (
-            ["!miatyank", "!feco", "!feri", "!feci", "!feciba", "!feriba", "!isten", "!mester", "!fonok"]
+            ["!miatyank", "!feco", "!feri", "!feci", "!feciba", "!feriba", "!isten", "!mester", "!fonok", "!foni"]
             .includes(cont)
         ) {
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the fecó`);
