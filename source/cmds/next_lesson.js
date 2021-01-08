@@ -25,6 +25,7 @@ function cmdNextClass(client, timetable, students) {
         const studentClasses = getStudentsClasses(students, targetStudent);
         const today = timetable[Utilz.getDayString()];
         const now = new Time(new Date().getHours(), new Date().getMinutes());
+        // const now = new Time(13, 0);
         if (!today) {
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but there are no classes on ${Utilz.getDayString()}`);
             const embed = new MessageEmbed()
@@ -34,24 +35,38 @@ function cmdNextClass(client, timetable, students) {
             return;
         }
         const classesLeft = today.filter(x => now.compare(x.data.start) < 0)
-        .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
+            .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
         const classesNow  = today.filter(x => now.compare(x.data.start) >= 0 && now.compare(x.data.start.add(new Time(x.data.length))) <= 0)
-        .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
+            .filter(x => (x.subj in studentClasses[0] && !x.data.elective) || (x.subj in studentClasses[1] && x.data.elective));
         
-        const reply = ((classesNow.length ? "**MOST:**\n" +
-            "\`\`\`c\n" + classesNow[0].data.start.toString() + " - " + classesNow[0].data.start.add(new Time(classesNow[0].data.length)).toString() + " ║ "
-            + classesNow[0].subj + (classesNow[0].data.elective ? " (fakt)" : "") + "\`\`\`\n" : "") +
-            (classesLeft.length ? "**KÖVETKEZŐ:**\n" +
-            "\`\`\`c\n" + classesLeft[0].data.start.toString() + " - " + classesLeft[0].data.start.add(new Time(classesLeft[0].data.length)).toString() + " ║ " 
-            + classesLeft[0].subj + (classesLeft[0].data.elective ? " (fakt)" : "") + "\`\`\`" : "")
-            )
-            || `**${targetStudent}** nevű tanulónak ma már nem lesz több órája.`;
+        const classNowData = classesNow.length ? [
+            classesNow[0].data.start.toString(),
+            classesNow[0].data.start.add(new Time(classesNow[0].data.length)).toString(),
+            classesNow[0].subj + (classesNow[0].data.elective ? " (fakt)" : "")
+        ] : [];
+        const classesLeftData = classesLeft?.map(x => [
+            x.data.start.toString(),
+            x.data.start.add(new Time(x.data.length)).toString(),
+            x.subj + (x.data.elective ? " (fakt)" : "")
+        ]) ?? [];
+
+        const reply =
+            (classNowData.length ?
+            "**MOST:**\n"
+            + "\`\`\`c\n" +
+            classNowData[0] + " - " + classNowData[1] + " ║ " + classNowData[2]
+            + "\`\`\`\n\n" : "") + 
+            (classesLeftData.length ?
+            `**KÖVETKEZŐ${classesLeftData.length > 1 ? "K" : ""}:**\n`
+            + "\`\`\`c\n" +
+            classesLeftData.map(x => x[0] + " - " + x[1] + " ║ " + x[2]).reduce((a,b) => a + "\n" + b)
+            + "\`\`\`" : "");
         
         console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried ${targetStudentStr}'s next class`);
         const embed = new MessageEmbed()
             .setColor(0x00bb00)
             .setTitle(targetStudent)
-            .setDescription(reply);
+            .setDescription(reply || `**${targetStudent}** nevű tanulónak ma már nem lesz több órája.`);
         msg.channel.send(embed);
     });
 }

@@ -82,6 +82,14 @@ class Utilz {
                 }
             };
         })();
+
+        this.getNameAliases = (function () {
+            const studentsAliases = JSON.parse(fs.readFileSync("students/aliases.json"));
+
+            return function(name) {
+                return studentsAliases[name];
+            }
+        })();
     }
 }
 

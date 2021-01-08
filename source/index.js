@@ -11,7 +11,9 @@ const client = new DC.Client();
 function main() {
     const timetable = loadTimetableData();
     const students = loadStudentData();
-    
+
+    require('events').EventEmitter.defaultMaxListeners = 15;
+
     client.on("ready", () => {
         console.log("-- bot ready --");
         console.log(`Current time is: ${new Time(new Date().getHours(), new Date().getMinutes())}`);
