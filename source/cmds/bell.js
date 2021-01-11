@@ -141,25 +141,26 @@ checkBell = (function() {
     let lastRingIn = 0;
     
     return function(client, timetable) {
-        // console.log("ring tick");
         lastRingIn = Math.max(lastRingIn - 1, 0);
         if (lastRingIn > 0) return;
+        // console.log("ring tick");
         
         const today = timetable[Utilz.getDayString()];
         const now = new Time(new Date().getHours(), new Date().getMinutes());
+        // const now = new Time(10, 49);
         if (!today) return;
         let lessonsStart = [];
         for (var lesson of today) {
             if (lesson.data.start.compare(now.add(new Time(1))) == 0) {
-                lessonsStart.push(lesson.subj + (lesson.data.elective ? " (fakt)" : ""));
+                lessonsStart.push(lesson);
             }
         }
         if (lessonsStart.length == 0) return;
 
         lastRingIn = 4; // After the bell range, it can NOT ring for this many ticks.
         const reply =
-            "**" + lessonsStart.map(Utilz.capitalize)
-                               .reduce((a, b) => a + "**,\n**" + b)
+            "**" + lessonsStart.map(lesson => Utilz.capitalize(lesson.subj) + (lesson.data.elective ? " (fakt)" : "") + " " + Utilz.getMeetingURL(lesson.subj)[lesson.data.elective])
+                               .reduce((a, b) => a + "**\n**" + b)
             + `**\n${lessonsStart.length > 1 ? "órák kezdődnek" : "óra kezdődik"}.`;
         const embed = new MessageEmbed()
             .setColor(0x00bb00)

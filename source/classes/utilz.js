@@ -90,6 +90,14 @@ class Utilz {
                 return studentsAliases[name];
             }
         })();
+
+        this.getMeetingURL = (function() {
+            const meetingURLs = JSON.parse(fs.readFileSync("timetable/class_meeting_links.json"));
+
+            return function(lesson) {
+                return meetingURLs[lesson];
+            };
+        })();
     }
 }
 
