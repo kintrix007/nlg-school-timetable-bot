@@ -5,7 +5,7 @@ const cmdList = {
     "!help [parancs neve]" : "Megadja az adott parancs használati módját.\n\n**pl. `!help órák`**",
     "!órarend [nap]" : "Megadja a napi órarendet. Opcionálisan választható, hogy melyik napot\n\n**pl. `!órarend`, `!órarend holnap`, `!órarend csütörtök`**",
     "!névsor" : "Kiírja a névsort.\n\n**pl. `!névsor`**",
-    "!becenevek" : "Kiírja a névsort, mellé azt is, hogy még hogyan lehet hivatkozni az adott emberre.\n\n**pl. `!bevenevek`**",
+    // "!becenevek" : "Kiírja a névsort, mellé azt is, hogy még hogyan lehet hivatkozni az adott emberre.\n\n**pl. `!bevenevek`**",
     "!következő [diák neve]" : "Megadja, hogy mi lesz az adott diák következő órája.\n\n**pl. `!következő Ábel`**",
     "!kövi (lásd -> !következő)" : "Lásd:  `!következő`",
     "!órák [diák neve]" : "Listázza az összes órát amire az adott diák jár.\n\n**pl. `!órák Ábel`**",

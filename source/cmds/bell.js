@@ -99,12 +99,23 @@ function cmdRemoveBellCh(client) {
 function setBellRole(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+(?:role|rang)\s+<@&(\d+)>\s*/i;  // !csengetés rang @Csengetés
+        const regex = /!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+(?:role|rang)(?:\s+<@&(\d+)>)?\s*/i;  // !csengetés rang @Csengetés
         const match = msg.content.match(regex);
         if (!match) return;
         
+        bell = loadPrefs();
         const roleID = match[1];
         const guildID = msg.guild.id;
+
+        if (!roleID) {
+            const ringRole = bell[guildID]["ringRole"];
+            const embed = new MessageEmbed()
+                .setColor(0x00bb00)
+                .setDescription(ringRole ? `<@&${ringRole}> van jelenleg kiválasztva.` : "Az alapértelemzett, @everyone van kiválasztva.");
+            msg.channel.send(embed);
+            return;
+        }
+
         const member = msg.guild.member(msg.author); // same as `msg.member`
         if (!member.hasPermission("MANAGE_GUILD")) {
             const embed = new MessageEmbed()
@@ -114,8 +125,6 @@ function setBellRole(client) {
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried turning off the bell in ${msg.guild.name}, but they don't have MANAGE_GUILD permission`);
             return;
         }
-
-        bell = loadPrefs();
 
         if (bell[guildID] === undefined) {
             bell[guildID] = {"readableName" : msg.guild.name};

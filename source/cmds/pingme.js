@@ -10,7 +10,7 @@ let bell = {};
 function pingme(client, timetable, students) {
     client.on("message", msg => {
         if (msg.author.bot) return;
-        const regex = /!cs[eoö]ngess\s+(be|ki)/i // !csengess [be/ki]
+        const regex = /!cs[eoö]ngess\s+(be|ki)\s*/i // !csengess [be/ki]
         const match = msg.content.match(regex);
         if (!match) return;
 
