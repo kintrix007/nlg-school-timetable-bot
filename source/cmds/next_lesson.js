@@ -5,7 +5,7 @@ const { MessageEmbed } = require("discord.js");
 function cmdNextClass(client, timetable, students) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!k[öo]vetkez[őöo]\s+([a-z0-9\._áéíóöőúüű]+)\s*/i; // következő [diák neve]
+        const regex = /!(?:k[öo]vetkez[őöo]|k[öo]vi)\s+([a-z0-9\._áéíóöőúüű]+)\s*/i; // következő [diák neve]
         const match = msg.content.match(regex);
         if (!match) return;
 
@@ -55,7 +55,7 @@ function cmdNextClass(client, timetable, students) {
             "**MOST:**\n"
             + "\`\`\`c\n" +
             classNowData[0] + " - " + classNowData[1] + " ║ " + classNowData[2]
-            + "\`\`\`\n\n" : "") + 
+            + "\`\`\`\n" : "") + 
             (classesLeftData.length ?
             `**KÖVETKEZŐ${classesLeftData.length > 1 ? "K" : ""}:**\n`
             + "\`\`\`c\n" +

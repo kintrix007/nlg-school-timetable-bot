@@ -5,12 +5,14 @@ const cmdList = {
     "!help [parancs neve]" : "Megadja az adott parancs használati módját.\n\n**pl. `!help órák`**",
     "!órarend [nap]" : "Megadja a napi órarendet. Opcionálisan választható, hogy melyik napot\n\n**pl. `!órarend`, `!órarend holnap`, `!órarend csütörtök`**",
     "!névsor" : "Kiírja a névsort.\n\n**pl. `!névsor`**",
+    "!becenevek" : "Kiírja a névsort, mellé azt is, hogy még hogyan lehet hivatkozni az adott emberre.\n\n**pl. `!bevenevek`**",
     "!következő [diák neve]" : "Megadja, hogy mi lesz az adott diák következő órája.\n\n**pl. `!következő Ábel`**",
+    "!kövi (lásd -> !következő)" : "Lásd:  `!következő`",
     "!órák [diák neve]" : "Listázza az összes órát amire az adott diák jár.\n\n**pl. `!órák Ábel`**",
     "!tanulók [óra neve]" : "Listázza az összes diákot, aki részt vesz az adott órán.\n\n**pl. `!tanulók fizika`**",
     "!csengetés [be/ki/rang]" : "Be-, illetve kikapcsolja a csengetést az adott csatornán.\nBeállítható, hogy melyik `role` legyen pingelve csengetéskor.\n(használatához `Manage Server` jog szükséges)\n\n**pl. `!csengetés be`, `!csengetés rang @Suli`**",
     "!csöngő (lásd -> !csengetés)" : "Lásd:  `!csengetés`",
-    "!csengess [be/ki] - TODO" : "Be-, illletve kikapcsolja, hogy neked szóljon-e a csengő.\n\n**pl. `!csengess be`**"
+    "!csengess [be/ki]" : "Be-, illletve kikapcsolja, hogy neked szóljon-e a csengő.\n\n**pl. `!csengess be`, `!csengess ki`**"
 };
 
 function cmdHelp(client, timetable, students) {

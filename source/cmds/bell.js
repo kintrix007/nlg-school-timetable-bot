@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
 const fs = require("fs");
 const Time = require("../classes/time.js");
 const Utilz = require("../classes/utilz.js");
+const { MessageEmbed } = require("discord.js");
 
 const prefsDirPath = "prefs";
 const prefsFilePath = `${prefsDirPath}/bell.json`;
@@ -12,7 +12,7 @@ let checkInterval;
 let checkBell = function(timetable){}; // C-style prototyping the function :P
 
 function cmdBell(client, timetable, students) {
-    loadPrefs();
+    bell = loadPrefs();
 
     // Admin permission required
     cmdSetBellCh(client);
@@ -32,7 +32,7 @@ function cmdSetBellCh(client) {
         if (
             regex.test(msg.content)
         ) {
-            const guildId = msg.guild.id;
+            const guildID = msg.guild.id;
             const member = msg.guild.member(msg.author); // same as `msg.member`
             if (!member.hasPermission("MANAGE_GUILD")) {
                 const embed = new MessageEmbed()
@@ -43,14 +43,13 @@ function cmdSetBellCh(client) {
                 return
             }
 
-            if (bell[guildId] === undefined) {
-                bell[guildId] = {"readableName" : msg.guild.name};
-            } else {
-                clearInterval(bell[guildId]["interval"]);
+            bell = loadPrefs();
+            if (bell[guildID] === undefined) {
+                bell[guildID] = {"readableName" : msg.guild.name};
             }
-            bell[guildId]["readableName"] = msg.guild.name;
-            bell[guildId]["channelID"] = msg.channel.id;
-            savePrefs();
+            bell[guildID]["readableName"] = msg.guild.name;
+            bell[guildID]["channelID"] = msg.channel.id;
+            savePrefs(bell);
             msg.channel.send(`${msg.channel} kiválaszva, mint csengetési csatorna.`);
             // console.log(bell);
             console.log(`${msg.channel.name} was set as bell channel`);
@@ -76,15 +75,16 @@ function cmdRemoveBellCh(client) {
                 return
             }
 
+            bell = loadPrefs();
             if (bell[guildID] === undefined || bell[guildID]["channelID"] == undefined) {
                 msg.channel.send("Nincs bekapcsolva csengetés.");
                 return;
             }
             const channelID = bell[guildID]["channelID"];
             bell[guildID]["channelID"] = undefined;
-            bell[guildID]["readableName"] = undefined;
+            // bell[guildID]["readableName"] = undefined;
             bell[guildID]["ringRole"] = undefined;
-            savePrefs();
+            savePrefs(bell);
             client.channels.fetch(channelID)
                            .then(channel => {
                                 msg.channel.send(`Csengetés leállítva a(z) ${channel} csatornában.`);
@@ -115,25 +115,18 @@ function setBellRole(client) {
             return;
         }
 
-        let roleExists = true;
-        // console.log(msg.guild.roles);
-        msg.guild.roles.fetch(roleID)
-                       .then(role => {roleExists = true;})
-                       .catch(err => {roleExists = false;});
-        if (roleExists) {
-            bell[guildID]["ringRole"] = roleID;
-            savePrefs();
-            const embed = new MessageEmbed()
-                .setColor(0x00bb00)
-                .setDescription(`<@&${roleID}> kiválasztva, mint csengetési \`role\`.`);
-            msg.channel.send(embed);
-            console.log(`${msg.member.user.username}#${msg.member.user.discriminator} set <@&${roleID}> as ring role`);
-        } else {
-            const embed = new MessageEmbed()
-                .setColor(0xbb0000)
-                .setDescription("Nem találtam ilyen nevű rangot.");
-            msg.channel.send(embed);
+        bell = loadPrefs();
+
+        if (bell[guildID] === undefined) {
+            bell[guildID] = {"readableName" : msg.guild.name};
         }
+        bell[guildID]["ringRole"] = roleID;
+        savePrefs(bell);
+        const embed = new MessageEmbed()
+            .setColor(0x00bb00)
+            .setDescription(`<@&${roleID}> kiválasztva, mint csengetési \`role\`.`);
+        msg.channel.send(embed);
+        console.log(`${msg.member.user.username}#${msg.member.user.discriminator} set <@&${roleID}> as ring role`);
     });
 }
 
@@ -157,7 +150,8 @@ checkBell = (function() {
         }
         if (lessonsStart.length == 0) return;
 
-        lastRingIn = 4; // After the bell range, it can NOT ring for this many ticks.
+        bell = loadPrefs();
+        lastRingIn = 4; // After the bell rang, it can NOT ring for this many ticks.
         const reply =
             "**" + lessonsStart.map(lesson => Utilz.capitalize(lesson.subj) + (lesson.data.elective ? " (fakt)" : "") + " " + Utilz.getMeetingURL(lesson.subj)[lesson.data.elective])
                                .reduce((a, b) => a + "**\n**" + b)
@@ -185,8 +179,8 @@ checkBell = (function() {
     };
 }());
 
-function savePrefs() { // save
-    const saveData = bell;
+function savePrefs(dataToSave) { // save
+    const saveData = dataToSave;
     // console.log(saveData);
     if (!fs.existsSync(prefsDirPath)) {
         console.log(`created dir '${prefsDirPath}' because it did not exist`);
@@ -201,9 +195,9 @@ function loadPrefs() { // load
     let loadDataRaw = fs.readFileSync(prefsFilePath, err => {if (err) console.log(err)});
     
     let loadData = JSON.parse(loadDataRaw);
-    bell = loadData;
     console.log(`loaded prefs for '${prefsFilePath}'`);
-    console.log(loadData);
+    // console.log(loadData);
+    return loadData;
 }
 
 module.exports = cmdBell;
