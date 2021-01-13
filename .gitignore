@@ -105,6 +105,7 @@ dist
 
 # Discord.js bot token
 source/token
+# Token sample for GitGub
 source/token_example
 
 # Preferences files
