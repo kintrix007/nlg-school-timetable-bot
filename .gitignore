@@ -104,9 +104,7 @@ dist
 .tern-port
 
 # Discord.js bot token
-source/token
-# Token sample for GitGub
-source/token_example
+*.token
 
 # Preferences files
 prefs/
