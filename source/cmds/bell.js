@@ -169,21 +169,23 @@ checkBell = (function() {
             .setColor(0x00bb00)
             .setTitle("**Csöngő van!**")
             .setDescription(reply);
-        for (var guildID in bell) {
+        for (const guildID in bell) {
             const channelID = bell[guildID]["channelID"];
             if (!channelID) continue;
 
+            // console.log(bell);
             client.channels.fetch(channelID)
-                           .then(channel => {
-                               channel.send(embed);
-                               if (bell[guildID]["ringRole"] === undefined) {
-                                   channel.send("@everyone");
-                               } else {
-                                   channel.send(`<@&${bell[guildID]["ringRole"]}>`);
-                               }
-                               console.log(`rang the bell in ${channel.name} for classes ${lessonsStart}`);
-                           })
-                           .catch(err => console.log(`error happened in checkBell: -\t${err}`));
+                .then(channel => {
+                    channel.send(embed);
+                    if (bell[guildID]["ringRole"] === undefined) {
+                        channel.send("@everyone");
+                    } else {
+                        const roleID = bell[guildID]["ringRole"];
+                        channel.send(`<@&${roleID}>`);
+                    }
+                    console.log(`rang the bell in ${channel.name} for classes ${lessonsStart}`);
+                })
+                .catch(err => console.log(`error happened in checkBell: -\t${err}`));
         }
     };
 }());
