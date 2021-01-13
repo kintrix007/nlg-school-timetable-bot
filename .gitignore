@@ -105,6 +105,7 @@ dist
 
 # Discord.js bot token
 **/token
+**/token_example
 
 # Preferences files
 prefs/
