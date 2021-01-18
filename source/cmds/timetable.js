@@ -7,7 +7,7 @@ const hunDaysNumDict = {"vasarnap" : 0, "hetfo" : 1, "kedd" : 2, "szerda" : 3, "
 function cmdTimetable(client, timetable, students) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /![oó]rarend(?:\s+([a-zA-Záéíóöőúüű]+))?/i; // !órarend [nap]
+        const regex = /!(?:[oó]rarend|most)(?:\s+([a-zA-Záéíóöőúüű]+))?/i; // !órarend [nap] - !most
         const match = msg.content.match(regex);
         if (!match) return;
 
