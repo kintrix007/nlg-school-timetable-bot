@@ -104,7 +104,7 @@ dist
 .tern-port
 
 # Discord.js bot token
-**/*.token
+source/**/*.token
 
 # Preferences files
 prefs/
