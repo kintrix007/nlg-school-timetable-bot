@@ -106,5 +106,5 @@ dist
 # Preferences files
 prefs/
 
-
+# Discord js token files
 *.token
