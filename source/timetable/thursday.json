@@ -1,4 +1,19 @@
 {
+    "matek": [{
+		"start": {
+			"h": 8,
+			"m": 0
+		},
+		"length": 45,
+		"elective": 1
+	},{
+		"start": {
+			"h": 12,
+			"m": 50
+		},
+		"length": 45,
+		"elective": 1
+	}],
 	"angol1": [{
 		"start": {
 			"h": 8,
@@ -58,14 +73,6 @@
 		"start": {
 			"h": 11,
 			"m": 45
-		},
-		"length": 45,
-		"elective": 1
-	}],
-	"matek": [{
-		"start": {
-			"h": 12,
-			"m": 50
 		},
 		"length": 45,
 		"elective": 1
