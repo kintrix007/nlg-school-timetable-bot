@@ -12,7 +12,7 @@ const cmdList = {
     "!tanulók <óra neve>" : "Listázza az összes diákot, aki részt vesz az adott órán.\n\n**pl. `!tanulók fizika`**",
     "!csengetés <be|ki|rang> [rang neve]" : "Be-, illetve kikapcsolja a csengetést az adott csatornán.\nBeállítható, hogy melyik `role` legyen pingelve csengetéskor.\nAlapértelmezett az @everyone.\n(használatához `Manage Server` jog szükséges)\n\n**pl. `!csengetés be`, `!csöngő rang`, `!csengetés rang @Suli`**",
     "!csöngő (lásd -> !csengetés)" : "Lásd:  `!csengetés`",
-    "!csengess <be/ki>" : "Be-, illletve kikapcsolja, hogy neked szóljon-e a csengő.\n\n**pl. `!csengess be`, `!csengess ki`**"
+    "!csengess <be|ki>" : "Be-, illletve kikapcsolja, hogy neked szóljon-e a csengő.\n\n**pl. `!csengess be`, `!csengess ki`**"
 };
 
 const footerNote = "A []-nél egy paraméter opcionálisan megadható,\nA <>-nél egy paraméter kötelező.";
