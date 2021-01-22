@@ -6,19 +6,21 @@ const cmdList = {
     "!órarend [nap]" : "Megadja a napi órarendet. Opcionálisan választható, hogy melyik napot\n\n**pl. `!órarend`, `!órarend holnap`, `!órarend csütörtök`**",
     "!névsor" : "Kiírja a névsort.\n\n**pl. `!névsor`**",
     // "!becenevek" : "Kiírja a névsort, mellé azt is, hogy még hogyan lehet hivatkozni az adott emberre.\n\n**pl. `!bevenevek`**",
-    "!következő [diák neve]" : "Megadja, hogy mi lesz az adott diák következő órája.\n\n**pl. `!következő Ábel`**",
+    "!következő [diák neve]" : "Megadja, hogy mi lesz az adott diák következő órája.\n\n**pl. `!következő`, `!következő Ábel`**",
     "!kövi (lásd -> !következő)" : "Lásd:  `!következő`",
-    "!órák [diák neve]" : "Listázza az összes órát amire az adott diák jár.\n\n**pl. `!órák Ábel`**",
-    "!tanulók [óra neve]" : "Listázza az összes diákot, aki részt vesz az adott órán.\n\n**pl. `!tanulók fizika`**",
-    "!csengetés [be/ki/rang]" : "Be-, illetve kikapcsolja a csengetést az adott csatornán.\nBeállítható, hogy melyik `role` legyen pingelve csengetéskor.\n(használatához `Manage Server` jog szükséges)\n\n**pl. `!csengetés be`, `!csengetés rang @Suli`**",
+    "!órák <diák neve>" : "Listázza az összes órát amire az adott diák jár.\n\n**pl. `!órák Ábel`**",
+    "!tanulók <óra neve>" : "Listázza az összes diákot, aki részt vesz az adott órán.\n\n**pl. `!tanulók fizika`**",
+    "!csengetés <be|ki|rang> [rang neve]" : "Be-, illetve kikapcsolja a csengetést az adott csatornán.\nBeállítható, hogy melyik `role` legyen pingelve csengetéskor.\nAlapértelmezett az @everyone.\n(használatához `Manage Server` jog szükséges)\n\n**pl. `!csengetés be`, `!csöngő rang`, `!csengetés rang @Suli`**",
     "!csöngő (lásd -> !csengetés)" : "Lásd:  `!csengetés`",
-    "!csengess [be/ki]" : "Be-, illletve kikapcsolja, hogy neked szóljon-e a csengő.\n\n**pl. `!csengess be`, `!csengess ki`**"
+    "!csengess <be/ki>" : "Be-, illletve kikapcsolja, hogy neked szóljon-e a csengő.\n\n**pl. `!csengess be`, `!csengess ki`**"
 };
+
+const footerNote = "A []-nél egy paraméter opcionálisan megadható,\nA <>-nél egy paraméter kötelező.";
 
 function cmdHelp(client, timetable, students) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!help\s*!?(.*)/i;
+        const regex = /^!help\s*!?(.*?)\s*$/i;
         const match = msg.content.match(regex);
         if (!match) return
 
@@ -27,7 +29,8 @@ function cmdHelp(client, timetable, students) {
             const embed = new MessageEmbed()
                 .setColor(0x00bb00)
                 .setTitle("**Help:**")
-                .setDescription(`\`\`\`\n${reply}\`\`\``);
+                .setDescription(`\`\`\`\n${reply}\`\`\``)
+                .setFooter(footerNote);
             msg.channel.send(embed);
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the general help sheet`);
         } else {
@@ -45,7 +48,8 @@ function cmdHelp(client, timetable, students) {
                     const embed = new MessageEmbed()
                         .setColor(0x00bb00)
                         .setTitle(`\`${cmd[cmdName]}\``)
-                        .setDescription(cmdDesc);
+                        .setDescription(cmdDesc)
+                        .setFooter(footerNote);
                     msg.channel.send(embed);
                     console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the help sheet for '${cmdName}'`);
                     return;

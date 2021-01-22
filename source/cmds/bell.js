@@ -27,7 +27,7 @@ function cmdBell(client, timetable, students) {
 function cmdSetBellCh(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+be\s*/i; // !csengetés be
+        const regex = /^!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+be\s*$/i; // !csengetés be
         const cont = msg.content;
         if (
             regex.test(msg.content)
@@ -60,7 +60,7 @@ function cmdSetBellCh(client) {
 function cmdRemoveBellCh(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+ki\s*/i;  // !csengetés ki
+        const regex = /^!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+ki\s*$/i;  // !csengetés ki
         if (
             regex.test(msg.content)
         ) {
@@ -99,7 +99,7 @@ function cmdRemoveBellCh(client) {
 function setBellRole(client) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+(?:role|rang)(?:\s+<@&(\d+)>)?\s*/i;  // !csengetés rang @Csengetés
+        const regex = /^!(?:cs[eoö]nget[ée]s|cs[eoö]ng[oöő])\s+(?:role|rang)(?:\s+<@&(\d+)>)?\s*$/i;  // !csengetés rang @Csengetés
         const match = msg.content.match(regex);
         if (!match) return;
         

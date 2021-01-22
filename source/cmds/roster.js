@@ -12,8 +12,7 @@ function roster(client, students) {
         if (msg.author.bot) return;
         const cont = msg.content;
         if (
-            cont.startsWith("!névsor") ||
-            cont.startsWith("!nevsor")
+            Utilz.removeAccents(cont.toLowerCase()).startsWith("!névsor")
         ) {
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the roster`);
             let reply = Utilz.properHunNameSort(students.roster)
@@ -32,14 +31,14 @@ function aliases(client, students) {
         if (msg.author.bot) return;
         const cont = msg.content;
         if (
-            cont.startsWith("!becenevek")
+            Utilz.removeAccents(cont.toLowerCase()).startsWith("!becenevek")
         ) {
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the roster`);
             let reply = Utilz.properHunNameSort(students.roster).map(name => `**${name}**` + " - " + Utilz.getNameAliases(name).reduce((a,b) => a + ", " + b))
                                                                 .reduce((a, b) => a + "\n" + b);
             const embed = new MessageEmbed()
                 .setColor(0x00bb00)
-                .setTitle("**Névsor:**")
+                .setTitle("**Becenevek:**")
                 .setDescription(reply);
             msg.channel.send(embed);
         }

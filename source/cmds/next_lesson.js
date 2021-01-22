@@ -5,11 +5,13 @@ const { MessageEmbed } = require("discord.js");
 function cmdNextClass(client, timetable, students) {
     client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /!(?:k[öo]vetkez[őöo]|k[öo]vi)\s+([a-z0-9\._áéíóöőúüű]+)\s*/i; // következő [diák neve]
+        const regex = /^!(?:k[öo]vetkez[őöo]|k[öo]vi)(?:\s+([a-z0-9\._áéíóöőúüű]+))?\s*$/i; // következő [diák neve]
         const match = msg.content.match(regex);
         if (!match) return;
 
-        const targetStudentStr = match[1];
+        const targetStudentStr = match[1] ?? (msg.member.nickname ?? msg.member.user.username);
+        console.log(targetStudentStr);
+
         const targetStudent = Utilz.lookupNameFromAlias(targetStudentStr);
         if ( // check if classmate exists
             !students.roster.includes(targetStudent)
@@ -17,7 +19,7 @@ function cmdNextClass(client, timetable, students) {
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but they aren't a student`);
             const embed = new MessageEmbed()
                 .setColor(0xbb0000)
-                .setDescription(`Nincs rögzítve ${targetStudentStr} nevű tagja az osztálynak.`)
+                .setDescription(`Nincs rögzítve **${targetStudentStr}** nevű tagja az osztálynak.`)
             msg.channel.send(embed);
             return;
         }
