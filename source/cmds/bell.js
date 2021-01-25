@@ -83,7 +83,7 @@ function cmdRemoveBellCh(client) {
             const channelID = bell[guildID]["channelID"];
             bell[guildID]["channelID"] = undefined;
             // bell[guildID]["readableName"] = undefined;
-            bell[guildID]["ringRole"] = undefined;
+            // bell[guildID]["ringRole"] = undefined;
             savePrefs(bell);
             client.channels.fetch(channelID)
                            .then(channel => {
