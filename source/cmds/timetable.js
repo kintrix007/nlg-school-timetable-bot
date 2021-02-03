@@ -62,7 +62,7 @@ function sendTimetableOfDay(data, msg, targetDate) {
         // let currentTime = new Time(12, 32);
         let isSameDay = date.getDay() === targetDate.getDay();
         let isSameTime = currentTime.compare(startTime) >= 0 && currentTime.compare(endTime.add(new Time(5))) <= 0; 
-        const now = isSameTime && isSameDay ? " <== most" : "";
+        const now = isSameTime && isSameDay ? "<== most" : "";
         return [startTime, endTime, subj, elective, now];
     });
 
