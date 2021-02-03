@@ -128,12 +128,23 @@ function loadSetPrefixCmd(data) {
         if (msg.author.bot) return;
         const cont = Utilz.prefixless(data, msg);
 
-        const regex = /^prefix\s+(.+?)\s*$/i;
+        const regex = /^\s*prefix(?:\s+(.+?))?\s*$/i;
         const match = cont?.match(regex);
         if (!match) return;
 
         prefixes = Utilz.loadPrefs("prefixes.json");
         const guildID = msg.guild.id;
+        const newPrefix = match[1];
+
+        if (!newPrefix) {
+            const guildID = msg.guild.id;
+            const currentPrefix = prefixes[guildID];
+            const embed = new DC.MessageEmbed()
+                .setColor(0x00bb00)
+                .setDescription(`Jelenleg a \`${currentPrefix}\` van kiválasztva, mint prefix.`);
+            msg.channel.send(embed);
+            return;
+        }
 
         if (!msg.member.hasPermission("MANAGE_GUILD")) {
             const embed = new DC.MessageEmbed()
@@ -143,7 +154,6 @@ function loadSetPrefixCmd(data) {
             return;
         }
 
-        const newPrefix = match[1];
         if (newPrefix.length > 3) {
             const embed = new DC.MessageEmbed()
                 .setColor(0xbb0000)

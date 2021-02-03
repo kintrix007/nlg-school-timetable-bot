@@ -12,7 +12,7 @@ function roster(data, msg) {
     if (msg.author.bot) return;
     const cont = Utilz.prefixless(data, msg);
     if (
-        cont?.startsWith("nevsor")
+        cont?.trim()?.startsWith("nevsor")
     ) {
         console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the roster`);
         let reply = Utilz.properHunNameSort(data.students.roster)
@@ -29,7 +29,7 @@ function aliases(data, msg) {
     if (msg.author.bot) return;
     const cont = Utilz.prefixless(data, msg);
     if (
-        cont?.startsWith("becenevek")
+        cont?.trim()?.startsWith("becenevek")
     ) {
         console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried the roster`);
         let reply = Utilz.properHunNameSort(data.students.roster).map(name => `**${name}**` + " - " + Utilz.getNameAliases(name).reduce((a,b) => a + ", " + b))

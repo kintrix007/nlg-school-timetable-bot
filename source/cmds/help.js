@@ -3,6 +3,7 @@ const { MessageEmbed } = require("discord.js");
 
 const cmdList = {
     "!help [parancs neve]" : "Megadja az adott parancs használati módját.\n\n**pl. `!help órák`**",
+    "!prefix [új prefix]" : "Átállítja a prefix-et, amit a bot használ.\n\n**pl. `!prefix $$`**",
     "!órarend [nap]" : "Megadja a napi órarendet. Opcionálisan választható, hogy melyik napot\n\n**pl. `!órarend`, `!órarend holnap`, `!órarend csütörtök`**",
     "!névsor" : "Kiírja a névsort.\n\n**pl. `!névsor`**",
     // "!becenevek" : "Kiírja a névsort, mellé azt is, hogy még hogyan lehet hivatkozni az adott emberre.\n\n**pl. `!bevenevek`**",
@@ -10,19 +11,19 @@ const cmdList = {
     "!kövi (lásd -> !következő)" : "Lásd:  `!következő`",
     "!órák <diák neve>" : "Listázza az összes órát amire az adott diák jár.\n\n**pl. `!órák Ábel`**",
     "!tanulók <óra neve>" : "Listázza az összes diákot, aki részt vesz az adott órán.\n\n**pl. `!tanulók fizika`**",
-    "!csengetés <be|ki|rang> [rang neve]" : "Be-, illetve kikapcsolja a csengetést az adott csatornán.\nBeállítható, hogy melyik `role` legyen pingelve csengetéskor.\nAlapértelmezett az @everyone.\n(használatához `Manage Server` jog szükséges)\n\n**pl. `!csengetés be`, `!csöngő rang`, `!csengetés rang @Suli`**",
+    "!csengetés [be|ki|rang] [rang neve]" : "Be-, illetve kikapcsolja a csengetést az adott csatornán.\nBeállítható, hogy melyik `role` legyen pingelve csengetéskor.\nAlapértelmezett az @everyone.\n(használatához `Manage Server` jog szükséges)\n\n**pl. `!csengetés be`, `!csöngő rang`, `!csengetés rang @Suli`**",
     "!csöngő (lásd -> !csengetés)" : "Lásd:  `!csengetés`",
     "!csengess <be|ki>" : "Be-, illletve kikapcsolja, hogy neked szóljon-e a csengő.\n\n**pl. `!csengess be`, `!csengess ki`**"
 };
 
-const footerNote = "A []-nél egy paraméter opcionálisan megadható,\nA <>-nél egy paraméter kötelező.";
+const footerNote = "A példákban `!` a prefix. Mindig a legutóbb beállítottat kell használni.\nA []-nél egy paraméter opcionálisan megadható,\nA <>-nél egy paraméter kötelező.";
 
 function cmdHelp(data) {
     data.client.on("message", (msg) => {
         if (msg.author.bot) return;
         const cont = Utilz.prefixless(data, msg);
 
-        const regex = /^help\s*(.*?)\s*$/i;
+        const regex = /^\s*help\s*(.*?)\s*$/i;
         const match = cont?.match(regex);
         if (!match) return;
 

@@ -7,7 +7,7 @@ function cmdNextClass(data) {
         if (msg.author.bot) return;
         const cont = Utilz.prefixless(data, msg);
 
-        const regex = /^(?:k[öo]vetkez[őöo]|k[öo]vi)(?:\s+([a-z0-9\._áéíóöőúüű]+))?\s*$/i; // következő [diák neve]
+        const regex = /^\s*(?:k[öo]vetkez[őöo]|k[öo]vi)(?:\s+([a-z0-9\._áéíóöőúüű]+))?\s*$/i; // következő [diák neve]
         const match = cont?.match(regex);
         if (!match) return;
 
@@ -27,11 +27,12 @@ function cmdNextClass(data) {
         }
         
         const studentClasses = getStudentsClasses(data.students, targetStudent);
-        const today = data.timetable[Utilz.getDayString()];
-        const now = new Time(new Date().getHours(), new Date().getMinutes());
+        const date = new Date();
+        const today = data.timetable[Utilz.getDayString(date)];
+        const now = new Time(date.getHours(), date.getMinutes());
         // const now = new Time(13, 0);
         if (!today) {
-            console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but there are no classes on ${Utilz.getDayString()}`);
+            console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but there are no classes on ${Utilz.getDayString(date)}`);
             const embed = new MessageEmbed()
                 .setColor(0xbb0000)
                 .setDescription(`**${targetStudent}** nevű tanulónak ma nincsenek órái.`);

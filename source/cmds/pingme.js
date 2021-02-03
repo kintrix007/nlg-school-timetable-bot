@@ -1,9 +1,5 @@
-const fs = require("fs");
 const Utilz = require("../classes/utilz.js");
 const { MessageEmbed } = require("discord.js");
-
-const prefsDirPath = "prefs";
-const prefsFilePath = `${prefsDirPath}/bell.json`;
 
 let bell = {};
 
@@ -12,7 +8,7 @@ function pingme(data) {
         if (msg.author.bot) return;
         const cont = Utilz.prefixless(data, msg);
 
-        const regex = /^cs[eoö]ngess\s+(be|ki)\s*$/i // !csengess [be/ki]
+        const regex = /^\s*cs[eoö]ngess\s+(be|ki)\s*$/i // !csengess [be/ki]
         const match = cont?.match(regex);
         if (!match) return;
 

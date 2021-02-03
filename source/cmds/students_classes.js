@@ -6,7 +6,7 @@ function cmdStudentClasses(data) {
         if (msg.author.bot) return;
         const cont = Utilz.prefixless(data, msg);
 
-        const regex = /^[óo]r[áa]k\s+([a-z0-9\._áéíóöőúüű]+)\s*$/i // !órák [diák neve]
+        const regex = /^\s*[óo]r[áa]k\s+([a-z0-9\._áéíóöőúüű]+)\s*$/i // !órák [diák neve]
         const match = cont?.match(regex);
         if (!match) return;
 

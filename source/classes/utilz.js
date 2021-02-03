@@ -7,25 +7,15 @@ class Utilz {
         this.getDayString = (function() {
             const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
             
-            return (function () {
-                let date = new Date();
+            return (function (date) {
                 return days[date.getDay()];
-            });
-        })();
-
-        this.getDayStringFromNum = (function() {
-            const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-            
-            return (function (dayNum) {
-                return days[(dayNum + 999*7) % 7];
             });
         })();
 
         this.getDayStringHun = (function() {
             const days = ["vasárnap", "hétfő", "kedd", "szerda", "csütörtök", "péntek", "szombat"];
             
-            return (function () {
-                let date = new Date();
+            return (function (date) {
                 return days[date.getDay()];
             });
         })();
@@ -109,10 +99,15 @@ class Utilz {
             const prefix = this.removeAccents(
                 (prefixes[guildID] ?? data.defaultPrefix).toLowerCase()
             );
+            const regex = new RegExp(`^(<@!?${data.client.user.id}>).+$`);
             const cont = this.removeAccents(msg.content.toLowerCase());
             
-            if (!cont.startsWith(prefix.toLowerCase())) return null;
-            return cont.slice(prefix.length);
+            if (cont.startsWith(prefix.toLowerCase()))
+                return cont.slice(prefix.length);
+            
+            const match = cont.match(regex);
+            if (match)
+                return cont.slice(match[1].length);
         }
 
         this.savePrefs = function(saveData, filename) {
@@ -121,7 +116,7 @@ class Utilz {
                 console.log(`created dir '${this.prefsDirPath}' because it did not exist`);
             }
             fs.writeFileSync(`${this.prefsDirPath}/${filename}`, JSON.stringify(saveData, undefined, 4));
-            console.log(`saved prefs for ${this.prefsDirPath}/${filename}`);
+            console.log(`saved prefs in ${this.prefsDirPath}/${filename}`);
         }
 
         this.loadPrefs = function(filename, silent = false) {
@@ -130,7 +125,7 @@ class Utilz {
             const loadDataRaw = fs.readFileSync(`${this.prefsDirPath}/${filename}`);
             const loadData = JSON.parse(loadDataRaw);
             if (!silent)
-                console.log(`loaded prefs for ${this.prefsDirPath}/${filename}`);
+                console.log(`loaded prefs from ${this.prefsDirPath}/${filename}`);
             return loadData;
         }
     }

@@ -6,7 +6,7 @@ function cmdClassStudents(data) {
         if (msg.author.bot) return;
         const cont = Utilz.prefixless(data, msg);
 
-        const regex = /^tanul[óo]k\s+([a-z0-9_áéíóöőúüű]+)\s*$/i; // !tanulók [óra neve]
+        const regex = /^\s*tanul[óo]k\s+([a-z0-9_áéíóöőúüű]+)\s*$/i; // !tanulók [óra neve]
         const match = cont?.match(regex);
         if (!match) return;
 
