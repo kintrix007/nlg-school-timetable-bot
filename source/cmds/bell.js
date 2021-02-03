@@ -278,7 +278,7 @@ function getRingRole(msg) {
     const guildID = msg.guild.id;
     const ringRoleID = bell[guildID]?.ringRole;
 
-    const reply = "Jelenleg az " + (!ringRoleID ?
+    const reply = "Jelenleg a(z) " + (!ringRoleID ?
         "alapértelemzett, @everyone" : `<@&${ringRoleID}>`)
         + " van kiválasztva mint csengetési *role*.";
     
