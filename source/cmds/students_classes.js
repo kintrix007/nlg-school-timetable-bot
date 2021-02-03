@@ -1,17 +1,19 @@
 const Utilz = require("../classes/utilz.js");
 const { MessageEmbed } = require("discord.js");
 
-function cmdStudentClasses(client, timetable, students) {
-    client.on("message", (msg) => {
+function cmdStudentClasses(data) {
+    data.client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /^![óo]r[áa]k\s+([a-z0-9\._áéíóöőúüű]+)\s*$/i // !órák [diák neve]
-        const match = msg.content.match(regex);
+        const cont = Utilz.prefixless(data, msg);
+
+        const regex = /^[óo]r[áa]k\s+([a-z0-9\._áéíóöőúüű]+)\s*$/i // !órák [diák neve]
+        const match = cont?.match(regex);
         if (!match) return;
 
         const targetStudentStr = match[1];
         const targetStudent = Utilz.lookupNameFromAlias(targetStudentStr);
         if ( // check if classmate exists
-            !students.roster.includes(targetStudent)
+            !data.students.roster.includes(targetStudent)
         ) { // return if doesn't exist
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s classes, but they aren't a student`);
             const embed = new MessageEmbed()
@@ -22,7 +24,7 @@ function cmdStudentClasses(client, timetable, students) {
         }
 
         console.log(`${msg.member.user.username}#${msg.member.user.discriminator} queried ${targetStudentStr}'s classes`);
-        const lessons = students.classes;
+        const lessons = data.students.classes;
         let studentClasses = [[], []]; // 1st is obligatory classes, 2nd is elective classes
         for (var lesson in lessons) {
             // Add the lesson to list if student has it as obligatory

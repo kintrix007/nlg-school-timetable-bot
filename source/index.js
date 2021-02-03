@@ -2,11 +2,15 @@
 
 const DC = require("discord.js");
 const fs = require("fs");
+const Utilz = require("./classes/utilz.js");
 const Time = require("./classes/time.js");
 
 const CMDS_DIR = "./cmds";
 
 const client = new DC.Client();
+
+const defaultPrefix = "!";
+let prefixes = {};
 
 function main() {
     const timetable = loadTimetableData();
@@ -19,7 +23,15 @@ function main() {
         console.log(`current time is ${new Time(new Date().getHours(), new Date().getMinutes())}`);
     });
 
-    loadCmds(timetable, students);
+    const commandData = {
+        defaultPrefix: defaultPrefix,
+        client: client,
+        timetable: timetable,
+        students: students
+    }
+
+    loadCmds(commandData);
+    loadSetPrefixCmd(commandData);
 
     loginBot();
 }
@@ -97,7 +109,7 @@ function loadStudentData() {
     };
 }
 
-function loadCmds(timetable, students) {
+function loadCmds(data) {
     fs.readdir(CMDS_DIR, (err, files) => {
         if (err) {
             return;
@@ -105,9 +117,49 @@ function loadCmds(timetable, students) {
         files.forEach(file => {
             const filePath = `${CMDS_DIR}/${file}`
             const cmd = require(filePath);
-            cmd(client, timetable, students);
+            cmd(data);
             console.log(`loaded cmd from '${filePath}'`);
         });
+    });
+}
+
+function loadSetPrefixCmd(data) {
+    client.on("message", msg => {
+        if (msg.author.bot) return;
+        const cont = Utilz.prefixless(data, msg);
+
+        const regex = /^prefix\s+(.+?)\s*$/i;
+        const match = cont?.match(regex);
+        if (!match) return;
+
+        prefixes = Utilz.loadPrefs("prefixes.json");
+        const guildID = msg.guild.id;
+
+        if (!msg.member.hasPermission("MANAGE_GUILD")) {
+            const embed = new DC.MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription("Nincs jogod ehhez. (\`Manage Server\` hozzáférés szükséges)");
+            msg.channel.send(embed);
+            return;
+        }
+
+        const newPrefix = match[1];
+        if (newPrefix.length > 3) {
+            const embed = new DC.MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription(`A *prefix* hossza ne legyen hosszabb, mint \`3\`! \`"${newPrefix}"(${newPrefix.length})\``);
+            msg.channel.send(embed);
+            return;
+        }
+
+        prefixes[guildID] = newPrefix;
+        Utilz.savePrefs(prefixes, "prefixes.json");
+
+        const embed = new DC.MessageEmbed()
+            .setColor(0x00bb00)
+            .setTitle(`Mostantól \`${prefixes[guildID]}\` a prefix!`)
+            .setDescription(`A prefix sikeresen átállítva.\nsegítségért: \`${prefixes[guildID]}help\``);
+        msg.channel.send(embed);
     });
 }
 

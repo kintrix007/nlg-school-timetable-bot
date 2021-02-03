@@ -2,11 +2,13 @@ const Utilz = require("../classes/utilz.js");
 const Time = require("../classes/time.js");
 const { MessageEmbed } = require("discord.js");
 
-function cmdNextClass(client, timetable, students) {
-    client.on("message", (msg) => {
+function cmdNextClass(data) {
+    data.client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /^!(?:k[öo]vetkez[őöo]|k[öo]vi)(?:\s+([a-z0-9\._áéíóöőúüű]+))?\s*$/i; // következő [diák neve]
-        const match = msg.content.match(regex);
+        const cont = Utilz.prefixless(data, msg);
+
+        const regex = /^(?:k[öo]vetkez[őöo]|k[öo]vi)(?:\s+([a-z0-9\._áéíóöőúüű]+))?\s*$/i; // következő [diák neve]
+        const match = cont?.match(regex);
         if (!match) return;
 
         const targetStudentStr = match[1] ?? (msg.member.nickname ?? msg.member.user.username);
@@ -14,7 +16,7 @@ function cmdNextClass(client, timetable, students) {
 
         const targetStudent = Utilz.lookupNameFromAlias(targetStudentStr);
         if ( // check if classmate exists
-            !students.roster.includes(targetStudent)
+            !data.students.roster.includes(targetStudent)
         ) { // return if doesn't exist
             console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but they aren't a student`);
             const embed = new MessageEmbed()
@@ -24,8 +26,8 @@ function cmdNextClass(client, timetable, students) {
             return;
         }
         
-        const studentClasses = getStudentsClasses(students, targetStudent);
-        const today = timetable[Utilz.getDayString()];
+        const studentClasses = getStudentsClasses(data.students, targetStudent);
+        const today = data.timetable[Utilz.getDayString()];
         const now = new Time(new Date().getHours(), new Date().getMinutes());
         // const now = new Time(13, 0);
         if (!today) {

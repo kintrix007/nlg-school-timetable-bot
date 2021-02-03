@@ -41,9 +41,9 @@
 	}, {
 		"start": {
 			"h": 12,
-			"m": 50
+			"m": 5
 		},
-		"length": 45,
+		"length": 90,
 		"elective": 1
 	}]
 }

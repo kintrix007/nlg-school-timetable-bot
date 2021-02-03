@@ -7,14 +7,16 @@ const prefsFilePath = `${prefsDirPath}/bell.json`;
 
 let bell = {};
 
-function pingme(client, timetable, students) {
-    client.on("message", msg => {
+function pingme(data) {
+    data.client.on("message", msg => {
         if (msg.author.bot) return;
-        const regex = /^!cs[eoö]ngess\s+(be|ki)\s*$/i // !csengess [be/ki]
-        const match = msg.content.match(regex);
+        const cont = Utilz.prefixless(data, msg);
+
+        const regex = /^cs[eoö]ngess\s+(be|ki)\s*$/i // !csengess [be/ki]
+        const match = cont?.match(regex);
         if (!match) return;
 
-        msg.guild.members.fetch(client.user.id) // get the bot as a member
+        msg.guild.members.fetch(data.client.user.id) // get the bot as a member
         .then(botMember => {
             const hasPermission = botMember.hasPermission("MANAGE_ROLES");
 
@@ -27,7 +29,7 @@ function pingme(client, timetable, students) {
                 return;
             }
             
-            bell = loadPrefs();
+            bell = Utilz.loadPrefs("bell.json");
             const guildID = msg.guild.id;
             if (bell[guildID] === undefined) {
                 return;
@@ -48,14 +50,14 @@ function pingme(client, timetable, students) {
                     msg.member.roles.add(ringRole);
                     const embed = new MessageEmbed()
                         .setColor(0x00bb00)
-                        .setDescription(`${msg.member} magkapta a ${ringRole} \`role\`-t.\nMostantől értesülni fogsz a csengetésekről.`)
+                        .setDescription(`${msg.member} magkapta a ${ringRole} \`role\`-t.\n\nMostantől értesülni fogsz a csengetésekről.`)
                     msg.channel.send(embed);
                     console.log(`${msg.member.user.username}#${msg.member.user.discriminator} got the role ${ringRole.name}`);
                 } else {
                     msg.member.roles.remove(ringRole);
                     const embed = new MessageEmbed()
-                        .setColor(0x00bb00)
-                        .setDescription(`${msg.member} elvesztette a ${ringRole} \`role\`-t.\nMostantől nem kapsz értesítést a csengetésekről.`)
+                        .setColor(0xffbb00)
+                        .setDescription(`${msg.member} elvesztette a ${ringRole} \`role\`-t.\n\nMostantől nem kapsz értesítést a csengetésekről.`)
                     msg.channel.send(embed);
                     console.log(`${msg.member.user.username}#${msg.member.user.discriminator} lost the role ${ringRole.name}`);
                 }
@@ -64,27 +66,6 @@ function pingme(client, timetable, students) {
         })
         .catch(console.log);
     })
-}
-
-
-function savePrefs(dataToSave) { // save
-    const saveData = dataToSave;
-    // console.log(saveData);
-    if (!fs.existsSync(prefsDirPath)) {
-        console.log(`created dir '${prefsDirPath}' because it did not exist`);
-        fs.mkdirSync(prefsDirPath);
-    }
-    fs.writeFile(prefsFilePath, JSON.stringify(saveData, undefined, 4), err => {if (err) console.log(err)});
-    console.log(`saved prefs for '${prefsFilePath}'`);
-}
-
-function loadPrefs() { // load
-    if (!fs.existsSync(prefsFilePath)) return;
-    let loadDataRaw = fs.readFileSync(prefsFilePath, err => {if (err) console.log(err)});
-    
-    let loadData = JSON.parse(loadDataRaw);
-    console.log(`loaded prefs for '${prefsFilePath}'`);
-    return loadData;
 }
 
 module.exports = pingme;

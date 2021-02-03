@@ -1,7 +1,7 @@
 const Utilz = require("../classes/utilz.js");
 
-function cmdFather(client, timetable, students) {
-    client.on("message", (msg) => {
+function cmdFather(data) {
+    data.client.on("message", (msg) => {
         if (msg.author.bot) return;
         const cont = Utilz.removeAccents(msg.content.toLowerCase());
         if (

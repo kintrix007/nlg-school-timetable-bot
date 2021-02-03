@@ -2,6 +2,8 @@ const fs = require("fs");
 
 class Utilz {
     constructor() {
+        this.prefsDirPath = "prefs";
+        
         this.getDayString = (function() {
             const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
             
@@ -98,6 +100,39 @@ class Utilz {
                 return meetingURLs[lesson];
             };
         })();
+
+        // returns a lowercase, accentless string, that is after the specified prefix.
+        // returns null, in not prefixed properly
+        this.prefixless = function(data, msg) {
+            const guildID = msg.guild.id;
+            const prefixes = this.loadPrefs("prefixes.json", true);
+            const prefix = this.removeAccents(
+                (prefixes[guildID] ?? data.defaultPrefix).toLowerCase()
+            );
+            const cont = this.removeAccents(msg.content.toLowerCase());
+            
+            if (!cont.startsWith(prefix.toLowerCase())) return null;
+            return cont.slice(prefix.length);
+        }
+
+        this.savePrefs = function(saveData, filename) {
+            if (!fs.existsSync(this.prefsDirPath)) {
+                fs.mkdirSync(this.prefsDirPath);
+                console.log(`created dir '${this.prefsDirPath}' because it did not exist`);
+            }
+            fs.writeFileSync(`${this.prefsDirPath}/${filename}`, JSON.stringify(saveData, undefined, 4));
+            console.log(`saved prefs for ${this.prefsDirPath}/${filename}`);
+        }
+
+        this.loadPrefs = function(filename, silent = false) {
+            if (!fs.existsSync(`${this.prefsDirPath}/${filename}`)) return {};
+        
+            const loadDataRaw = fs.readFileSync(`${this.prefsDirPath}/${filename}`);
+            const loadData = JSON.parse(loadDataRaw);
+            if (!silent)
+                console.log(`loaded prefs for ${this.prefsDirPath}/${filename}`);
+            return loadData;
+        }
     }
 }
 

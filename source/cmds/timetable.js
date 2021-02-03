@@ -4,18 +4,20 @@ const { MessageEmbed } = require("discord.js");
 
 const hunDaysNumDict = {"vasarnap" : 0, "hetfo" : 1, "kedd" : 2, "szerda" : 3, "csutortok" : 4, "pentek" : 5, "szombat" : 6};
 
-function cmdTimetable(client, timetable, students) {
-    client.on("message", (msg) => {
+function cmdTimetable(data) {
+    data.client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /^!(?:[oó]rarend|most)(?:\s+([a-zA-Záéíóöőúüű]+))?\s*$/i; // !órarend [nap] - !most
-        const match = msg.content.match(regex);
+        const cont = Utilz.prefixless(data, msg);
+
+        const regex = /^(?:[oó]rarend|most)(?:\s+([a-zA-Záéíóöőúüű]+))?\s*$/i; // !órarend [nap] - !most
+        const match = cont?.match(regex);
         if (!match) return;
 
         const targetDayStr = match[1];
         let targetDay = Utilz.removeAccents(targetDayStr?.toLowerCase() ?? "ma");
         console.log(`querying for '${targetDay}'...`);
         if (targetDay == "ma") {
-            sendTodayTimetable(msg, timetable);
+            sendTodayTimetable(msg, data.timetable);
             return;
         } else if (targetDay == "holnap") {
             targetDay = Utilz.getDayStringFromNum(new Date().getDay() + 1);
@@ -25,7 +27,7 @@ function cmdTimetable(client, timetable, students) {
             targetDay = Utilz.getDayStringFromNum(hunDaysNumDict[targetDay]);
         }
 
-        sendTimetableOfDay(msg, timetable, targetDay);
+        sendTimetableOfDay(msg, data.timetable, targetDay);
     });
 }
 

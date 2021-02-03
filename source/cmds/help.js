@@ -17,12 +17,14 @@ const cmdList = {
 
 const footerNote = "A []-nél egy paraméter opcionálisan megadható,\nA <>-nél egy paraméter kötelező.";
 
-function cmdHelp(client, timetable, students) {
-    client.on("message", (msg) => {
+function cmdHelp(data) {
+    data.client.on("message", (msg) => {
         if (msg.author.bot) return;
-        const regex = /^!help\s*!?(.*?)\s*$/i;
-        const match = msg.content.match(regex);
-        if (!match) return
+        const cont = Utilz.prefixless(data, msg);
+
+        const regex = /^help\s*(.*?)\s*$/i;
+        const match = cont?.match(regex);
+        if (!match) return;
 
         if (!match[1]) {
             const reply = Object.keys(cmdList).reduce((a, b) => a + "\n"+ b);
