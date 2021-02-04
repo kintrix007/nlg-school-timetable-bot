@@ -116,7 +116,7 @@ class Utilz {
                 console.log(`created dir '${this.prefsDirPath}' because it did not exist`);
             }
             fs.writeFileSync(`${this.prefsDirPath}/${filename}`, JSON.stringify(saveData, undefined, 4));
-            console.log(`saved prefs in ${this.prefsDirPath}/${filename}`);
+            console.log(`saved prefs in '${this.prefsDirPath}/${filename}'`);
         }
 
         this.loadPrefs = function(filename, silent = false) {
@@ -125,7 +125,7 @@ class Utilz {
             const loadDataRaw = fs.readFileSync(`${this.prefsDirPath}/${filename}`);
             const loadData = JSON.parse(loadDataRaw);
             if (!silent)
-                console.log(`loaded prefs from ${this.prefsDirPath}/${filename}`);
+                console.log(`loaded prefs from '${this.prefsDirPath}/${filename}'`);
             return loadData;
         }
     }

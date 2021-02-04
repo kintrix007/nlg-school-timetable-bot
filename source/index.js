@@ -141,7 +141,7 @@ function loadSetPrefixCmd(data) {
             const currentPrefix = prefixes[guildID];
             const embed = new DC.MessageEmbed()
                 .setColor(0x00bb00)
-                .setDescription(`Jelenleg a(z) \`${currentPrefix ?? data.defaultPrefix}\` van kiválasztva, mint prefix.`);
+                .setDescription(`Jelenleg a(z) \`${currentPrefix ?? data.defaultPrefix}\` van kiválasztva mint prefix.`);
             msg.channel.send(embed);
             return;
         }

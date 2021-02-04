@@ -12,17 +12,16 @@ function cmdNextClass(data) {
         if (!match) return;
 
         const targetStudentStr = match[1] ?? (msg.member.nickname ?? msg.member.user.username);
-        console.log(targetStudentStr);
 
         const targetStudent = Utilz.lookupNameFromAlias(targetStudentStr);
         if ( // check if classmate exists
             !data.students.roster.includes(targetStudent)
         ) { // return if doesn't exist
-            console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but they aren't a student`);
             const embed = new MessageEmbed()
                 .setColor(0xbb0000)
                 .setDescription(`Nincs rögzítve **${targetStudentStr}** nevű tagja az osztálynak.`)
             msg.channel.send(embed);
+            console.log(`${msg.member.user.username}#${msg.member.user.discriminator} tried to query ${targetStudentStr}'s next class, but they aren't a student`);
             return;
         }
         

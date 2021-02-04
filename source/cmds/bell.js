@@ -47,6 +47,7 @@ function cmdBell(data) {
     });
 
     setupJobs(data);
+    console.log("bell jobs set up successfully");
     
     // checkInterval = setInterval(checkBell, 300 * 60, data.client, data.timetable);
 }
@@ -129,19 +130,22 @@ function ringBellConstructor(data) {
         const currentTime = new Time(scheduleDate.getHours(), scheduleDate.getMinutes());
         if (!today) return;
 
-        const lessonsStart = today.filter(lesson => lesson.data.start.compare(now) === 0);      // lessons that start now.
+        const lessonsStart = today.filter(lesson => lesson.data.start.compare(currentTime) === 0);      // lessons that start now.
+        // console.log(lessonsStart);
         const lessonsStrings = lessonsStart.map(lesson => {
-            const subj = Utilz.capitalize(lesson.subj);
+            const subj = lesson.subj;
             const elec = lesson.data.elective ? " (fakt)" : "";
-            const meetURL = Utilz.getMeetingURL(subj)[elec ? 1 : 0];
-            return "**" + subj + elec + " " + meetURL + "**";
+            const meetURL = Utilz.getMeetingURL(subj)[elec ? "1" : "0"];
+            return "**" + Utilz.capitalize(subj) + elec + " " + meetURL + "**";
         });
+
+
 
         const reply = lessonsStrings.reduce((a, b) => a + "\n" + b) + "\n"
             + (lessonsStart.length > 1 ? "órák kezdődnek." : "óra kezdődik.");
         const embed = new MessageEmbed()
             .setColor(0x00bb00)
-            .setTitle(Math.random < 0.02 ? "Irány órára gyerekek!" : "Csöngő van!")
+            .setTitle(Math.random < 0.02 ? "Irány órára, gyerekek!" : "Csöngő van!")
             .setDescription(reply);
 
         bell = Utilz.loadPrefs(bellPrefs);
@@ -161,6 +165,8 @@ function ringBellConstructor(data) {
                 })
                 .catch(err => console.log("ringBell error, channel does not exist:\n" + err));
         });
+
+        console.log("rang the bell");
     };
 }
 
