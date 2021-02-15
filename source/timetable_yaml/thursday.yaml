@@ -1,0 +1,49 @@
+- matek:
+		start: "08:00"
+		length: 45
+		elective: yes
+
+- angol1:
+		start: "08:55"
+		length: 45
+		elective: no
+
+- info:
+		start: "09:55"
+		length: 45
+		elective: yes
+
+- orosz:
+		start: "10:50"
+		length: 45
+		elective: no
+
+- nemet_kl:
+		start: "10:50"
+		length: 45
+		elective: no
+
+- olasz:
+		start: "10:50"
+		length: 45
+		elective: no
+
+- francia:
+		start: "10:50"
+		length: 45
+		elective: no
+
+- tori:
+		start: "11:45"
+		length: 45
+		elective: no
+
+- tori:
+		start: "11:45"
+		length: 45
+		elective: yes
+
+- foci:
+	start: "13:55"
+	length: 45
+	elective: yes
