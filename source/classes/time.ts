@@ -1,7 +1,7 @@
 export default class Time {
-    public time: number;
-    public hour: number;
-    public minute: number;
+    public time  : number = 0;
+    public hour  : number = 0;
+    public minute: number = 0;
     
     constructor(time: number | string, minutes: number | undefined = undefined) {
         if (typeof(time) === "string" && minutes === undefined) {
@@ -24,11 +24,11 @@ export default class Time {
         }
     }
 
-    valueOf(): number {
+    valueOf() {
         return this.time;
     }
 
-    toString(): string {
+    toString() {
         let h = `${this.hour < 10 ? "0" : ""}${this.hour}`;
         let m = `${this.minute < 10 ? "0" : ""}${this.minute}`;
         return `${h}:${m}`;

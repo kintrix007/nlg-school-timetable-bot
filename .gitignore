@@ -108,3 +108,7 @@ prefs/
 
 # Discord js token files
 *.token
+
+*.js
+
+*testing*.*

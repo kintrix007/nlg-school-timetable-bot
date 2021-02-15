@@ -1,11 +1,11 @@
-import fs from "fs";
-import yaml from "yaml";
-import DC from "discord.js";
+import * as fs from "fs";
+import * as yaml from "yaml";
+import * as DC from "discord.js";
 import * as types from "./types";
 
 export namespace Utilz {
     const prefsDirPath = "prefs";
-    const studentsAliases = yaml.parse(fs.readFileSync("students/aliases.yaml", "utf-8"));
+    const studentsAliases : {[key: string]: string[]} = yaml.parse(fs.readFileSync("students/aliases.yaml", "utf-8"));
     
     const getDayString = (function() {
         const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -24,7 +24,7 @@ export namespace Utilz {
     })();
 
     const translateDayStringToHun = (function() {
-        const days = {
+        const days: {[key: string]: string} = {
             "monday"    : "hétfő",
             "tuesday"   : "kedd",
             "wednesday" : "szerda",
@@ -33,6 +33,7 @@ export namespace Utilz {
             "saturday"  : "szombat",
             "sunday"    : "vasárnap"
         };
+        
         return (engDayString: string) => days[engDayString];
     })();
 
@@ -57,23 +58,24 @@ export namespace Utilz {
         return arr.sort((str1: string, str2: string) => {
             const a = removeAccents(str1);
             const b = removeAccents(str2);
-            if (a === b) return 0;
             if (a > b) return 1;
             if (a < b) return -1;
+            return 0;
         });
     };
 
-    function lookupNameFromAlias(lookupName: string): string {
+    function lookupNameFromAlias(lookupName: string): string | null {
         if (studentsAliases[lookupName] !== undefined) return lookupName;
-        for (var name in studentsAliases) {
+        for (var [name, aliases] of Object.entries(studentsAliases)) {
             if (removeAccents(name.toLowerCase()) === removeAccents(lookupName.toLowerCase())) {
                 return name;
             }
-            const names = studentsAliases[name].map(x => removeAccents(x.toLowerCase()));
+            const names = aliases.map(x => removeAccents(x.toLowerCase()));
             if (names.includes(removeAccents(lookupName.toLowerCase()))) {
                 return name;
             }
         }
+        return null;
     }
 
     function getNameAliases(name: string): string[] {
@@ -90,23 +92,25 @@ export namespace Utilz {
 
     // returns a lowercase, accentless string, that is after the specified prefix.
     // returns null, in not prefixed properly
-    function prefixless(data: types.CommandData, msg: DC.Message): string | null {
-        const guildID = msg.guild.id;
+    function prefixless(data: types.CommandData, msg: DC.Message): string {
+        const guildID = msg.guild!.id;
         const prefixes = loadPrefs("prefixes.json", true);
         const prefix = removeAccents(
             (prefixes[guildID] ?? data.defaultPrefix).toLowerCase()
         );
-        const regex = new RegExp(`^(<@!?${data.client.user.id}>).+$`);
+        const regex = new RegExp(`^(<@!?${data.client.user!.id}>).+$`);
         const cont = removeAccents(msg.content.toLowerCase());
         
-        if (cont.startsWith(prefix.toLowerCase()))
+        if (cont.startsWith(prefix.toLowerCase())) {
             return cont.slice(prefix.length);
+        }
         
         const match = cont.match(regex);
-        if (match)
+        if (match) {
             return cont.slice(match[1].length);
+        }
         
-        return null;
+        return "";
     }
 
     function savePrefs(saveData: any, filename: string): void {
@@ -127,5 +131,4 @@ export namespace Utilz {
             console.log(`loaded prefs from '${prefsDirPath}/${filename}'`);
         return loadData;
     }
-
 }
