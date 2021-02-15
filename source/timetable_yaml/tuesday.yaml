@@ -1,0 +1,44 @@
+- kemia:
+		start: "08:00"
+		length: 45
+		elective: yes
+
+- olasz:
+		start: "08:00"
+		length: 45
+		elective: no
+
+- magyar:
+		start: "08:55"
+		length: 45
+		elective: no
+
+- tori:
+		start: "09:55"
+		length: 45
+		elective: no
+
+- fizika:
+		start: "10:50"
+		length: 45
+		elective: yes
+
+- matek:
+		start: "11:45"
+		length: 45
+		elective: no
+
+- angol1:
+		start: "11:45"
+		length: 45
+		elective: no
+
+- angol2:
+		start: "12:50"
+		length: 45
+		elective: no
+
+- matek:
+		start: "13:55"
+		length: 45
+		elective: yes
