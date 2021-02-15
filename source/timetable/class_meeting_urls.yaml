@@ -2,61 +2,61 @@
 # second line is elective
 
 biosz: 
-	- "https://meet.google.com/lookup/d6e5ql7inw"
-	- "https://meet.google.com/lookup/dwhxsgtfbj"
+  - "https://meet.google.com/lookup/d6e5ql7inw"
+  - "https://meet.google.com/lookup/dwhxsgtfbj"
 
 angol1: 
-	- "https://meet.google.com/lookup/cjfuxo7crt"
-	- ""
+  - "https://meet.google.com/lookup/cjfuxo7crt"
+  - ""
 
 angol2: 
-	- "https://meet.google.com/lookup/bz4p6chq2a"
-	- ""
+  - "https://meet.google.com/lookup/bz4p6chq2a"
+  - ""
 
 nemet_hm: 
-	- "https://meet.google.com/lookup/hro6eskqh7"
-	- ""
+  - "https://meet.google.com/lookup/hro6eskqh7"
+  - ""
 
 nemet_kl: 
-	- "https://meet.google.com/lookup/fjts7o3kse"
-	- ""
+  - "https://meet.google.com/lookup/fjts7o3kse"
+  - ""
 
 francia: 
-	- "https://meet.google.com/kjp-qzup-pov"
-	- ""
+  - "https://meet.google.com/kjp-qzup-pov"
+  - ""
 
 orosz: 
-	- "https://meet.google.com/lookup/f2qepalmxr"
-	- ""
+  - "https://meet.google.com/lookup/f2qepalmxr"
+  - ""
 
 olasz: 
-	- ""
-	- ""
+  - ""
+  - ""
 
 magyar: 
-	- "https://meet.google.com/lookup/gvwtod56cb"
-	- ""
+  - "https://meet.google.com/lookup/gvwtod56cb"
+  - ""
 
 matek: 
-	- "https://meet.google.com/lookup/grskynez65"
-	- "https://meet.google.com/lookup/g66ih3unij"
+  - "https://meet.google.com/lookup/grskynez65"
+  - "https://meet.google.com/lookup/g66ih3unij"
 
 kemia:
-	- ""
-	- "https://meet.google.com/lookup/ev2bet3zso"
+  - ""
+  - "https://meet.google.com/lookup/ev2bet3zso"
 
 tori: 
-	- "https://meet.google.com/lookup/a3kvlymaao"
-	- ""
+  - "https://meet.google.com/lookup/a3kvlymaao"
+  - ""
 
 fizika: 
-	-	""
-	-	""
+  -  ""
+  -  ""
 
 info:
--	""
--	""
+-  ""
+-  ""
 
 foci:
-	-	""
-	-	"https://meet.google.com/lookup/b5ibptmkoj"
+  -  ""
+  -  "https://meet.google.com/lookup/b5ibptmkoj"

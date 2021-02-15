@@ -1,56 +1,56 @@
 biosz:
-	obligatory: [ A.Olivér, B.Péter, B.Kristóf, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, G.Balázs, H.Zoltán,
+  obligatory: [ A.Olivér, B.Péter, B.Kristóf, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, G.Balázs, H.Zoltán,
                 I.Lili, K.Milán, K.Boldizsár, K.Zsófia, L.Antónia, M.László, M.Lili, N.Krisztián, N.Ábel, N.Dóra,
-								N.István, O.Blanka, P.István, Sz.András, Sz.Bernadett, T.Csilla, T.Balázs, V.Dávid, V.Dorottya ]
-	elective: [ B.Bálint, F.Emese, F.Imola, I.Lili, K.Zsófia, Sz.Bernadett ]
+                N.István, O.Blanka, P.István, Sz.András, Sz.Bernadett, T.Csilla, T.Balázs, V.Dávid, V.Dorottya ]
+  elective: [ B.Bálint, F.Emese, F.Imola, I.Lili, K.Zsófia, Sz.Bernadett ]
 
 angol1:
-	obligatory: [ N.Ábel, B.Bálint, V.Dorottya, G.Balázs, I.Lili, B.Karolina, B.Kristóf, M.Lili, A.Olivér, P.István, T.Balázs, L.Antónia ]
+  obligatory: [ N.Ábel, B.Bálint, V.Dorottya, G.Balázs, I.Lili, B.Karolina, B.Kristóf, M.Lili, A.Olivér, P.István, T.Balázs, L.Antónia ]
 
 angol2:
-	obligatory: [ O.Blanka, T.Csilla, V.Dávid, Sz.Bernadett, N.Dóra, F.Emese, D.Kinga, N.Krisztián, M.László, K.Milán, F.Imola, A.Olivér, B.Péter, Sz.András, H.Zoltán, K.Zsófia ]
+  obligatory: [ O.Blanka, T.Csilla, V.Dávid, Sz.Bernadett, N.Dóra, F.Emese, D.Kinga, N.Krisztián, M.László, K.Milán, F.Imola, A.Olivér, B.Péter, Sz.András, H.Zoltán, K.Zsófia ]
 
 nemet_hm:
-	obligatory: [ N.Ábel, Sz.Bernadett, V.Dorottya, F.Emese, B.Kristóf, A.Olivér, T.Balázs ]
+  obligatory: [ N.Ábel, Sz.Bernadett, V.Dorottya, F.Emese, B.Kristóf, A.Olivér, T.Balázs ]
 
 nemet_kl:
-	obligatory: [ G.Balázs, V.Dávid, M.László, B.Péter, L.Antónia ]
+  obligatory: [ G.Balázs, V.Dávid, M.László, B.Péter, L.Antónia ]
 
 francia:
-	obligatory: [ Sz.András, K.Zsófia, M.Lili, N.István ]
+  obligatory: [ Sz.András, K.Zsófia, M.Lili, N.István ]
 
 orosz:
-	obligatory: [ B.Bálint, O.Blanka, K.Boldizsár, I.Lili, B.Karolina, F.Imola, P.István, H.Zoltán ]
+  obligatory: [ B.Bálint, O.Blanka, K.Boldizsár, I.Lili, B.Karolina, F.Imola, P.István, H.Zoltán ]
 
 olasz:
-	obligatory: [ T.Csilla, N.Dóra, D.Kinga, K.Milán ]
+  obligatory: [ T.Csilla, N.Dóra, D.Kinga, K.Milán ]
 
 magyar:
-	obligatory: [ A.Olivér, B.Péter, B.Kristóf, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, G.Balázs, H.Zoltán,
+  obligatory: [ A.Olivér, B.Péter, B.Kristóf, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, G.Balázs, H.Zoltán,
                 I.Lili, K.Milán, K.Boldizsár, K.Zsófia, L.Antónia, M.László, M.Lili, N.Krisztián, N.Ábel, N.Dóra,
-								N.István, O.Blanka, P.István, Sz.András, Sz.Bernadett, T.Csilla, T.Balázs, V.Dávid, V.Dorottya ]
-	elective: [ Sz.Bernadett, T.Csilla, H.Zoltán, Sz.András ]
+                N.István, O.Blanka, P.István, Sz.András, Sz.Bernadett, T.Csilla, T.Balázs, V.Dávid, V.Dorottya ]
+  elective: [ Sz.Bernadett, T.Csilla, H.Zoltán, Sz.András ]
 
 matek:
-	obligatory: [ D.Kinga, F.Emese, F.Imola, H.Zoltán, K.Milán, K.Zsófia, M.László, N.Krisztián, N.Dóra, N.István, O.Blanka, Sz.András, Sz.Bernadett, T.Csilla, V.Dávid ]
-	elective: [ N.Ábel, B.Bálint, K.Boldizsár, V.Dorottya, G.Balázs, I.Lili, B.Karolina, B.Kristóf, M.Lili, A.Olivér, P.István, T.Balázs, L.Antónia ]
+  obligatory: [ D.Kinga, F.Emese, F.Imola, H.Zoltán, K.Milán, K.Zsófia, M.László, N.Krisztián, N.Dóra, N.István, O.Blanka, Sz.András, Sz.Bernadett, T.Csilla, V.Dávid ]
+  elective: [ N.Ábel, B.Bálint, K.Boldizsár, V.Dorottya, G.Balázs, I.Lili, B.Karolina, B.Kristóf, M.Lili, A.Olivér, P.István, T.Balázs, L.Antónia ]
 
 kemia:
-	elective: [ B.Karolina, B.Bálint, F.Emese, F.Imola, K.Boldizsár, K.Zsófia, L.Antónia, O.Blanka, A.Olivér, N.István ]
+  elective: [ B.Karolina, B.Bálint, F.Emese, F.Imola, K.Boldizsár, K.Zsófia, L.Antónia, O.Blanka, A.Olivér, N.István ]
 
 tori:
-	obligatory: [ T.Csilla, V.Dávid, N.Dóra, G.Balázs ]
-	elective: [ A.Olivér, B.Péter, B.Kristóf, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, H.Zoltán,
-	            I.Lili, K.Milán, K.Boldizsár, K.Zsófia, L.Antónia, M.László, M.Lili, N.Krisztián, N.Ábel,
-							N.István, O.Blanka, P.István, Sz.András, Sz.Bernadett, T.Balázs, V.Dorottya ]
+  obligatory: [ T.Csilla, V.Dávid, N.Dóra, G.Balázs ]
+  elective: [ A.Olivér, B.Péter, B.Kristóf, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, H.Zoltán,
+              I.Lili, K.Milán, K.Boldizsár, K.Zsófia, L.Antónia, M.László, M.Lili, N.Krisztián, N.Ábel,
+              N.István, O.Blanka, P.István, Sz.András, Sz.Bernadett, T.Balázs, V.Dorottya ]
 
 fizika:
-	obligatory: [ A.Olivér, B.Péter, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, G.Balázs, H.Zoltán, I.Lili, K.Milán, K.Zsófia,
-	              L.Antónia, M.László, M.Lili, N.Krisztián, N.Dóra, O.Blanka, Sz.András, Sz.Bernadett, T.Csilla, T.Balázs, V.Dávid ]
-	elective: [ N.Ábel, V.Dorottya, B.Kristóf, P.István, N.István, K.Boldizsár ]
+  obligatory: [ A.Olivér, B.Péter, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, G.Balázs, H.Zoltán, I.Lili, K.Milán, K.Zsófia,
+                L.Antónia, M.László, M.Lili, N.Krisztián, N.Dóra, O.Blanka, Sz.András, Sz.Bernadett, T.Csilla, T.Balázs, V.Dávid ]
+  elective: [ N.Ábel, V.Dorottya, B.Kristóf, P.István, N.István, K.Boldizsár ]
 
 info:
-	elective: [ T.Balázs,  P.István,  "**[A lista hiányos...]**" ]
+  elective: [ T.Balázs,  P.István,  "**[A lista hiányos...]**" ]
 
 foci:
-	elective: [ B.Karolina, L.Antónia, M.Lili, N.Dóra, V.Dávid, K.Milán, G.Balázs ]
+  elective: [ B.Karolina, L.Antónia, M.Lili, N.Dóra, V.Dávid, K.Milán, G.Balázs ]
