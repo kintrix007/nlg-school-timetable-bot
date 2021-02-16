@@ -9,6 +9,7 @@ import { createCmdsListener } from "./commands";
 const client = new DC.Client();
 
 const DEFAULT_PREFIX = "!";
+const CMDS_DIR = "build/cmds";
 
 function main() {
     const timetable = loadTimetableData();
@@ -27,7 +28,7 @@ function main() {
         defaultPrefix: DEFAULT_PREFIX
     };
 
-    createCmdsListener(data);
+    createCmdsListener(data, CMDS_DIR);
     loginBot();
 }
 

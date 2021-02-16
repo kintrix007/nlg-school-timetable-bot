@@ -11,7 +11,9 @@ function cmdFather(data: types.Data, cont: string, msg: Message) {
     }
 }
 
-export const cmd: types.Command = {
+const cmd: types.Command = {
     func: cmdFather,
     commandName: "miatyánk"
 }
+
+module.exports = cmd;
