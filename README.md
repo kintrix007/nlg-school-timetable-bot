@@ -2,6 +2,21 @@
 
 ### This bot script is made for personal use, for Németh László Gimnázium's 11/a grade, to be specific.
 
-The concept of the bot is applicable for different schools and timetables as well, since it reads all the school specific data from JSON files.
+The bot is made so that it can easily be used with different schools, and timetables as well. All the data is read from YAML files.
+(By changing the names of the subjects it's also needed to change them in `types.ts`.)
 
-If you - for some reason - want to use this bot for your school's (online) education, you only need to replace files in the `source/timetable/` and `source/students/` folders.
+---
+
+### Dependencies
+
+- discord.js
+- node-schedule
+- yaml
+
+Run `npm install` in the project directory to get the required files.
+
+---
+
+### How to use
+
+~~To be written~~
