@@ -3,7 +3,6 @@ import * as Utilz from "./classes/utilz";
 import * as fs from "fs";
 import { Message } from "discord.js";
 
-const CMDS_DIR = "source/cmds";
 const cmds: types.Command[] = [];
 
 function createCmd(command: types.Command): void {
@@ -12,20 +11,22 @@ function createCmd(command: types.Command): void {
     cmds.push(command);
 }
 
-function loadCmds() {
-    const files = fs.readdirSync(CMDS_DIR)
+function loadCmds(cmds_dir: string) {
+    const files = fs.readdirSync(cmds_dir)
         .filter(filename => filename.endsWith(".js"));
-    console.log(files);
+    // console.log(files);
 
     files.forEach(filename => {
         const command: types.Command = require(`./cmds/${filename}`);
         createCmd(command)
         console.log(command);
-    })
+    });
+
+    // Would this even work...?
 }
 
-export function createCmdsListener(data: types.Data): void {
-    loadCmds();
+export function createCmdsListener(data: types.Data, cmds_dir: string): void {
+    loadCmds(cmds_dir);
     
     console.log("message listener set");
 
