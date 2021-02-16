@@ -2,8 +2,7 @@
 
 ### This bot script is made for mainly personal use, specifically for Németh László Gimnázium's 11/a grade.
 
-The bot is made so that it can easily be used with different schools, and timetables as well. All the data is read from YAML files.
-(By changing the names of the subjects it's also needed to change them in `types.ts`.)
+The bot is made so that it can be easily used with different schools, and timetables as well. All the data is read from YAML files.
 
 ---
 
