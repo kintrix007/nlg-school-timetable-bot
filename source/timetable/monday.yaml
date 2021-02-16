@@ -1,49 +1,49 @@
-- biosz:
-    start: "08:00"
-    length: 45
-    elective: yes
+- subj: biosz
+  start: "08:00"
+  length: 45
+  elective: true
 
-- angol2:
-    start: "08:55"
-    length: 45
-    elective: no
+- subj: angol2
+  start: "08:55"
+  length: 45
+  elective: false
 
-- biosz:
-    start: "09:55"
-    length: 45
-    elective: no
+- subj: biosz
+  start: "09:55"
+  length: 45
+  elective: false
 
-- nemet_hm:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: nemet_hm
+  start: "10:50"
+  length: 45
+  elective: false
 
-- nemet_kl:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: nemet_kl
+  start: "10:50"
+  length: 45
+  elective: false
 
-- francia:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: francia
+  start: "10:50"
+  length: 45
+  elective: false
 
-- orosz:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: orosz
+  start: "10:50"
+  length: 45
+  elective: false
 
-- olasz:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: olasz
+  start: "10:50"
+  length: 45
+  elective: false
 
-- nemet_hm:
-    start: "11:45"
-    length: 110
-    elective: no
+- subj: nemet_hm
+  start: "11:45"
+  length: 110
+  elective: false
 
-- matek:
-    start: "13:55"
-    length: 45
-    elective: yes
+- subj: matek
+  start: "13:55"
+  length: 45
+  elective: true

@@ -1,18 +1,17 @@
 {
     "compilerOptions": {
-        "target": "esnext",
-        "lib": ["esnext"],
-        "allowJs": true,
+        "target": "es6",
+        "lib": ["es6"],
+        "allowJs": false,
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
         "strict": true,
-        "forceConsistentCasingInFileNames": true,
+        "strictNullChecks": true,
+        "noImplicitAny": true,
         "noFallthroughCasesInSwitch": true,
-        "module": "esnext",
+        "forceConsistentCasingInFileNames": true,
         "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
+        "isolatedModules": false,
         "noEmit": false
     }
 }

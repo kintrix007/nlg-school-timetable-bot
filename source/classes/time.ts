@@ -3,7 +3,7 @@ export default class Time {
     public hour  : number = 0;
     public minute: number = 0;
     
-    constructor(time: number | string, minutes: number | undefined = undefined) {
+    constructor(time: Date | number | string, minutes: number | undefined = undefined) {
         if (typeof(time) === "string" && minutes === undefined) {
             const hourStr = time.slice(0, 2);
             const minuteStr = time.slice(3, 5);
@@ -11,6 +11,11 @@ export default class Time {
             this.minute = parseInt(minuteStr);
             this.time = this.hour * 60 + this.minute;
         } else
+        if (time instanceof Date && minutes === undefined) {
+            this.hour = time.getHours();
+            this.minute = time.getMinutes();
+            this.time = this.hour * 60 + this.minute;
+        }
         if (typeof(time) === "number") {
             if (minutes === undefined) {
                 this.time = time;

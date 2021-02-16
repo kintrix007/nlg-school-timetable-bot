@@ -1,6 +1,7 @@
 import * as DC from "discord.js";
 import Time from "./time";
 
+// Timetable
 export interface Lesson {
     subj:       string;
     start:      Time;
@@ -9,27 +10,20 @@ export interface Lesson {
     elective:   boolean;
 }
 
+export type TimetableDay = Lesson[];
+
+export interface Timetable {
+    [key: string]: TimetableDay;
+}
+
+// Students
 export interface Attendants {
-    obligatory: string[] | undefined;
-    elective:   string[] | undefined;
+    obligatory?: string[];
+    elective?:   string[];
 }
 
 export interface LessonsAttendants {
-    biosz:      Attendants;
-    angol1:     Attendants;
-    angol2:     Attendants;
-    nemet_hm:   Attendants;
-    nemet_kl:   Attendants;
-    francia:    Attendants;
-    orosz:      Attendants;
-    olasz:      Attendants;
-    magyar:     Attendants;
-    matek:      Attendants;
-    kemia:      Attendants;
-    tori:       Attendants;
-    fizika:     Attendants;
-    info:       Attendants;
-    foci:       Attendants;
+    [key: string]: Attendants;
 }
 
 export interface Students {
@@ -37,9 +31,18 @@ export interface Students {
     lessons:    LessonsAttendants;
 }
 
+// Data
 export interface CommandData {
     client:         DC.Client;
-    timetable:      Lesson[];
+    timetable:      Timetable;
     students:       Students;
     defaultPrefix:  string;
+}
+
+// Bot Command
+export interface BotCommand {
+    func:           Function;
+    usage?:         string;
+    description?:   string;
+    examples?:      string[];
 }

@@ -1,55 +1,55 @@
-- tori:
-    start: "08:00"
-    length: 45
-    elective: yes
+- subj: tori
+  start: "08:00"
+  length: 45
+  elective: true
 
-- biosz:
-    start: "08:00"
-    length: 45
-    elective: yes
+- subj: biosz
+  start: "08:00"
+  length: 45
+  elective: true
 
-- biosz:
-    start: "08:55"
-    length: 45
-    elective: no
+- subj: biosz
+  start: "08:55"
+  length: 45
+  elective: false
 
-- angol1:
-    start: "09:55"
-    length: 45
-    elective: no
+- subj: angol1
+  start: "09:55"
+  length: 45
+  elective: false
 
-- matek:
-    start: "09:55"
-    length: 45
-    elective: no
+- subj: matek
+  start: "09:55"
+  length: 45
+  elective: false
 
-- angol2:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: angol2
+  start: "10:50"
+  length: 45
+  elective: false
 
-- orosz:
-    start: "11:45"
-    length: 45
-    elective: no
+- subj: orosz
+  start: "11:45"
+  length: 45
+  elective: false
 
-- nemet_hm:
-    start: "11:45"
-    length: 45
-    elective: no
+- subj: nemet_hm
+  start: "11:45"
+  length: 45
+  elective: false
 
-- olasz:
-    start: "11:45"
-    length: 45
-    elective: no
+- subj: olasz
+  start: "11:45"
+  length: 45
+  elective: false
 
 
-- matek:
-    start: "13:55"
-    length: 45
-    elective: yes
+- subj: matek
+  start: "13:55"
+  length: 45
+  elective: true
 
-- kemia:
-    start: "16:00"
-    length: 45
-    elective: yes
+- subj: kemia
+  start: "16:00"
+  length: 45
+  elective: true

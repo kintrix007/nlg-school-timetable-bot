@@ -1,29 +1,29 @@
-- magyar:
-    start: "09:00"
-    length: 100
-    elective: no
+- subj: magyar
+  start: "09:00"
+  length: 100
+  elective: false
 
-- nemet_hm:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: nemet_hm
+  start: "10:50"
+  length: 45
+  elective: false
 
-- nemet_kl:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: nemet_kl
+  start: "10:50"
+  length: 45
+  elective: false
 
-- olasz:
-    start: "10:50"
-    length: 45
-    elective: no
+- subj: olasz
+  start: "10:50"
+  length: 45
+  elective: false
 
-- matek:
-    start: "11:45"
-    length: 45
-    elective: no
+- subj: matek
+  start: "11:45"
+  length: 45
+  elective: false
 
-- matek:
-    start: "12:05"
-    length: 90
-    elective: yes
+- subj: matek
+  start: "12:05"
+  length: 90
+  elective: true

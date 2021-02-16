@@ -1,44 +1,44 @@
-- kemia:
-    start: "08:00"
-    length: 45
-    elective: yes
+- subj: kemia
+  start: "08:00"
+  length: 45
+  elective: true
 
-- olasz:
-    start: "08:00"
-    length: 45
-    elective: no
+- subj: olasz
+  start: "08:00"
+  length: 45
+  elective: false
 
-- magyar:
-    start: "08:55"
-    length: 45
-    elective: no
+- subj: magyar
+  start: "08:55"
+  length: 45
+  elective: false
 
-- tori:
-    start: "09:55"
-    length: 45
-    elective: no
+- subj: tori
+  start: "09:55"
+  length: 45
+  elective: false
 
-- fizika:
-    start: "10:50"
-    length: 45
-    elective: yes
+- subj: fizika
+  start: "10:50"
+  length: 45
+  elective: true
 
-- matek:
-    start: "11:45"
-    length: 45
-    elective: no
+- subj: matek
+  start: "11:45"
+  length: 45
+  elective: false
 
-- angol1:
-    start: "11:45"
-    length: 45
-    elective: no
+- subj: angol1
+  start: "11:45"
+  length: 45
+  elective: false
 
-- angol2:
-    start: "12:50"
-    length: 45
-    elective: no
+- subj: angol2
+  start: "12:50"
+  length: 45
+  elective: false
 
-- matek:
-    start: "13:55"
-    length: 45
-    elective: yes
+- subj: matek
+  start: "13:55"
+  length: 45
+  elective: true

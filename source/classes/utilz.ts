@@ -6,7 +6,7 @@ import * as types from "./types";
 const prefsDirPath = "prefs";
 const studentsAliasesRaw = fs.readFileSync("source/students/aliases.yaml", "utf-8").toString();
 const studentsAliases : {[key: string]: string[]} = yaml.parse(studentsAliasesRaw);
-    
+
 export const getDayString = (function() {
     const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
     
@@ -91,7 +91,7 @@ export const getMeetingURL = (function() {
 })();
 
 // returns a lowercase, accentless string, that is after the specified prefix.
-// returns null, in not prefixed properly
+// returns an emtpy string if there it is incorrect
 export function prefixless(data: types.CommandData, msg: DC.Message): string {
     const guildID = msg.guild!.id;
     const prefixes = loadPrefs("prefixes.json", true);
