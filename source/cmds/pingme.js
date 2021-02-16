@@ -1,4 +1,4 @@
-const Utilz = require("../classes/utilz.js");
+const Utilz = require("../classes/utilz");
 const { MessageEmbed } = require("discord.js");
 
 let bell = {};

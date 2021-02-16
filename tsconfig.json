@@ -1,18 +1,18 @@
 {
     "compilerOptions": {
         "target": "es6",
-        "lib": ["es6"],
-        "allowJs": false,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
+        "module": "commonjs",
+        "lib": ["es6", "ES2019.Array"],
+        "allowJs": true,
+        "outDir": "build",
         "strict": true,
-        "strictNullChecks": true,
         "noImplicitAny": true,
-        "noFallthroughCasesInSwitch": true,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "moduleResolution": "node",
-        "isolatedModules": false,
-        "noEmit": false,
-        "outDir": "build"
-    }
+        "strictNullChecks": true
+    },
+    "include": ["source/**/*"],
+    "exclude": ["node_modules", "**/*.spec.ts"]
 }
