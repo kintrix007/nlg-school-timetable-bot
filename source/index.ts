@@ -1,10 +1,10 @@
-// import * as Utilz from "./classes/utilz.js";
-import * as types from "./classes/types.js";
+// import * as Utilz from "./classes/utilz";
+import * as types from "./classes/types";
 import * as DC from "discord.js";
 import * as fs from "fs";
 import * as yaml from "yaml";
-import Time from "./classes/time.js";
-import { createCmdsListener } from "./commands.js";
+import Time from "./classes/time";
+import { createCmdsListener } from "./commands";
 
 const client = new DC.Client();
 
@@ -20,7 +20,7 @@ function main() {
         console.log("current time is:", currentTime.toString());
     });
 
-    const data: types.CommandData = {
+    const data: types.Data = {
         client: client,
         timetable: timetable,
         students: students,
@@ -51,7 +51,7 @@ function loadTimetableData(): types.Timetable {
         const dayDataRaw = fs.readFileSync(`source/timetable/${day}.yaml`).toString();
         const dayData: LessonRaw[] = yaml.parse(dayDataRaw);
         const convertedDayData : types.TimetableDay = dayData.map(x => {
-            const lesson: types.Lesson = {
+            const lesson: types.LessonData = {
                 subj: x.subj,
                 start: new Time(x.start),
                 end: new Time(x.start).add(new Time(x.length)),

@@ -1,8 +1,8 @@
 import * as DC from "discord.js";
-import Time from "./time.js";
+import Time from "./time";
 
 // Timetable
-export interface Lesson {
+export interface LessonData {
     subj:       string;
     start:      Time;
     end:        Time;
@@ -10,10 +10,10 @@ export interface Lesson {
     elective:   boolean;
 }
 
-export type TimetableDay = Lesson[];
+export type TimetableDay = LessonData[];
 
 export interface Timetable {
-    [key: string]: TimetableDay;
+    [day: string]: TimetableDay;
 }
 
 // Students
@@ -23,7 +23,7 @@ export interface Attendants {
 }
 
 export interface LessonsAttendants {
-    [key: string]: Attendants;
+    [lesson: string]: Attendants;
 }
 
 export interface Students {
@@ -32,7 +32,7 @@ export interface Students {
 }
 
 // Data
-export interface CommandData {
+export interface Data {
     client:         DC.Client;
     timetable:      Timetable;
     students:       Students;
@@ -40,7 +40,7 @@ export interface CommandData {
 }
 
 // Bot Command
-export interface BotCommand {
+export interface Command {
     func:           Function;
     commandName:    string;
     aliases?:       string;

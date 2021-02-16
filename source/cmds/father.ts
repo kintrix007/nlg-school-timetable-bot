@@ -1,5 +1,5 @@
-// import * as Utilz from "../classes/utilz.js";
-import * as types from "../classes/types.js";
+// import * as Utilz from "../classes/utilz";
+import * as types from "../classes/types";
 import { Message } from "discord.js";
 
 const fecoSynonyms = ["miatyank", "feco", "feri", "feci", "feciba", "feriba", "isten", "mester", "fonok", "foni", "nemeth"];

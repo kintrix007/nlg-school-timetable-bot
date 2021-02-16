@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as yaml from "yaml";
 import * as DC from "discord.js";
-import * as types from "./types.js";
+import * as types from "./types";
 
 const prefsDirPath = "prefs";
 

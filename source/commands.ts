@@ -1,13 +1,13 @@
-import * as types from "./classes/types.js";
-import * as Utilz from "./classes/utilz.js";
+import * as types from "./classes/types";
+import * as Utilz from "./classes/utilz";
 import * as fs from "fs";
 import { Message } from "discord.js";
 
 const CMDS_DIR = "source/cmds";
-const cmds: types.BotCommand[] = [];
+const cmds: types.Command[] = [];
 
-function createCmd(command: types.BotCommand): void {
-    if (command.usage) console.log(`added command '${command.usage}'`);
+function createCmd(command: types.Command): void {
+    console.log(`added command '${command.commandName}'`);
 
     cmds.push(command);
 }
@@ -18,12 +18,13 @@ function loadCmds() {
     console.log(files);
 
     files.forEach(filename => {
-        const cmd = require(`source/cmds/${filename}`);
-        console.log(cmd);
+        const command: types.Command = require(`source/cmds/${filename}`);
+        createCmd(command)
+        console.log(command);
     })
 }
 
-export function createCmdsListener(data: types.CommandData): void {
+export function createCmdsListener(data: types.Data): void {
     loadCmds();
     
     console.log("message listener set");
@@ -40,7 +41,7 @@ export function createCmdsListener(data: types.CommandData): void {
     });
 }
 
-export function getCmdList(): types.BotCommand[] {
+export function getCmdList(): types.Command[] {
     return cmds
         .filter(x => x.usage !== undefined)
         .sort((a, b) => {

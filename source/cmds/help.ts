@@ -1,6 +1,6 @@
-import * as Utilz from "../classes/utilz.js";
-import * as types from "../classes/types.js";
-import { getCmdList } from "../commands.js";
+import * as Utilz from "../classes/utilz";
+import * as types from "../classes/types";
+import { getCmdList } from "../commands";
 import { Message, MessageEmbed } from "discord.js";
 
 const cmdList = getCmdList();
