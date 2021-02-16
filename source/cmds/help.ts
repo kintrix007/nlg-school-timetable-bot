@@ -7,7 +7,7 @@ const cmdList = getCmdList();
 
 const footerNote = "A [] helyén egy paraméter opcionálisan megadható,\nA <> helyén pedig egy paraméter kötelező.";
 
-function cmdHelp(data: types.CommandData, cont: string, msg: Message) {
+function cmdHelp(data: types.Data, cont: string, msg: Message) {
     const regex = /^\s*help\s*(.*?)\s*$/i;
     const match = cont?.match(regex);
     if (!match) return;
@@ -57,7 +57,7 @@ function cmdHelp(data: types.CommandData, cont: string, msg: Message) {
     }
 }
 
-export const cmd: types.BotCommand = {
+export const cmd: types.Command = {
     func: cmdHelp,
     commandName: "help",
     usage: "!help [parancs neve]",

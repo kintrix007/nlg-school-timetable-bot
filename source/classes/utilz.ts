@@ -93,7 +93,7 @@ export const getMeetingURL = (function() {
 
 // returns a lowercase, accentless string, that is after the specified prefix.
 // returns an emtpy string if there it is incorrect
-export function prefixless(data: types.CommandData, msg: DC.Message): string {
+export function prefixless(data: types.Data, msg: DC.Message): string {
     const prefix = removeAccents(getPrefix(data, msg.guild!).toLowerCase());
 
     const regex = new RegExp(`^(<@!?${data.client.user!.id}>).+$`);
@@ -111,7 +111,7 @@ export function prefixless(data: types.CommandData, msg: DC.Message): string {
     return "";
 }
 
-export function getPrefix(data: types.CommandData, guild: DC.Guild): string {
+export function getPrefix(data: types.Data, guild: DC.Guild): string {
     const guildID = guild.id;
     const prefixes = loadPrefs("prefixes.json", true);
     const prefix = prefixes[guildID] ?? data.defaultPrefix;
