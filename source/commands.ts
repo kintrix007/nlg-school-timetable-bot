@@ -17,7 +17,7 @@ function loadCmds(cmds_dir: string) {
     // console.log(files);
 
     files.forEach(filename => {
-        const command: types.Command = require(`${cmds_dir}/${filename}`);
+        const command: types.Command = require(`./cmds/${filename}`);
         createCmd(command)
         console.log(command);
     });

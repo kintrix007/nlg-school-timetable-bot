@@ -1,12 +1,17 @@
 // import * as Utilz from "./classes/utilz";
-import * as types from "./classes/types";
-import * as DC from "discord.js";
-import * as fs from "fs";
-import * as yaml from "yaml";
+// import * as types from "./classes/types";
+// import * as DC from "discord.js";
+// import * as fs from "fs";
+// import * as yaml from "yaml";
+import { Client } from "discord.js";
+import { readFileSync } from "fs";
+import { types } from "util";
+import { parse } from "yaml";
 import Time from "./classes/time";
+import { Data, LessonData, LessonsAttendants, Students, Timetable, TimetableDay } from "./classes/types";
 import { createCmdsListener } from "./commands";
 
-const client = new DC.Client();
+const client = new Client();
 
 const DEFAULT_PREFIX = "!";
 const CMDS_DIR = "build/cmds";
@@ -21,7 +26,7 @@ function main() {
         console.log("current time is:", currentTime.toString());
     });
 
-    const data: types.Data = {
+    const data: Data = {
         client: client,
         timetable: timetable,
         students: students,
@@ -33,11 +38,11 @@ function main() {
 }
 
 function loginBot() {
-    const token = fs.readFileSync("source/token.token", "ascii");
+    const token = readFileSync("source/token.token", "ascii");
     client.login(token);
 }
 
-function loadTimetableData(): types.Timetable {
+function loadTimetableData(): Timetable {
     const daysList = ["monday", "tuesday", "wednesday", "thursday", "friday"];
 
     interface LessonRaw {
@@ -47,12 +52,12 @@ function loadTimetableData(): types.Timetable {
         elective: boolean;
     }
 
-    const timetable: types.Timetable = {};
+    const timetable: Timetable = {};
     daysList.forEach(day => {
-        const dayDataRaw = fs.readFileSync(`source/timetable/${day}.yaml`).toString();
-        const dayData: LessonRaw[] = yaml.parse(dayDataRaw);
-        const convertedDayData : types.TimetableDay = dayData.map(x => {
-            const lesson: types.LessonData = {
+        const dayDataRaw = readFileSync(`source/timetable/${day}.yaml`).toString();
+        const dayData: LessonRaw[] = parse(dayDataRaw);
+        const convertedDayData : TimetableDay = dayData.map(x => {
+            const lesson: LessonData = {
                 subj: x.subj,
                 start: new Time(x.start),
                 end: new Time(x.start).add(new Time(x.length)),
@@ -61,19 +66,19 @@ function loadTimetableData(): types.Timetable {
             };
             return lesson;
         }).sort((lesson1, lesson2) => Math.sign(lesson1.start.time - lesson2.start.time));
-        timetable[day] = convertedDayData as types.TimetableDay;
+        timetable[day] = convertedDayData as TimetableDay;
     });
 
     return timetable;
 }
 
-function loadStudentData(): types.Students {
-    const rosterRaw = fs.readFileSync("source/students/roster.yaml").toString()
-    const roster: string[] = yaml.parse(rosterRaw);
-    const lessonsRaw = fs.readFileSync("source/students/lessons.yaml").toString()
-    const lessons: types.LessonsAttendants = (yaml.parse(lessonsRaw));
+function loadStudentData(): Students {
+    const rosterRaw = readFileSync("source/students/roster.yaml").toString()
+    const roster: string[] = parse(rosterRaw);
+    const lessonsRaw = readFileSync("source/students/lessons.yaml").toString()
+    const lessons: LessonsAttendants = (parse(lessonsRaw));
 
-    const students: types.Students = {
+    const students: Students = {
         roster: roster.sort(),
         lessons: lessons
     };

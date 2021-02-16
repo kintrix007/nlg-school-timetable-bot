@@ -1,5 +1,5 @@
-const Utilz = require("../classes/utilz.js");
-const Time = require("../classes/time.js");
+const Utilz = require("../classes/utilz");
+const Time = require("../classes/time");
 const schedule = require("node-schedule");
 const { MessageEmbed } = require("discord.js");
 

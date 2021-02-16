@@ -2,9 +2,16 @@
   "name": "timetable-bot",
   "version": "1.0.0",
   "description": "A bot that keeps track of the timetable and rings the bell",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:dev": "nodemon",
+    "build": "rimraf ./build && ./node_modules/.bin/tsc",
+    "typeCheck": "rimraf ./build && ./node_modules/.bin/tsc --noEmit",
+    "start": "npm run build && node build/index.js",
+    "lintFix": "npm run lint --fix",
+    "lint": "./node_modules/.bin/eslint 'source/**/*.{js,ts}'",
+    "unitTest": "mocha -r ts-node/register test/**/*.spec.ts",
+    "test": "npm run lint && npm run unitTest"
   },
   "repository": {
     "type": "git",
@@ -25,6 +32,13 @@
     "@types/node": "^14.14.28",
     "@types/node-schedule": "^1.3.1",
     "@types/yaml": "^1.9.7",
-    "typescript": "^4.1.5"
+    "typescript": "^4.1.5",
+    "ts-node": "^9.1.1",
+    "eslint": "^7.10.0",
+    "@typescript-eslint/eslint-plugin": "^4.9.1",
+    "@typescript-eslint/parser": "^4.4.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.1.2",
+    "mocha": "^8.1.3"
   }
 }
