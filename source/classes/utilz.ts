@@ -1,9 +1,10 @@
 import * as fs from "fs";
 import * as yaml from "yaml";
 import * as DC from "discord.js";
-import * as types from "./types";
+import * as types from "./types.js";
 
 const prefsDirPath = "prefs";
+
 const studentsAliasesRaw = fs.readFileSync("source/students/aliases.yaml", "utf-8").toString();
 const studentsAliases : {[key: string]: string[]} = yaml.parse(studentsAliasesRaw);
 
@@ -93,11 +94,8 @@ export const getMeetingURL = (function() {
 // returns a lowercase, accentless string, that is after the specified prefix.
 // returns an emtpy string if there it is incorrect
 export function prefixless(data: types.CommandData, msg: DC.Message): string {
-    const guildID = msg.guild!.id;
-    const prefixes = loadPrefs("prefixes.json", true);
-    const prefix = removeAccents(
-        (prefixes[guildID] ?? data.defaultPrefix).toLowerCase()
-    );
+    const prefix = removeAccents(getPrefix(data, msg.guild!).toLowerCase());
+
     const regex = new RegExp(`^(<@!?${data.client.user!.id}>).+$`);
     const cont = removeAccents(msg.content.toLowerCase());
     
@@ -111,6 +109,13 @@ export function prefixless(data: types.CommandData, msg: DC.Message): string {
     }
     
     return "";
+}
+
+export function getPrefix(data: types.CommandData, guild: DC.Guild): string {
+    const guildID = guild.id;
+    const prefixes = loadPrefs("prefixes.json", true);
+    const prefix = prefixes[guildID] ?? data.defaultPrefix;
+    return prefix;
 }
 
 export function savePrefs(saveData: any, filename: string): void {

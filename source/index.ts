@@ -1,10 +1,10 @@
-// import * as Utilz from "./classes/utilz";
-import * as types from "./classes/types";
+// import * as Utilz from "./classes/utilz.js";
+import * as types from "./classes/types.js";
 import * as DC from "discord.js";
 import * as fs from "fs";
 import * as yaml from "yaml";
 import Time from "./classes/time.js";
-import { createCmdsListener } from "./commands";
+import { createCmdsListener } from "./commands.js";
 
 const client = new DC.Client();
 

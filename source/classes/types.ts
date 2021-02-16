@@ -1,5 +1,5 @@
 import * as DC from "discord.js";
-import Time from "./time";
+import Time from "./time.js";
 
 // Timetable
 export interface Lesson {
@@ -42,6 +42,8 @@ export interface CommandData {
 // Bot Command
 export interface BotCommand {
     func:           Function;
+    commandName:    string;
+    aliases?:       string;
     usage?:         string;
     description?:   string;
     examples?:      string[];

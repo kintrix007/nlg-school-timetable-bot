@@ -1,5 +1,5 @@
-// import * as Utilz from "../classes/utilz";
-import * as types from "../classes/types";
+// import * as Utilz from "../classes/utilz.js";
+import * as types from "../classes/types.js";
 import { Message } from "discord.js";
 
 const fecoSynonyms = ["miatyank", "feco", "feri", "feci", "feciba", "feriba", "isten", "mester", "fonok", "foni", "nemeth"];
@@ -12,5 +12,6 @@ function cmdFather(data: types.CommandData, cont: string, msg: Message) {
 }
 
 export const cmd: types.BotCommand = {
-    func: cmdFather
+    func: cmdFather,
+    commandName: "miatyánk"
 }

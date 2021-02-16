@@ -1,6 +1,7 @@
-import * as types from "./classes/types";
-import * as Utilz from "./classes/utilz";
+import * as types from "./classes/types.js";
+import * as Utilz from "./classes/utilz.js";
 import * as fs from "fs";
+import { Message } from "discord.js";
 
 const CMDS_DIR = "source/cmds";
 const cmds: types.BotCommand[] = [];
@@ -27,7 +28,7 @@ export function createCmdsListener(data: types.CommandData): void {
     
     console.log("message listener set");
 
-    data.client.on("message", msg => {
+    data.client.on("message", (msg: Message) => {
         console.log("recieved message", msg.content);
         if (msg.author.bot) return;
         const cont = Utilz.prefixless(data, msg);
