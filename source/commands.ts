@@ -17,11 +17,7 @@ function loadCmds(cmds_dir: string) {
     // console.log(files);
 
     files.forEach(filename => {
-<<<<<<< Updated upstream
-        const command: types.Command = require(`./cmds/${filename}`);
-=======
         const command: types.Command = require(`./${filename}`);
->>>>>>> Stashed changes
         createCmd(command)
         console.log(command);
     });
