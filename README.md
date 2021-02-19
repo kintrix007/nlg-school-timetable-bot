@@ -27,7 +27,7 @@ Now you have done the basic preparations to run this version of the bot, without
 
 ### How to change the timetable, the students listed etc...?
 
-1. If you go into the folder `source/` there are two subfolders in which you will need for that. There are `timetable/` and `students/`
+1. If you go into the folder `source/` there are two subfolders in which you will need for that. There are `timetable/` and `students/`.
 1. Both of these contain YAML files. (Files ending with `.yaml`)
 1. By looking at their contents you should get a pretty good idea about their format.
 1. Open up `monday.yaml`.
