@@ -25,7 +25,7 @@ Run `npm install` in the project directory to get the required files.
 1. Go into the `source/` folder, and create a file called `token.token`, and paste your bot's token there.
 Now you have done the basic preparations to run this version of the bot, without changing anything.
 
-### How to change the timetable, the classes etc...?
+### How to change the timetable, the students listed etc...?
 
 1. If you go into the folder `source/` there are two subfolders in which you will need for that. There are `timetable/` and `students/`
 1. Both of these contain YAML files. (Files ending with `.yaml`)
