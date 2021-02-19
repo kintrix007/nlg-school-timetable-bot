@@ -29,6 +29,10 @@ export default class Time {
         }
     }
 
+    equals(time: Time) {
+        return this.time === time.time;
+    }
+
     valueOf() {
         return this.time;
     }

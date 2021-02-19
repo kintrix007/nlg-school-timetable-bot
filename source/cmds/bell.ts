@@ -21,6 +21,12 @@ const cmd: types.Command = {
 };
 
 const PREFS_FILE = "bell.json";
+const customRingMessages = [
+    "Irány órára, gyerekek!",
+    "Vigyázzatok, mindenkit felírok, aki késik!",
+    "Futás, futás, futás! Kezdődik az óra!"
+];
+
 
 export interface BellData {
     [guildID: string]: {
@@ -62,9 +68,9 @@ async function setupJobs(data: types.Data) {
                 const startTime = lesson.start;
 
                 const rule = new schedule.RecurrenceRule();
+                rule.dayOfWeek = dayNum;
                 rule.hour = startTime.hour;
                 rule.minute = startTime.minute;
-                rule.dayOfWeek = dayNum;
                 
                 schedule.scheduleJob(`${dayStr}-${lesson.subj}-${lesson.start}`, rule, ringBellConstructor(data));
             });
@@ -74,10 +80,12 @@ async function setupJobs(data: types.Data) {
     function ringBellConstructor(data: types.Data) {
         return function(scheduleDate: Date): void {
             const today = data.timetable[Utilz.getDayString(scheduleDate)];
-            const currentTime = new Time(scheduleDate);
+            // const currentTime = new Time(scheduleDate);
+            const currentTime = new Time(10, 50);
+            console.log("bell schedule time:", currentTime.toString());
             if (!today) return;
     
-            const lessonsStart = today.filter(lesson => lesson.start === currentTime);      // lessons that start now.
+            const lessonsStart = today.filter(lesson => lesson.start.equals(currentTime));      // lessons that start now.
             const lessonsStrings = lessonsStart.map(lesson => {
                 const subj = lesson.subj;
                 const elec = (lesson.elective ? 1 : 0);
@@ -85,11 +93,19 @@ async function setupJobs(data: types.Data) {
                 return "**" + Utilz.capitalize(subj) + (elec ? " (fakt)" : "") + " " + meetURL + "**";
             });
     
+            if (lessonsStrings.length === 0) {
+                console.error("tried to ring the bell, but there weren't any lessons starting at this time." + currentTime.toString());
+                return;
+            }
+
             const reply = lessonsStrings.reduce((a, b) => a + "\n" + b) + "\n"
                 + (lessonsStart.length > 1 ? "órák kezdődnek." : "óra kezdődik.");
+            const ringMessage = (Math.random() < 0.01
+                ? customRingMessages[Math.floor(Math.random() * customRingMessages.length)]
+                : "Csöngő van!");
             const embed = new MessageEmbed()
                 .setColor(0x00bb00)
-                .setTitle(Math.random() < 0.02 ? "Irány órára, gyerekek!" : "Csöngő van!")
+                .setTitle(ringMessage)
                 .setDescription(reply);
     
             const bell: BellData = Utilz.loadPrefs(PREFS_FILE);
@@ -181,23 +197,6 @@ function getBellActive(msg: Message): void {
         .setDescription(reply);
     msg.channel.send(embed);
     console.log(`${msg.author.username}#${msg.author.discriminator} queried the bell channel and the ring role`);
-}
-
-function getRingRole(msg: Message) {
-    if (msg.channel instanceof DMChannel) return;
-
-    const guildID = msg.guild!.id;
-    const bell: BellData = Utilz.loadPrefs(PREFS_FILE);
-
-    const ringRoleID = bell[guildID]?.ringRoleID;
-
-    const reply = "A jelenleg kiválasztott csengetési *role*: " + (ringRoleID ? `<@&${ringRoleID}>`: "@everyone") + ".";
-
-    const embed = new MessageEmbed()
-        .setColor(0x00bb00)
-        .setDescription(reply);
-    msg.channel.send(embed);
-    console.log(`${msg.author.username}#${msg.author.discriminator} queried the ring role`);
 }
 
 module.exports = cmd;

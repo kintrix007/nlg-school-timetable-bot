@@ -81,7 +81,7 @@ function sendTimetableOfDay(data: types.Data, msg: Message, targetDate: Date) {
         table.map(([start, end, subj, elec, now]) => [
             start.toString(), end.toString(),
             subj + elec + " ".repeat(subjMaxLength - subj.length - elec.length),
-            (now ? " <-" : "")
+            (now ? "<-" : "")
         ])  .map(x => x.reduce((a, b) => a + " ║ " + b, "").trim())
             .reduce((a, b) => a + "\n" + b)
     + "\n```";
