@@ -40,7 +40,7 @@ function main() {
 }
 
 function loginBot() {
-    const token = fs.readFileSync("source/token.token").toString();
+    const token = fs.readFileSync("source/token.token").toString().trim();
     return client.login(token);
 }
 
