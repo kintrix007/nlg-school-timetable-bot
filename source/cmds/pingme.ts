@@ -45,7 +45,7 @@ async function cmdPingme({ data, msg }: types.CombinedData) {
         const embed = new MessageEmbed()
             .setColor(0xbb0000)
             .setTitle("Hiányzik hozzáférés...")
-            .setDescription("Nincs engedélyezve a `Manage Roles` hozzáférés.");
+            .setDescription("Nincs engedélyezve a `Manage Roles` hozzáférés, így nem fog működni a *rang* adás.");
         msg.channel.send(embed);
     }
 
