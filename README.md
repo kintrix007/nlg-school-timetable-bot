@@ -32,11 +32,12 @@ Now you have done the basic preparations to run this version of the bot, without
 1. By looking at their contents you should get a pretty good idea about their format.
 1. Open up `monday.yaml`.
 1. There, you'll see the definition of monday's schedule/timetable.
-    yaml
-    - subj: name_of_the_class
-      start: "08:00"
-      length: 45
-      elective: false
+```yaml
+- subj: name_of_the_class
+  start: "08:00"
+  length: 45
+  elective: false
+```
 1. You need to always follow the format `"HH:MM"` for the start time.
 1. The length can be any number, this tell the length in minutes.
 1. The elective just signifies whether or not a class is elective. Can be ignored completely, and just always set to `false` (recommended)
