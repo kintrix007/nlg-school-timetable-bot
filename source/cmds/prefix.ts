@@ -9,12 +9,12 @@ const description = "Átállítja a *prefix*et, amit a bot használ.\n"
 
 const cmd: types.Command = {
     func: cmdPrefix,
-    commandName: "prefix",
+    name: "prefix",
     adminCommand: true,
     usage: "prefix [új prefix]",
     description: description,
     examples: [ "", "!!", "." ],
-    aliases: [ "elotag", "hivoszo" ]
+    aliases: [ "előtag", "hivószó" ]
 };
 
 const PREFS_FILE = "prefixes.json";
@@ -49,7 +49,7 @@ function cmdPrefix({ data, msg, args }: types.CombinedData) {
     Utilz.savePrefs(PREFS_FILE, prefixes);
 
     const currentPrefix = Utilz.getPrefix(data, msg.guild!);
-    const helpCmdName = getHelpCmd()?.commandName;
+    const helpCmdName = getHelpCmd()?.name;
 
     const embed = new MessageEmbed()
         .setColor(0x00bb00)

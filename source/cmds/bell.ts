@@ -12,9 +12,9 @@ const description = "Be-, illetve kikapcsolja a csengetést az adott szerveren.\
 const cmd: types.Command = {
     func: cmdBell,
     setupFunc: setupJobs,
-    commandName: "csengetes",
+    name: "csengetés",
     adminCommand: true,
-    aliases: [ "csongetes", "csengo", "csongo" ],
+    aliases: [ "csöngetés", "csengő", "csöngő" ],
     usage: "csengetés [be|ki] [role pingelve]",
     description: description,
     examples: [ "", "be", "ki", "be @Csengetes" ]

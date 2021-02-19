@@ -8,8 +8,8 @@ const description = "Kilistázza egy adott diák jelenleg tartó, illetve a még
 
 const cmd: types.Command = {
     func: cmdNextLesson,
-    commandName: "kovetkezo",
-    aliases: [ "kovi", "next" ],
+    name: "következő",
+    aliases: [ "kövi", "next" ],
     usage: "következő [diák neve]",
     description: description,
     examples: [ "", "Ábel", "Balázs" ]

@@ -55,11 +55,13 @@ export interface CombinedData {
 }
 
 // Bot Command
+export type CommandGroup = "help" | "moderation" | "roles" | "utility";
+
 export interface Command {
-    func:           Function;
     setupFunc?:     (data: Data) => Promise<void>;
-    commandName:    string;
-    helpCommand?:   boolean;
+    func:           Function;
+    name:           string;
+    group?:         CommandGroup;
     aliases?:       string[];
     usage?:         string;
     description?:   string;

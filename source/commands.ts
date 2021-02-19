@@ -6,9 +6,9 @@ import { Message, MessageEmbed, DMChannel } from "discord.js";
 const cmds: types.Command[] = [];
 
 function createCmd(command: types.Command): void {
-    console.log(`loaded command '${command.commandName}'`);
+    console.log(`loaded command '${command.name}'`);
 
-    if (command.helpCommand) {
+    if (command.group === "help") {
         cmds.unshift(command);      // unshift = prepend
     } else {
         cmds.push(command);
@@ -60,14 +60,14 @@ export function createCmdsListener(data: types.Data, cmds_dir: string): void {
 
         cmds.forEach(cmd => {
             if (
-                Utilz.removeAccents(cmd.commandName.toLowerCase()) === command ||
+                Utilz.removeAccents(cmd.name.toLowerCase()) === command ||
                 cmd.aliases?.map(x => Utilz.removeAccents(x.toLowerCase()))?.includes(command)
             ) {
                 // if admin command called by non-admin, then return
                 if (cmd.adminCommand && !msg.member!.hasPermission("MANAGE_GUILD")) {
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
-                        .setDescription("Ehhez `Manage Server` hozzáférésre van szükséged.");
+                        .setDescription(`A \`${cmd.name}\` parancs használatához \`Manage Server\` hozzáférésre van szükséged.`);
                     msg.channel.send(embed);
                     return;
                 }
@@ -84,5 +84,5 @@ export function getCmdList(): types.Command[] {
 }
 
 export function getHelpCmd() {
-    return cmds.find(x => x.helpCommand === true);
+    return cmds.find(x => x.group === "help");
 }

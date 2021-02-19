@@ -5,7 +5,7 @@ const fecoSynonyms = ["miatyank", "feco", "feri", "feci", "feciba", "feriba", "i
 
 const cmd: types.Command = {
     func: cmdFather,
-    commandName: "miatyank",
+    name: "miatyánk",
     aliases: fecoSynonyms
 };
 

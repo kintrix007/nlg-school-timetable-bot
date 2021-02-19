@@ -5,9 +5,9 @@ import { MessageEmbed } from "discord.js";
 
 const cmd: types.Command = {
     func: cmdHelp,
-    commandName: "help",
-    helpCommand: true,
-    aliases: [ "segitseg" ],
+    name: "help",
+    group: "help",
+    aliases: [ "segítség" ],
     usage: "help [parancs neve]",
     description: "Megadja egy parancs használati módját, leírását, és mutat néhány pédát.",
     examples: [ "", "órarend", "követkető" ]
@@ -23,7 +23,8 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
 
     if (targetCommand) {
         // query specific help sheet
-        const command = cmdList.find(x => x.commandName === targetCommand || x.aliases?.includes(targetCommand));
+        const command = cmdList.find(x => Utilz.removeAccents(x.name.toLowerCase()) === targetCommand
+            || x.aliases?.map(x => Utilz.removeAccents(x.toLowerCase()))?.includes(targetCommand));
         if (!command) {
             const embed = new MessageEmbed()
                 .setColor(0xbb0000)
@@ -32,7 +33,7 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
             return;
         }
         const usage = "`" + currentPrefix + command.usage! + "`";
-        const commandName = currentPrefix + command.commandName;
+        const commandName = currentPrefix + command.name;
         const aliases = (command.aliases ? "alias: " + command.aliases.map(x => currentPrefix+x).reduce((a, b) => a + ", " + b) : "");
         const description = command.description || "**[Nincs hozzáadva leírás]**";
         const examples = (command.examples ? "**Pl.:  " +
@@ -52,10 +53,20 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
 
     } else {
         // query general help sheet
-        const reply = "```\n" + cmdList.reduce((a, b) => {
-            const usage = currentPrefix + b.usage!;
-            return a + usage + "\n";
-        }, "") + "\n```";
+        const commandsInGroups: {[group: string]: types.Command[]} = {};
+        cmdList.forEach(command => {
+            if (commandsInGroups[command.group ?? ""] === undefined) {
+                commandsInGroups[command.group ?? ""] = [];
+            }
+            commandsInGroups[command.group ?? ""].push(command);
+        });
+
+        const reply = "```\n"
+            + Object.entries(commandsInGroups).reduce((acc, [group, commands]) => {
+                const isValidGroup = group && group !== "help"; 
+                return acc + (isValidGroup ? "```\n**" + Utilz.capitalize(group) + ":**\n```" : "")
+                    + commands.reduce((acc, command) => acc + currentPrefix + command.usage! + "\n", "");
+            }, "") + "```";
         
         const embed = new MessageEmbed()
             .setColor(0x00bb00)

@@ -6,7 +6,7 @@ import { BellData } from "./bell"
 const cmd: types.Command = {
     func: cmdPingme,
     setupFunc: setup,
-    commandName: "ertesites",
+    name: "értesítés",
     adminCommand: true,
     aliases: [ "reactionmessage", "reaction" ],
     usage: "értesítés",
@@ -107,7 +107,8 @@ function reactionChange(data: types.Data, isAdd: boolean) {
             if (!botMember?.hasPermission("MANAGE_ROLES")) {
                 const embed = new MessageEmbed()
                     .setColor(0xbb0000)
-                    .setDescription("nop");
+                    .setTitle("Nincs engedélyezve a `Manage Roles` hozzáférés!")
+                    .setDescription(`Nem sikerült odaadni a *role*-t ${user} felhasználónak.\nEzügyben keresd a szerver adminokat.`);
                 reaction.message.channel.send(embed);
                 return;
             };
@@ -123,7 +124,8 @@ function reactionChange(data: types.Data, isAdd: boolean) {
                 if (ringRoleID === undefined) {
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
-                        .setDescription("nop");
+                        .setTitle("Nincs kiválasztva csengetési *role!*")
+                        .setDescription(`Nem sikerült odaadni a *role*-t ${user} felhasználónak.\nEzügyben keresd a szerver adminokat.`);
                     reaction.message.channel.send(embed);
                     return;
                 }

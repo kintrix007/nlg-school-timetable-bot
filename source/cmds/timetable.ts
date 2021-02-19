@@ -9,9 +9,9 @@ const description = "Megadja egy adott napra rögzített órarendet.\n"
 
 const cmd: types.Command = {
     func: cmdTimetable,
-    commandName: "orarend",
+    name: "órarend",
     aliases: [ "most" ],
-    usage: "orarend [nap]",
+    usage: "órarend [nap]",
     description: description,
     examples: [ "", "tegnap", "holnap", "kedd" ]
 };
@@ -33,9 +33,12 @@ function cmdTimetable({ data, msg, args }: types.CombinedData) {
         break;
     default: {
         if (!Object.keys(hunDaysToNum).includes(targetDayStr)) {
-            // TODO
-            return
-        };
+            const embed = new MessageEmbed()
+                .setColor(0xbb0000)
+                .setDescription(`Nincs rögzítve órarend a '${targetDayStr}' nevű napra.`);
+            msg.channel.send(embed);
+            return;
+        }
         
         const targetDay = hunDaysToNum[targetDayStr];
         const diff = targetDay - targetDate.getDay();
@@ -79,7 +82,7 @@ function sendTimetableOfDay(data: types.Data, msg: Message, targetDate: Date) {
     const subjMaxLength = table.reduce((acc, [,,subj,elec]) => (subj.length + elec.length) > acc ? (subj.length + elec.length) : acc, 0);
     const reply = "```c\n" +
         table.map(([start, end, subj, elec, now]) => [
-            start.toString(), end.toString(),
+            start.toString() + " - " + end.toString(),
             subj + elec + " ".repeat(subjMaxLength - subj.length - elec.length),
             (now ? "<-" : "")
         ])  .map(x => x.reduce((a, b) => a + " ║ " + b, "").trim())
