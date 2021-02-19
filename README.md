@@ -31,7 +31,7 @@ Now you have done the basic preparations to run this version of the bot, without
 1. Both of these contain YAML files. (Files ending with `.yaml`)
 1. By looking at their contents you should get a pretty good idea about their format.
 1. Open up `monday.yaml`.
-1. There, you'll see the definition of monday's schedule/timetable.
+1. There, you'll see the definition of monday's timetable in the following format:
 ```yaml
 - subj: name_of_the_class
   start: "08:00"
