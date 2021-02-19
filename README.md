@@ -19,7 +19,7 @@ Run `npm install` in the project directory to get the required files.
 ### How to use
 
 1. Clone this repo to your computer, then open up the folder you cloned this to.
-1. Open a terminal in that folder (if you Shift+Right click in it, there should be an option for that)
+1. Open a terminal in that folder (if you `Shift + Right Click` in it, there should be an option for that)
 1. Type `npm install` into the command line, then press enter.
 1. Wait until it installs the required files
 1. Go into the `source/` folder, and create a file called `token.token`, and paste your bot's token there.
