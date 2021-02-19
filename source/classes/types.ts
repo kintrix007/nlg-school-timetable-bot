@@ -59,7 +59,7 @@ export interface Command {
     func:           Function;
     setupFunc?:     (data: Data) => Promise<void>;
     commandName:    string;
-    showOnTop?:     boolean;
+    helpCommand?:   boolean;
     aliases?:       string[];
     usage?:         string;
     description?:   string;

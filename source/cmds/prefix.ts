@@ -1,6 +1,7 @@
 import * as Utilz from "../classes/utilz";
 import * as types from "../classes/types";
 import { MessageEmbed } from "discord.js";
+import { getHelpCmd } from "../commands"
 
 const description = "Átállítja a *prefix*et, amit a bot használ.\n"
     + "Az alapértelmezett a `!`, álállítás után azzal fognak működni a parancsok.\n"
@@ -48,11 +49,12 @@ function cmdPrefix({ data, msg, args }: types.CombinedData) {
     Utilz.savePrefs(PREFS_FILE, prefixes);
 
     const currentPrefix = Utilz.getPrefix(data, msg.guild!);
+    const helpCmdName = getHelpCmd()?.commandName;
 
     const embed = new MessageEmbed()
         .setColor(0x00bb00)
         .setTitle(`Mostantól \`${currentPrefix}\` a prefix!`)
-        .setDescription(`A prefix sikeresen átállítva.\nsegítségért: \`${currentPrefix}help\``);
+        .setDescription("A prefix sikeresen átállítva." + (helpCmdName ? `\nsegítségért: \`${currentPrefix}${helpCmdName}\`` : ""));
     msg.channel.send(embed);
     console.log(`${msg.author.username}#${msg.author.discriminator} changed the prefix to ${currentPrefix}`);
 }

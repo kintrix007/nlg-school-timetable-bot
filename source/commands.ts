@@ -8,8 +8,8 @@ const cmds: types.Command[] = [];
 function createCmd(command: types.Command): void {
     console.log(`loaded command '${command.commandName}'`);
 
-    if (command.showOnTop) {
-        cmds.unshift(command);      // unshift == prepend
+    if (command.helpCommand) {
+        cmds.unshift(command);      // unshift = prepend
     } else {
         cmds.push(command);
     }
@@ -81,4 +81,8 @@ export function createCmdsListener(data: types.Data, cmds_dir: string): void {
 
 export function getCmdList(): types.Command[] {
     return cmds.filter(x => x.usage !== undefined);
+}
+
+export function getHelpCmd() {
+    return cmds.find(x => x.helpCommand === true);
 }

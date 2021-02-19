@@ -6,7 +6,7 @@ import { MessageEmbed } from "discord.js";
 const cmd: types.Command = {
     func: cmdHelp,
     commandName: "help",
-    showOnTop: true,
+    helpCommand: true,
     aliases: [ "segitseg" ],
     usage: "help [parancs neve]",
     description: "Megadja egy parancs használati módját, leírását, és mutat néhány pédát.",

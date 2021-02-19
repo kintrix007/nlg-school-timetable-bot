@@ -80,8 +80,7 @@ async function setupJobs(data: types.Data) {
     function ringBellConstructor(data: types.Data) {
         return function(scheduleDate: Date): void {
             const today = data.timetable[Utilz.getDayString(scheduleDate)];
-            // const currentTime = new Time(scheduleDate);
-            const currentTime = new Time(10, 50);
+            const currentTime = new Time(scheduleDate);
             console.log("bell schedule time:", currentTime.toString());
             if (!today) return;
     
