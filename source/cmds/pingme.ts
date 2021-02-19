@@ -3,19 +3,21 @@ import * as types from "../classes/types";
 import { MessageEmbed, TextChannel, DMChannel, User } from "discord.js";
 import { BellData } from "./bell"
 
-const REACTION_PREFS_FILE = "reaction_messages.json";
-const BELL_PREFS_FILE = "bell.json";
-
 const cmd: types.Command = {
     func: cmdPingme,
     setupFunc: setup,
-    commandName: "csengess",
+    commandName: "ertesites",
     adminCommand: true,
-    aliases: [ "pingme", "ping" ],
-    usage: "csengess",
+    aliases: [ "reactionmessage", "reaction" ],
+    usage: "értesítés",
     // description: "",
     examples: [ "" ]
 };
+
+const REACTION_PREFS_FILE = "reaction_messages.json";
+const BELL_PREFS_FILE = "bell.json";
+const REACTION_EMOJI = "🔔";
+const TEMP_MSG_LENGTH = 20;
 
 export interface ReactionMessages {
     [guildID: string]: {
@@ -49,13 +51,13 @@ async function cmdPingme({ data, msg }: types.CombinedData) {
 
     const embed = new MessageEmbed()
         .setColor(0x00bb00)
-        .setTitle("Reagálj erre az üzenetre egy 🔔-vel, hogy értesülj a csengetésekről!")
+        .setTitle(`Reagálj erre az üzenetre egy ${REACTION_EMOJI}-vel, hogy értesülj a csengetésekről!`)
         .setDescription("Amennyiben ezt meg akarod szüntetni, csak vondd vissza a reakctiót.");
     msg.channel.send(embed)
     .then(sentMsg => {
         if (sentMsg.channel instanceof DMChannel) return;       // never happends
 
-        sentMsg.react("🔔");
+        sentMsg.react(REACTION_EMOJI);
 
         reactionMessages[guildID] = {
             channelID: sentMsg.channel.id,
@@ -83,14 +85,17 @@ async function setup(data: types.Data) {
 
     reactionChange(data, true);
     reactionChange(data, false);
+
+    console.log("successfully set up reaction-role listeners");
 }
 
-function reactionChange(data: types.Data, add: boolean) {
-    const event = add ? "messageReactionAdd" : "messageReactionRemove"
+function reactionChange(data: types.Data, isAdd: boolean) {
+    const event = isAdd ? "messageReactionAdd" : "messageReactionRemove"
 
     data.client.on(event, async (reaction, user) => {
         if (user.bot) return;
         if (!(user instanceof User)) return;
+        if (reaction.emoji.name !== REACTION_EMOJI) return;
 
         const guildID = reaction.message.guild!.id;
         const messageID = reaction.message.id;
@@ -99,18 +104,45 @@ function reactionChange(data: types.Data, add: boolean) {
             const guild = await data.client.guilds.fetch(guildID)
             const botMember = guild.member(data.client.user!);
 
-            if (!botMember?.hasPermission("MANAGE_ROLES")) return;
+            if (!botMember?.hasPermission("MANAGE_ROLES")) {
+                const embed = new MessageEmbed()
+                    .setColor(0xbb0000)
+                    .setDescription("nop");
+                reaction.message.channel.send(embed);
+                return;
+            };
 
-            const reactionMessages: ReactionMessages = Utilz.loadPrefs(REACTION_PREFS_FILE);
+            const reactionMessages: ReactionMessages = Utilz.loadPrefs(REACTION_PREFS_FILE, true);
 
             if (reactionMessages[guildID]?.messageID === messageID) {
                 const member = await getMember(data, guildID, user)
                 
                 if (member === undefined) return;
                 const bellData: BellData = Utilz.loadPrefs(BELL_PREFS_FILE, true);
-                const ringRoleID = bellData[guildID].ringRoleID;
-                if (ringRoleID === undefined) return;
-                member.roles.remove(ringRoleID);
+                const ringRoleID = bellData[guildID]?.ringRoleID;
+                if (ringRoleID === undefined) {
+                    const embed = new MessageEmbed()
+                        .setColor(0xbb0000)
+                        .setDescription("nop");
+                    reaction.message.channel.send(embed);
+                    return;
+                }
+
+                const bellChannel = await data.client.channels.fetch(bellData[guildID].channelID) as TextChannel;
+
+                if (isAdd) {
+                    member.roles.add(ringRoleID);
+                    bellChannel.send(`${user}, mostantól értesülni fogsz a csengetésekről! 🔔`)
+                    .then(sentMsg => setTimeout(() => sentMsg.delete(), TEMP_MSG_LENGTH*1000));
+
+                    console.log(`${user.username}#${user.discriminator} reacted with '${REACTION_EMOJI}'`);
+                } else {
+                    member.roles.remove(ringRoleID);
+                    bellChannel.send(`${user}, mostantól nem fogsz értesítést kapni a csengetésekről! 🔕`)
+                    .then(sentMsg => setTimeout(() => sentMsg.delete(), TEMP_MSG_LENGTH*1000));
+                    
+                    console.log(`${user.username}#${user.discriminator} removed '${REACTION_EMOJI}'`);
+                }
             }
         } catch (err) {
             console.error(err);

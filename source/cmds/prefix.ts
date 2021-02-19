@@ -2,12 +2,9 @@ import * as Utilz from "../classes/utilz";
 import * as types from "../classes/types";
 import { MessageEmbed } from "discord.js";
 
-const PREFS_FILE = "prefixes.json";
-const MAX_PREFIX_LENGTH = 4;
-
-const description = "Átállítja a *prefix*et, amit a bot használ.\n" +
-    "Az alapértelmezett a `!`, álállítás után azzal fognak működni a parancsok.\n" +
-    "Alternatív módon, a bot pingelésével is használhatóak a parancsok.";
+const description = "Átállítja a *prefix*et, amit a bot használ.\n"
+    + "Az alapértelmezett a `!`, álállítás után azzal fognak működni a parancsok.\n"
+    + "Alternatív módon, a bot pingelésével is használhatóak a parancsok.";
 
 const cmd: types.Command = {
     func: cmdPrefix,
@@ -18,6 +15,9 @@ const cmd: types.Command = {
     examples: [ "", "!!", "." ],
     aliases: [ "elotag", "hivoszo" ]
 };
+
+const PREFS_FILE = "prefixes.json";
+const MAX_PREFIX_LENGTH = 4;
 
 export interface PrefixData {
     [guildID: string]: string;

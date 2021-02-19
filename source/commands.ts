@@ -1,7 +1,7 @@
 import * as types from "./classes/types";
 import * as Utilz from "./classes/utilz";
 import * as fs from "fs";
-import { Message, MessageEmbed } from "discord.js";
+import { Message, MessageEmbed, DMChannel } from "discord.js";
 
 const cmds: types.Command[] = [];
 
@@ -44,7 +44,8 @@ export function createCmdsListener(data: types.Data, cmds_dir: string): void {
     loadCmds(cmds_dir);
     setUpCmds(data);
 
-    data.client.on("message", (msg: Message) => {;
+    data.client.on("message", (msg: Message) => {
+        if (msg.channel instanceof DMChannel) return;
         if (msg.author.bot) return;
         const cont = Utilz.prefixless(data, msg);
         if (!cont) return;

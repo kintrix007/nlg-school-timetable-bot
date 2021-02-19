@@ -3,9 +3,9 @@ import Time from "../classes/time";
 import * as types from "../classes/types";
 import { Message, MessageEmbed } from "discord.js";
 
-const description = "Megadja egy adott napra rögzített órarendet.\n" +
-    "Ez lehet relatív is, mint `holnap`, vagy `tegnap`.\n" +
-    "Ha nincs megadva nap, akkor automatikusan az adott napit adja meg.";
+const description = "Megadja egy adott napra rögzített órarendet.\n"
+    + "Ez lehet relatív is, mint `holnap`, vagy `tegnap`.\n"
+    + "Ha nincs megadva nap, akkor automatikusan az adott napit adja meg.";
 
 const cmd: types.Command = {
     func: cmdTimetable,
@@ -32,7 +32,10 @@ function cmdTimetable({ data, msg, args }: types.CombinedData) {
         targetDate.setDate(targetDate.getDate() + 1);
         break;
     default: {
-        if (!Object.keys(hunDaysToNum).includes(targetDayStr)) return;
+        if (!Object.keys(hunDaysToNum).includes(targetDayStr)) {
+            // TODO
+            return
+        };
         
         const targetDay = hunDaysToNum[targetDayStr];
         const diff = targetDay - targetDate.getDay();

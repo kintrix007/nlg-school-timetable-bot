@@ -10,14 +10,13 @@ const client = new DC.Client();
 
 const DEFAULT_PREFIX = "!";
 const CMDS_DIR = `${__dirname}/cmds`;
-console.log(CMDS_DIR);
 
 function main() {
     const timetable = loadTimetableData();
     const students = loadStudentData();
 
     client.on("ready", () => {
-        console.log("-- bot successfully authenticated --");
+        console.log("-- bot online --");
     });
 
     const data: types.Data = {
@@ -27,19 +26,22 @@ function main() {
         defaultPrefix: DEFAULT_PREFIX
     };
 
+    console.log("-- authenticating bot... --");
     loginBot()
     .then(() => {
+        console.log("-- bot successfully authenticated --");
+        
         createCmdsListener(data, CMDS_DIR);
+        
         const currentTime = new Time(new Date());
-        console.log("current time is:", currentTime.toString());
+        console.log("the current time is:", currentTime.toString());
         console.log("-- bot ready --");
     });
 }
 
-async function loginBot() {
-    console.log("-- authenticating bot... --");
+function loginBot() {
     const token = fs.readFileSync("source/token.token").toString();
-    await client.login(token);
+    return client.login(token);
 }
 
 function loadTimetableData(): types.Timetable {

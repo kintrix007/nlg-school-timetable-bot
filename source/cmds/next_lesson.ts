@@ -3,8 +3,8 @@ import * as types from "../classes/types";
 import Time from "../classes/time";
 import { MessageEmbed } from "discord.js";
 
-const description = "Kilistázza egy adott diák jelenleg tartó, illetve a még aznap következő óráit.\n" +
-    "Ha nincs megadva név, akkor a küldő Discord felhasználónevét fogja használni.";
+const description = "Kilistázza egy adott diák jelenleg tartó, illetve a még aznap következő óráit.\n"
+    + "Ha nincs megadva név, akkor a küldő Discord felhasználónevét fogja használni.";
 
 const cmd: types.Command = {
     func: cmdNextLesson,
@@ -44,11 +44,12 @@ function cmdNextLesson({ data, msg, args }: types.CombinedData) {
     };
     
     const reduceFunc = (a: string, b: types.Lesson) => a + b.start.toString() + " ║ " + Utilz.capitalize(b.subj) + (b.elective ? " (fakt)" : "") + "\n";
+    const currentLessons = lessons.current.reduce(reduceFunc, "");
+    const nextLessons = lessons.next.reduce(reduceFunc, "");
 
-    const reply = "**Jelenleg tart:**\n" + "```c\n" +
-        lessons.current.reduce(reduceFunc, "") + "```" +
-        "\n**Következik:**\n" + "```c\n" +
-        lessons.next.reduce(reduceFunc, "") + "```";
+    const reply = (currentLessons ? "**Jelenleg tart:**\n" + "```c\n" + currentLessons + "```" : "")
+        + (nextLessons ? "**Következik:**\n" + "```c\n" + nextLessons + "```" : "")
+        ?? "Nincsenek...";
     const embed = new MessageEmbed()
         .setColor(0x00bb00)
         .setTitle(`${targetStudent}:`)
