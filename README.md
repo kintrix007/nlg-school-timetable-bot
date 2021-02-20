@@ -38,9 +38,9 @@ Now you have done the basic preparations to run this version of the bot, without
   length: 45
   elective: false
 ```
-1. You need to always follow the format `"HH:MM"` for the start time.
-1. The length can be any whole number, this tells the length of the lesson in minutes.
-1. The elective just signifies whether or not a class is elective. Can be ignored completely, and just always set to `false` (recommended)
+- You need to always follow the format `"HH:MM"` for the start time.
+- The length can be any whole number, this tells the length of the lesson in minutes.
+- The elective just signifies whether or not a class is elective. Can be ignored completely, and just always set to `false` (recommended)
 
 ~~TO DO: Finish writing this...~~
 
