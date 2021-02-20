@@ -42,7 +42,7 @@ export const removeAccents = (function() {
     const accents =     ["á","é","í","ó","ö","ő","ú","ü","ű","Á","É","Í","Ó","Ö","Ő","Ú","Ü","Ű"];
     const non_accents = ["a","e","i","o","o","o","u","u","u","A","E","I","O","O","O","U","U","U"];
 
-    return function(str: string): string {
+    return function(str: string) {
         let result = str;
         accents.forEach((accent, index) => {
             result = result.replace(new RegExp(accent, "g"), non_accents[index]);

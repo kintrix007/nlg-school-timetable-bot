@@ -53,16 +53,17 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
 
     } else {
         // query general help sheet
-        const commandsInGroups: {[group: string]: types.Command[]} = {};
+        const commandsInGroups: {[K in types.CommandGroup]?: types.Command[]} = {};
         cmdList.forEach(command => {
             if (commandsInGroups[command.group ?? ""] === undefined) {
                 commandsInGroups[command.group ?? ""] = [];
             }
-            commandsInGroups[command.group ?? ""].push(command);
+            commandsInGroups[command.group ?? ""]?.push(command);
         });
 
         const reply = "```\n"
             + Object.entries(commandsInGroups).reduce((acc, [group, commands]) => {
+                if (commands === undefined) return acc;
                 const isValidGroup = group && group !== "help"; 
                 return acc + (isValidGroup ? "```\n**" + Utilz.capitalize(group) + ":**\n```" : "")
                     + commands.reduce((acc, command) => acc + currentPrefix + command.usage! + "\n", "");

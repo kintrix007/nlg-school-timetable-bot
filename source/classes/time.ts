@@ -29,6 +29,10 @@ export default class Time {
         }
     }
 
+    add(timeObj: Time): Time {
+        return new Time(this.time + timeObj.time);
+    }
+
     equals(time: Time) {
         return this.time === time.time;
     }
@@ -41,9 +45,5 @@ export default class Time {
         let h = `${this.hour < 10 ? "0" : ""}${this.hour}`;
         let m = `${this.minute < 10 ? "0" : ""}${this.minute}`;
         return `${h}:${m}`;
-    }
-
-    add(timeObj: Time): Time {
-        return new Time(this.time + timeObj.time);
     }
 };
