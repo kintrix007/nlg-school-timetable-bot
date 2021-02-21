@@ -82,6 +82,7 @@ def update():
         print(f"git pull stopped with a non-zero exit code ({pull_exit_code})")
         exit(1)
     os.chdir(original_dir)
+    print("-- update successful --")
 
 if __name__ == "__main__":
     main()
