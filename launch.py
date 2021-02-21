@@ -71,7 +71,10 @@ def update():
     print("-- updating... --")
     original_dir = os.getcwd()
     os.chdir(root)
-    os.system("git pull")
+    pull_exit_code = os.system("git pull")
+    if pull_exit_code != 0:
+        print(f"git pull stopped with a non-zero exit code ({pull_exit_code})")
+        exit(1)
     os.chdir(original_dir)
 
 if __name__ == "__main__":
