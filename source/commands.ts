@@ -2,6 +2,7 @@ import * as types from "./classes/types";
 import * as Utilz from "./classes/utilz";
 import * as fs from "fs";
 import { Message, MessageEmbed, DMChannel } from "discord.js";
+import * as path from "path";
 
 const cmds: types.Command[] = [];
 
@@ -23,7 +24,8 @@ function loadCmds(cmds_dir: string) {
         .map(filename => filename.slice(0, filename.length-3));
 
     files.forEach(filename => {
-        const command: types.Command = require(`${cmds_dir}/${filename}`);
+        const cmdPath = path.join(cmds_dir, filename)
+        const command: types.Command = require(cmdPath);
         createCmd(command);
     });
 
@@ -63,7 +65,7 @@ export function createCmdsListener(data: types.Data, cmds_dir: string): void {
                 Utilz.removeAccents(cmd.name.toLowerCase()) === command ||
                 cmd.aliases?.map(x => Utilz.removeAccents(x.toLowerCase()))?.includes(command)
             ) {
-                // if admin command called by non-admin, then return
+                // if admin command called by non-admin, return
                 if (cmd.adminCommand && !msg.member!.hasPermission("MANAGE_GUILD")) {
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)

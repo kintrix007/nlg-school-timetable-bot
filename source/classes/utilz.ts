@@ -38,18 +38,32 @@ export const translateDayStringToHun = (function() {
     return (engDayString: string) => days[engDayString];
 })();
 
-export const removeAccents = (function() {
-    const accents =     ["á","é","í","ó","ö","ő","ú","ü","ű","Á","É","Í","Ó","Ö","Ő","Ú","Ü","Ű"];
-    const non_accents = ["a","e","i","o","o","o","u","u","u","A","E","I","O","O","O","U","U","U"];
+export const removeAccents = (() => {
+    const nonAccents: {[nonAccent: string]: string[]} = {
+        "a": ["á", "å", "ǎ", "ä", "ȧ"],
+        "c": ["ç", "č", "ċ"],
+        "d": ["đ", "ḋ"],
+        "e": ["é", "ë", "ě", "ĕ", "ę", "ė"],
+        "i": ["í", "ï", "ĭ", "ǐ", "į", "ı"],
+        "j": ["ǰ", "ȷ"],
+        "l": ["ł"],
+        "o": ["ó", "ö", "ő", "ǒ", "ǫ", "ȯ", "ø", "ǿ", "ò", "ô", "õ"],
+        "s": ["š", "ş", "ṡ"],
+        "u": ["ú", "ü", "ű", "ǔ", "ų", "û", "ů"],
+        "y": ["ÿ", "ẏ", "ẙ"]
+    };
 
-    return function(str: string) {
-        let result = str;
-        accents.forEach((accent, index) => {
-            result = result.replace(new RegExp(accent, "g"), non_accents[index]);
-        })
-        return result;
-    }
-}());
+    return (str: string) => (
+        Object.entries(nonAccents).reduce((acc, [nonAccent, accents]) => (
+            accents.reduce((a, accent) => {
+                const lowerAccent = accent;
+                const upperAccent = accent.toUpperCase();
+                return a.replace(new RegExp(lowerAccent, "g"), nonAccent)
+                        .replace(new RegExp(upperAccent, "g"), nonAccent.toUpperCase());
+            }, acc)
+        ), str)
+    );
+})();
 
 export function capitalize(str: string): string {
     return str[0].toUpperCase() + str.slice(1);

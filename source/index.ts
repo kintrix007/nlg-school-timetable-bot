@@ -5,11 +5,15 @@ import { createCmdsListener } from "./commands";
 import * as fs from "fs";
 import * as yaml from "yaml";
 import * as DC from "discord.js";
+import * as path from "path";
 
 const client = new DC.Client();
 
 const DEFAULT_PREFIX = "!";
-const CMDS_DIR = `${__dirname}/cmds`;
+const CMDS_DIR = path.join(__dirname, "cmds");
+const SOURCE_DIR = path.join(__dirname, "../source");
+const TIMETABLE_DIR = path.join(SOURCE_DIR, "timetable");
+const STUDENTS_DIR = path.join(SOURCE_DIR, "students");
 
 function main() {
     const timetable = loadTimetableData();
@@ -40,7 +44,8 @@ function main() {
 }
 
 function loginBot() {
-    const token = fs.readFileSync("source/token.token").toString().trim();
+    const tokenPath = path.join(SOURCE_DIR, "token.token");
+    const token = fs.readFileSync(tokenPath).toString().trim();
     return client.login(token);
 }
 
@@ -56,8 +61,11 @@ function loadTimetableData(): types.Timetable {
 
     const timetable: types.Timetable = {};
     daysList.forEach(day => {
-        const dayDataRaw = fs.readFileSync(`source/timetable/${day}.yaml`).toString();
+        const dayPath = path.join(TIMETABLE_DIR, `${day}.yaml`);
+        
+        const dayDataRaw = fs.readFileSync(dayPath).toString();
         const dayData: LessonRaw[] = yaml.parse(dayDataRaw);
+
         const convertedDayData : types.TimetableDay = dayData.map(x => {
             const lesson: types.Lesson = {
                 subj: x.subj,
@@ -75,12 +83,15 @@ function loadTimetableData(): types.Timetable {
 }
 
 function loadStudentData(): types.Students {
-    const rosterRaw = fs.readFileSync("source/students/roster.yaml").toString();
+    const rosterPath = path.join(STUDENTS_DIR, "roster.yaml");
+    const rosterRaw = fs.readFileSync(rosterPath).toString();
     const roster: string[] = yaml.parse(rosterRaw);
-    const lessonsRaw = fs.readFileSync("source/students/lessons.yaml").toString();
-    const lessonsStudents: types.LessonsAttendants = yaml.parse(lessonsRaw);
-    const studentsLessons: types.StudentsLessons = {};
 
+    const lessonsPath = path.join(STUDENTS_DIR, "lessons.yaml");
+    const lessonsRaw = fs.readFileSync(lessonsPath).toString();
+    const lessonsStudents: types.LessonsAttendants = yaml.parse(lessonsRaw);
+
+    const studentsLessons: types.StudentsLessons = {};
     roster.forEach(student => {
         const lessons = Object.entries(lessonsStudents).map(([lesson, lessonAttendants]) => {
             const hasAsObligatory = lessonAttendants.obligatory?.includes(student);

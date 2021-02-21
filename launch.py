@@ -1,30 +1,10 @@
 import os, sys
 from datetime import datetime
 import json
-from typing import Callable
 
-class Logger():
-    original_stdout = sys.stdout
-    log = []
+root = os.path.dirname(os.path.realpath(__file__))
 
-    def start(self):
-        sys.stdout = self
-    
-    def stop(self):
-        sys.stdout = self.original_stdout
-    
-    def write(self, log_msg):
-        self.log.append(log_msg)
-        self.original_stdout.write(log_msg)
-
-    def clear_log(self):
-        self.log = []
-    
-    def write_to_file(self, filename):
-        with open(filename, "w") as f:
-            f.write("\n".join(self.log))
-
-CRASH_LOG_DIR = "crash_logs"
+CRASH_LOG_DIR = f"{root}/crash_logs"
 
 def main():
     os.system(f"tsc")
@@ -45,6 +25,7 @@ def main():
         with open(f"{CRASH_LOG_DIR}/crash{iter}.log", "w") as f:
             f.write(crash_log)
         iter += 1
+
 
 if __name__ == "__main__":
     main()
