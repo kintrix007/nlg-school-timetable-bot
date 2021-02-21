@@ -43,4 +43,3 @@ Now you have done the basic preparations to run this version of the bot, without
 - The elective just signifies whether or not a class is elective. Can be ignored completely, and just always set to `false` (recommended)
 
 ~~TO DO: Finish writing this...~~
-
