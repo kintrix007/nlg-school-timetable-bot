@@ -5,12 +5,13 @@ import json
 import time
 
 root = os.path.dirname(os.path.realpath(__file__))
-CRASH_LOG_DIR = os.path.join(root, "crash_logs")
-PACKAGE = "package.json"
+CRASH_LOG_DIR = os.path.join(root, "crash_logs/")
+PACKAGE = os.path.join(root, "package.json")
 
 def main():
     test_token()
     update()
+    remove_crash_logs()
     compile()
 
     iter = 0
@@ -50,6 +51,11 @@ def test_token():
                 print("Plese put your bot's token into the file 'token.token'")
                 exit(1)
 
+def remove_crash_logs():
+    for filename in os.listdir(CRASH_LOG_DIR):
+        file = os.path.join(CRASH_LOG_DIR, filename)
+        os.remove(file)
+
 def compile():
     print("-- compiling... --")
     tsc_path = os.path.join(root, "node_modules", "typescript", "bin", "tsc")
@@ -61,7 +67,7 @@ def compile():
 
 def find_entry_point():
     print("-- finding entry point... --")
-    with open(os.path.join(root, PACKAGE), "r") as f:
+    with open(PACKAGE, "r") as f:
         entry_point = json.loads(f.read())["main"]
     print(f"-- found entry point ('{entry_point}') --")
     return entry_point
