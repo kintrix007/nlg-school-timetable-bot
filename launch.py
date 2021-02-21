@@ -10,6 +10,7 @@ PACKAGE = "package.json"
 
 def main():
     test_token()
+    update()
     compile()
 
     iter = 0
@@ -29,6 +30,7 @@ def main():
             f.write(crash_log)
         
         print("-- waiting to restart bot... --")
+        print("-- ^C to stop --")
         time.sleep(5)       # wait 5 seconds before restarting
         print("-- restarting bot... --")
         iter += 1
@@ -50,7 +52,8 @@ def test_token():
 
 def compile():
     print("-- compiling... --")
-    tsc_exit_code = os.system("./node_modules/typescript/bin/tsc")
+    tsc_path = os.path.join(root, "node_modules", "typescript", "bin", "tsc")
+    tsc_exit_code = os.system(f"{tsc_path} -p {root}")
     if tsc_exit_code != 0:
         print(f"tsc stopped with a non-zero exit code ({tsc_exit_code})")
         exit(1)
@@ -62,6 +65,14 @@ def find_entry_point():
         entry_point = json.loads(f.read())["main"]
     print(f"-- found entry point ('{entry_point}') --")
     return entry_point
+
+def update():
+    # kinda sucks... But it works, at least
+    print("-- updating... --")
+    original_dir = os.getcwd()
+    os.chdir(root)
+    os.system("git pull")
+    os.chdir(original_dir)
 
 if __name__ == "__main__":
     main()
