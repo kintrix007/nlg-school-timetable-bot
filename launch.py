@@ -1,13 +1,14 @@
 import os, sys
 from datetime import datetime
 import json
+import time
 
 root = os.path.dirname(os.path.realpath(__file__))
 
 CRASH_LOG_DIR = f"{root}/crash_logs"
 
 def main():
-    os.system(f"tsc")
+    os.system("./node_modules/typescript/bin/tsc")
 
     iter = 0
 
@@ -24,6 +25,9 @@ def main():
         print("\n---\n\n" + crash_log + "\n\n---\n")
         with open(f"{CRASH_LOG_DIR}/crash{iter}.log", "w") as f:
             f.write(crash_log)
+        print("-- waiting to restart bot... --")
+        time.sleep(5) # wait 5 seconds before restarting
+        print("-- restarting bot... --")
         iter += 1
 
 
