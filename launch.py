@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import os, sys
+import os
 from datetime import datetime
 import json
 import time
