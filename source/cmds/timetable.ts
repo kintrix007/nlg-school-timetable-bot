@@ -5,7 +5,7 @@ import { Message, MessageEmbed } from "discord.js";
 
 const description = "Megadja egy adott napra rögzített órarendet.\n"
     + "Ez lehet relatív is, mint `holnap`, vagy `tegnap`.\n"
-    + "Ha nincs megadva nap, akkor automatikusan az adott napit adja meg.";
+    + "Ha nincs megadva nap, akkor automatikusan a mait adja meg.";
 
 const cmd: types.Command = {
     func: cmdTimetable,
