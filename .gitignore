@@ -30,3 +30,5 @@ build/
 
 # testing file
 random_testing.ts
+
+crash_logs/

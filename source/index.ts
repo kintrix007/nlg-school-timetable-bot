@@ -36,7 +36,7 @@ function main() {
         const currentTime = new Time(new Date());
         console.log("the current time is:", currentTime.toString());
         console.log("-- bot ready --");
-    });
+    }).catch(console.error);
 }
 
 function loginBot() {
@@ -75,9 +75,9 @@ function loadTimetableData(): types.Timetable {
 }
 
 function loadStudentData(): types.Students {
-    const rosterRaw = fs.readFileSync("source/students/roster.yaml").toString()
+    const rosterRaw = fs.readFileSync("source/students/roster.yaml").toString();
     const roster: string[] = yaml.parse(rosterRaw);
-    const lessonsRaw = fs.readFileSync("source/students/lessons.yaml").toString()
+    const lessonsRaw = fs.readFileSync("source/students/lessons.yaml").toString();
     const lessonsStudents: types.LessonsAttendants = yaml.parse(lessonsRaw);
     const studentsLessons: types.StudentsLessons = {};
 
