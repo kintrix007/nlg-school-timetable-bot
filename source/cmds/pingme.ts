@@ -78,7 +78,7 @@ async function setup(data: types.Data) {
         }
         catch (err) {
             console.warn("Couldn't cache a reaction-role message:\t", err);
-            Utilz.savePrefs(REACTION_PREFS_FILE, reactionMessages);
+            continue;
         }
     }
     console.log("successfully cached reaction-role messages");

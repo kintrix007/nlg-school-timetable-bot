@@ -32,14 +32,14 @@ function main() {
 
     console.log("-- authenticating bot... --");
     loginBot()
-    .then(() => {
+    .then(async () => {
         console.log("-- bot successfully authenticated --");
         
-        createCmdsListener(data, CMDS_DIR);
+        await createCmdsListener(data, CMDS_DIR);
         
         const currentTime = new Time(new Date());
         console.log("the current time is:", currentTime.toString());
-        console.log("-- bot ready --");
+        console.log("-- bot setup complete --");
     }).catch(console.error);
 }
 

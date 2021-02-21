@@ -32,19 +32,19 @@ function loadCmds(cmds_dir: string) {
     console.log("-- finished loading commands --");
 }
 
-function setUpCmds(data: types.Data) {
+async function setUpCmds(data: types.Data) {
     console.log("-- started setting up commands... --");
 
-    cmds.forEach(async cmd => {
+    for (const cmd of cmds) {
         if (cmd.setupFunc) await cmd.setupFunc(data);
-    });
+    }
     
     console.log("-- finished setting up commands --");
 }
 
-export function createCmdsListener(data: types.Data, cmds_dir: string): void {
+export async function createCmdsListener(data: types.Data, cmds_dir: string) {
     loadCmds(cmds_dir);
-    setUpCmds(data);
+    await setUpCmds(data);
 
     data.client.on("message", (msg: Message) => {
         if (msg.channel instanceof DMChannel) return;
