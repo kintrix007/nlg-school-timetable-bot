@@ -8,6 +8,7 @@ The bot is made so that it can be easily used with different schools, and timeta
 
 ### Dependencies
 
+- typescript
 - discord.js
 - node-schedule
 - yaml
@@ -23,7 +24,8 @@ Run `npm install` in the project directory to get the required files.
 1. Type `npm install` into the command line, then press enter.
 1. Wait until it installs the required files
 1. Go into the `source/` folder, and create a file called `token.token`, and paste your bot's token there.
-Now you have done the basic preparations to run this version of the bot, without changing anything.
+Now you have done the basic preparations to run this version of the bot without changing anything.
+There is optionally a python *launcher* to be used. If launched with it, it will restart the bot if it crashes.
 
 ### How to change the timetable, the students listed etc...?
 
