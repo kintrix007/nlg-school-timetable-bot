@@ -42,6 +42,6 @@ There is optionally a python *launcher* to be used. If launched with it, it will
 ```
 - You need to always follow the format `"HH:MM"` for the start time.
 - The length can be any whole number, this tells the length of the lesson in minutes.
-- The elective just signifies whether or not a class is elective. Can be ignored completely, and just always set to `false` (recommended)
+- The elective just signifies whether or not a class is elective. Can be ignored completely, and just set to `false` (recommended)
 
 ~~TO DO: Finish writing this...~~
