@@ -9,6 +9,8 @@ root = os.path.dirname(os.path.realpath(__file__))
 CRASH_LOG_DIR = os.path.join(root, "crash_logs")
 
 def main():
+    test_token()
+
     print("-- compiling... --")
     tsc_exit_code = os.system("./node_modules/typescript/bin/tsc")
     if tsc_exit_code != 0:
@@ -38,6 +40,21 @@ def main():
         time.sleep(5)       # wait 5 seconds before restarting
         print("-- restarting bot... --")
         iter += 1
+
+def test_token():
+    token_path = os.path.join(root, "source", "token.token")
+    if not os.path.exists(token_path):
+        with open(token_path, "w") as f:
+            f.write("")
+        print("-- TOKEN MISSING --")
+        print("Plese put your bot's token into the file 'token.token'")
+        exit(1)
+    else:
+        with open(token_path, "r") as f:
+            if not f.read():
+                print("-- TOKEN MISSING --")
+                print("Plese put your bot's token into the file 'token.token'")
+                exit(1)
 
 
 if __name__ == "__main__":
