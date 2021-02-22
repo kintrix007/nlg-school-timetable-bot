@@ -64,17 +64,17 @@ async function setupJobs(data: types.Data) {
     Object.entries(data.timetable).forEach(([dayStr, lessons]) => {
         const DaysToNum: {[day: string]: number} = {"sunday" : 0, "monday" : 1, "tuesday" : 2, "wednesday" : 3, "thursday" : 4, "friday" : 5, "saturday" : 6};
         const dayNum = DaysToNum[dayStr];
-        lessons.filter((lesson, idx, list) => list.findIndex(x => x.start === lesson.start) === idx)    // remove lessons that start at the same time
-            .forEach(lesson => {
-                const startTime = lesson.start;
+        const uniqueLessons = lessons.filter(lesson => lessons.findIndex(x => x.start === lesson.start) === lessons.lastIndexOf(lesson));
+        uniqueLessons.forEach(lesson => {
+            const startTime = lesson.start;
 
-                const rule = new schedule.RecurrenceRule();
-                rule.dayOfWeek = dayNum;
-                rule.hour = startTime.hour;
-                rule.minute = startTime.minute;
-                
-                schedule.scheduleJob(`${dayStr}-${lesson.subj}-${lesson.start}`, rule, ringBellConstructor(data));
-            });
+            const rule = new schedule.RecurrenceRule();
+            rule.dayOfWeek = dayNum;
+            rule.hour = startTime.hour;
+            rule.minute = startTime.minute;
+            
+            schedule.scheduleJob(`${dayStr}-${lesson.subj}-${lesson.start}`, rule, ringBellConstructor(data));
+        });
         console.log(`bell is set up for day '${dayStr}'`);
     });
 
