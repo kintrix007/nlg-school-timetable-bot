@@ -64,7 +64,15 @@ async function setupJobs(data: types.Data) {
     Object.entries(data.timetable).forEach(([dayStr, lessons]) => {
         const DaysToNum: {[day: string]: number} = {"sunday" : 0, "monday" : 1, "tuesday" : 2, "wednesday" : 3, "thursday" : 4, "friday" : 5, "saturday" : 6};
         const dayNum = DaysToNum[dayStr];
-        const uniqueLessons = lessons.filter(lesson => lessons.findIndex(x => x.start === lesson.start) === lessons.lastIndexOf(lesson));
+
+        const uniqueLessons: types.Lesson[] = [];
+        lessons.forEach(lesson => {
+            if (!uniqueLessons.some(x => x.start.equals(lesson.start))) {
+                uniqueLessons.push(lesson);
+            }
+        });
+        // console.log(uniqueLessons);
+
         uniqueLessons.forEach(lesson => {
             const startTime = lesson.start;
 

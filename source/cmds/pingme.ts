@@ -78,7 +78,7 @@ async function setup(data: types.Data) {
             await channel.messages.fetch(guildData.messageID);
         }
         catch (err) {
-            console.warn("Couldn't cache a reaction-role message:\t", err);
+            console.warn(`Couldn't cache a reaction-role message '${guildID}':\t`, err);
             continue;
         }
     }
