@@ -18,12 +18,12 @@ function cmdKill({ msg, args }: types.CombinedData) {
     
     const embed = new MessageEmbed()
         .setColor(0x00bb00)
-        .setTitle(isPermanent ? "Shutting down... (shutdown)" : "Shutting down... (restart)");
+        .setTitle(isPermanent ? "**TODO**" : "Shutting down... (restart)");
     
     msg.channel.send(embed).then(sentMsg => {
         console.log("-- stopping bot... --");
         if (isPermanent) {
-            process.exit(-1);
+            // TODO
         } else {
             process.exit(0);
         }
