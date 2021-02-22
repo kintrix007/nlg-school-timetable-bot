@@ -32,7 +32,7 @@ function cmdPrefix({ data, msg, args }: types.CombinedData) {
         const currentPrefix = Utilz.getPrefix(data, msg.guild!);
         const embed = new MessageEmbed()
             .setColor(0x00bb00)
-            .setDescription(`Jelenleg a(z) \`${currentPrefix ?? data.defaultPrefix}\` van kiválasztva mint prefix.`);
+            .setDescription(`A jelenleg kiválasztott prefix: \`${currentPrefix ?? data.defaultPrefix}\``);
         msg.channel.send(embed);
         return;
     }
