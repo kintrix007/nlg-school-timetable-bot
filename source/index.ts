@@ -1,7 +1,7 @@
 import * as Utilz from "./classes/utilz";
 import * as types from "./classes/types";
 import Time from "./classes/time";
-import { createCmdsListener } from "./commands";
+import { createCmdsListeners } from "./commands";
 import * as fs from "fs";
 import * as yaml from "yaml";
 import * as DC from "discord.js";
@@ -22,7 +22,7 @@ function main() {
     client.on("ready", async () => {
         console.log("-- bot online --");
 
-        await createCmdsListener(data, CMDS_DIR);
+        await createCmdsListeners(data, CMDS_DIR);
         
         const currentTime = new Time(new Date());
         console.log("the current time is:", currentTime.toString());

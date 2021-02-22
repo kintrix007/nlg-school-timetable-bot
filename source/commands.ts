@@ -42,7 +42,7 @@ async function setUpCmds(data: types.Data) {
     console.log("-- finished setting up commands --");
 }
 
-export async function createCmdsListener(data: types.Data, cmds_dir: string) {
+export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
     loadCmds(cmds_dir);
     await setUpCmds(data);
 
