@@ -5,7 +5,7 @@ import { MessageEmbed } from "discord.js";
 const cmd: types.Command = {
     func: cmdKill,
     name: "kill",
-    usage: "kill",
+    aliases: [ "shutdown" ],
     group: "owner",
     ownerCommand: true
 };
