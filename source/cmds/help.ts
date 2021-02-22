@@ -56,15 +56,25 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
         // query general help sheet
         const commandsInGroups: {[K in types.CommandGroup]?: types.Command[]} = {};
         cmdList.forEach(command => {
-            if (commandsInGroups[command.group ?? ""] === undefined) {
-                commandsInGroups[command.group ?? ""] = [];
+            const group = command.group ?? "";
+            if (commandsInGroups[group] === undefined) {
+                commandsInGroups[group] = [];
             }
-            commandsInGroups[command.group ?? ""]?.push(command);
+            commandsInGroups[group]!.push(command);
         });
 
+        const commandsAssocList = (Object.entries(commandsInGroups)
+            .filter(([,commands]) => commands != undefined) as [types.CommandGroup, types.Command[]][])
+            .sort()
+            .sort(([groupA], [groupB]) => {
+                if (groupA === "help" && groupB !== "help") return -1;
+                if (groupB === "help" && groupA !== "help") return 1;
+                return 0;
+            });
+        console.log(commandsAssocList);
+
         const reply = "```\n"
-            + Object.entries(commandsInGroups).reduce((acc, [group, commands]) => {
-                if (commands === undefined) return acc;
+            + commandsAssocList.reduce((acc, [group, commands]) => {
                 const isValidGroup = group && group !== "help"; 
                 return acc + (isValidGroup ? "```\n**" + Utilz.capitalize(group) + ":**\n```" : "")
                     + commands.reduce((acc, command) => acc + currentPrefix + command.usage! + "\n", "");
