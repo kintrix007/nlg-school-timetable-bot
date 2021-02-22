@@ -55,7 +55,7 @@ export interface CombinedData {
 }
 
 // Bot Command
-export type CommandGroup = "help" | "admin" | "moderation" | "roles" | "utility" | "";
+export type CommandGroup = "help" | "admin" | "owner" | "moderation" | "roles" | "utility" | "";
 
 export interface Command {
     setupFunc?:     (data: Data) => Promise<void>;
@@ -67,4 +67,5 @@ export interface Command {
     description?:   string;
     examples?:      string[];
     adminCommand?:  boolean;
+    ownerCommand?:  boolean;
 }

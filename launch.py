@@ -23,18 +23,26 @@ def main():
     print("-- launching bot --")
     while True:
         exit_code = os.system(f"node {entry_point}")
-        current_time = datetime.now().strftime("%Y-%m-%d - %H:%M:%S")
-        crash_log = f"stopped at: {current_time}\nexit code: {exit_code}\n"
-        
-        print("\n---\n\n" + crash_log + "\n---\n")
-        with open(f"{CRASH_LOG_DIR}/crash{iter}.log", "w") as f:
-            f.write(crash_log)
+        if exit_code == 0:
+            print("-- bot stopped --")
+            print("-- waiting to update bot... --")
+            print("-- ^C to stop --")
+            time.sleep(5)
+            update()
+            compile()
+        else:
+            current_time = datetime.now().strftime("%Y-%m-%d - %H:%M:%S")
+            crash_log = f"stopped at: {current_time}\nexit code: {exit_code}\n"
+            print("\n---\n\n" + crash_log + "\n---\n")
+            with open(f"{CRASH_LOG_DIR}/crash{iter}.log", "w") as f:
+                f.write(crash_log)
+            
+            iter += 1
         
         print("-- waiting to restart bot... --")
         print("-- ^C to stop --")
         time.sleep(5)       # wait 5 seconds before restarting
         print("-- restarting bot... --")
-        iter += 1
 
 def test_token():
     token_path = os.path.join(root, "source", "token.token")

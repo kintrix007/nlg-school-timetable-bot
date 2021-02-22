@@ -79,6 +79,12 @@ export const properHunNameSort = function(arr: string[]): string[] {
     });
 };
 
+export function getUserString(user: DC.User) {
+    return `${user.username}#${user.discriminator}`;
+}
+
+// specific
+
 export function lookupNameFromAlias(lookupName: string) {
     if (studentsAliases[lookupName] !== undefined) return lookupName;
 
