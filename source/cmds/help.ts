@@ -71,7 +71,6 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
                 if (groupB === "help" && groupA !== "help") return 1;
                 return 0;
             });
-        console.log(commandsAssocList);
 
         const reply = "```\n"
             + commandsAssocList.reduce((acc, [group, commands]) => {
