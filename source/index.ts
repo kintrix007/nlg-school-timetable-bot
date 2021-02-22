@@ -19,8 +19,14 @@ function main() {
     const timetable = loadTimetableData();
     const students = loadStudentData();
 
-    client.on("ready", () => {
+    client.on("ready", async () => {
         console.log("-- bot online --");
+
+        await createCmdsListener(data, CMDS_DIR);
+        
+        const currentTime = new Time(new Date());
+        console.log("the current time is:", currentTime.toString());
+        console.log("-- bot setup complete --");
     });
 
     const data: types.Data = {
@@ -34,12 +40,6 @@ function main() {
     loginBot()
     .then(async () => {
         console.log("-- bot successfully authenticated --");
-        
-        await createCmdsListener(data, CMDS_DIR);
-        
-        const currentTime = new Time(new Date());
-        console.log("the current time is:", currentTime.toString());
-        console.log("-- bot setup complete --");
     }).catch(console.error);
 }
 
