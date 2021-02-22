@@ -23,7 +23,11 @@ def main():
     print("-- launching bot --")
     while True:
         exit_code = os.system(f"node {entry_point}")
-        if exit_code == 0:
+        if exit_code == -1:
+            print("-- bot permanently stopped --")
+            update()
+            break
+        elif exit_code == 0:
             print("-- bot stopped --")
             print("-- waiting to update bot... --")
             print("-- ^C to stop --")
