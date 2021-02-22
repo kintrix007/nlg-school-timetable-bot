@@ -6,6 +6,7 @@ import { BellData } from "./bell"
 const cmd: types.Command = {
     func: cmdPingme,
     setupFunc: setup,
+    group: "admin",
     name: "értesítés",
     adminCommand: true,
     aliases: [ "reactionmessage", "reaction" ],

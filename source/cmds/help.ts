@@ -19,7 +19,8 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
     const targetCommand = args[0];
     const currentPrefix = Utilz.getPrefix(data, msg.guild!);
     
-    const cmdList = getCmdList();
+    const isMemberAdmin = msg.member?.hasPermission("MANAGE_GUILD");
+    const cmdList = getCmdList(!isMemberAdmin);
 
     if (targetCommand) {
         // query specific help sheet

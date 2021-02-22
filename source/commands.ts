@@ -81,8 +81,8 @@ export async function createCmdsListener(data: types.Data, cmds_dir: string) {
     console.log("-- all message listeners set up --");
 }
 
-export function getCmdList(): types.Command[] {
-    return cmds.filter(x => x.usage !== undefined);
+export function getCmdList(adminExcluded = false): types.Command[] {
+    return cmds.filter(x => x.usage !== undefined && (adminExcluded && !x.adminCommand || !adminExcluded));
 }
 
 export function getHelpCmd() {

@@ -9,6 +9,7 @@ const description = "Átállítja a *prefix*et, amit a bot használ.\n"
 
 const cmd: types.Command = {
     func: cmdPrefix,
+    group: "admin",
     name: "prefix",
     adminCommand: true,
     usage: "prefix [új prefix]",

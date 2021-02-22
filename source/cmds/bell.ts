@@ -12,6 +12,7 @@ const description = "Be-, illetve kikapcsolja a csengetést az adott szerveren.\
 const cmd: types.Command = {
     func: cmdBell,
     setupFunc: setupJobs,
+    group: "admin",
     name: "csengetés",
     adminCommand: true,
     aliases: [ "csöngetés", "csengő", "csöngő" ],
