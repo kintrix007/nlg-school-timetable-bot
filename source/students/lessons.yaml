@@ -39,10 +39,10 @@ kemia:
   elective: [ B.Karolina, B.Bálint, F.Emese, F.Imola, K.Boldizsár, K.Zsófia, L.Antónia, O.Blanka, A.Olivér, N.István ]
 
 tori:
-  obligatory: [ T.Csilla, V.Dávid, N.Dóra, G.Balázs ]
-  elective: [ A.Olivér, B.Péter, B.Kristóf, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, H.Zoltán,
+  obligatory: [ A.Olivér, B.Péter, B.Kristóf, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, H.Zoltán,
               I.Lili, K.Milán, K.Boldizsár, K.Zsófia, L.Antónia, M.László, M.Lili, N.Krisztián, N.Ábel,
               N.István, O.Blanka, P.István, Sz.András, Sz.Bernadett, T.Balázs, V.Dorottya ]
+  elective: [ T.Csilla, V.Dávid, N.Dóra, G.Balázs ]
 
 fizika:
   obligatory: [ A.Olivér, B.Péter, B.Karolina, B.Bálint, D.Kinga, F.Emese, F.Imola, G.Balázs, H.Zoltán, I.Lili, K.Milán, K.Zsófia,
