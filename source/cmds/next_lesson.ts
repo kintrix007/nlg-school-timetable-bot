@@ -52,7 +52,7 @@ function cmdNextLesson({ data, msg, args }: types.CombinedData) {
         ?? "Nincsenek...";
     const embed = new MessageEmbed()
         .setColor(0x00bb00)
-        .setTitle(`${targetStudent}:`)
+        .setTitle(targetStudent)
         .setDescription(reply);
     msg.channel.send(embed);
     console.log(`${msg.author.username}#${msg.author.discriminator} queried ${targetStudent}'s next classes`);
