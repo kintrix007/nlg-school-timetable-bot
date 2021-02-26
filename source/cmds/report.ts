@@ -2,12 +2,25 @@ import * as Utilz from "../classes/utilz";
 import * as types from "../classes/types";
 import { Message, MessageReaction, User } from "discord.js";
 
-const reactionOptions = ["🇦", "🇧", "🇨", "🇩", "🇪"];
+const reactionOptions = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮"];
 
 const cmd: types.Command = {
     func: cmdReport,
     name: "report"
 };
+
+const optionsTree = [
+    ["timetable bug" , () => [
+        ["monday" , () => []],
+        ["tuesday" , () => []],
+        ["wednesday" , () => []],
+        ["thursday" , () => []],
+        ["friday" , () => []]
+    ]],
+    ["missing alias" , () => []],
+    ["bot crash" , () => []],
+    ["other" , () => []]
+];
 
 async function cmdReport({ data, msg }: types.CombinedData) {
     await msg.channel.send("Loading...")
@@ -33,7 +46,7 @@ async function cmdReport({ data, msg }: types.CombinedData) {
             
             break;
         case 4:
-            
+
             break;
         }
         sentMsg.edit(`Thank you for answering! (#${answer})`);
