@@ -13,13 +13,31 @@ async function cmdReport({ data, msg }: types.CombinedData) {
     await msg.channel.send("Loading...")
     .then(async sentMsg => {
 
-        const answer = await createPoll(sentMsg, ["yes", "no"]);
+        const answer = await createPoll(sentMsg, ["random option", "uhh, no...?"]);
         if (answer === undefined) {
             sentMsg.edit("Timed out");
-        } else {
-            sentMsg.edit(`Thank you for answering! (#${answer})`);
+            return;
         }
-        
+
+        switch (answer) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        case 4:
+            
+            break;
+        }
+        sentMsg.edit(`Thank you for answering! (#${answer})`);
+
     }).catch(console.error);
 }
 
