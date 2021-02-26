@@ -89,7 +89,8 @@ def update():
     pull_exit_code = os.system("git pull")
     if pull_exit_code != 0:
         print(f"git pull stopped with a non-zero exit code ({pull_exit_code})")
-        exit(1)
+        print("-- skipping update --")
+        return
     os.chdir(original_dir)
     print("-- update successful --")
 

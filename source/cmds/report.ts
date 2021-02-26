@@ -1,6 +1,6 @@
 import * as Utilz from "../classes/utilz";
 import * as types from "../classes/types";
-import { Message, MessageReaction, User } from "discord.js";
+import { Message } from "discord.js";
 
 const reactionOptions = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮"];
 
