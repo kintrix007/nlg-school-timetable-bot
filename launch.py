@@ -5,7 +5,7 @@ import json
 import time
 
 root = os.path.dirname(os.path.realpath(__file__))
-CRASH_LOG_DIR = os.path.join(root, "crash_logs/")
+CRASH_LOG_DIR = os.path.join(root, "crash_logs")
 PACKAGE = os.path.join(root, "package.json")
 
 def main():
@@ -16,9 +16,6 @@ def main():
 
     iter = 0
     entry_point = find_entry_point()
-
-    if not os.path.exists(CRASH_LOG_DIR):
-        os.mkdir(CRASH_LOG_DIR)
 
     print("-- launching bot --")
     while True:
@@ -61,6 +58,9 @@ def test_token():
                 exit(1)
 
 def remove_crash_logs():
+    if not os.path.exists(CRASH_LOG_DIR):
+        os.mkdir(CRASH_LOG_DIR)
+    
     for filename in os.listdir(CRASH_LOG_DIR):
         file = os.path.join(CRASH_LOG_DIR, filename)
         os.remove(file)

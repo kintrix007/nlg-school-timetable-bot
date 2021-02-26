@@ -19,7 +19,7 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
     const targetCommand = args[0];
     const currentPrefix = Utilz.getPrefix(data, msg.guild!);
     
-    const isMemberAdmin = msg.member?.hasPermission("MANAGE_GUILD");
+    const isMemberAdmin = Utilz.isAdmin(msg.member);
     const cmdList = getCmdList(!isMemberAdmin);
 
     if (targetCommand) {

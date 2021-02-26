@@ -53,7 +53,7 @@ function cmdNextLesson({ data, msg, args }: types.CombinedData) {
     const embed = new MessageEmbed()
         .setColor(0x00bb00)
         .setTitle(targetStudent)
-        .setDescription(reply);
+        .setDescription(reply || "A mai tanításnak már vége van.");
     msg.channel.send(embed);
     console.log(`${msg.author.username}#${msg.author.discriminator} queried ${targetStudent}'s next classes`);
 }

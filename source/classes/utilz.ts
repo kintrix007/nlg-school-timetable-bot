@@ -113,6 +113,11 @@ export const getMeetingURL = (function() {
     };
 })();
 
+export function isAdmin(member: DC.GuildMember | undefined | null) {
+    if (!member) return false;
+    return member.hasPermission("MANAGE_GUILD");
+}
+
 // returns a lowercase, accentless string, that is after the specified prefix.
 // returns an emtpy string if there it is incorrect
 export function prefixless(data: types.Data, msg: DC.Message): string {

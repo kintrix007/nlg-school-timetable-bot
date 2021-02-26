@@ -67,10 +67,10 @@ export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
                 cmd.aliases?.map(x => Utilz.removeAccents(x.toLowerCase()))?.includes(command)
             ) {
                 // if admin command called by non-admin, return
-                if (cmd.adminCommand && !msg.member!.hasPermission("MANAGE_GUILD")) {
+                if (cmd.adminCommand && !Utilz.isAdmin(msg.member)) {
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
-                        .setDescription(`A \`${cmd.name}\` parancs használatához \`Manage Server\` hozzáférésre van szükséged.`);
+                        .setDescription(`A \`${cmd.name}\` parancsot csak adminok használhatják.`);
                     msg.channel.send(embed);
                     return;
                 }
