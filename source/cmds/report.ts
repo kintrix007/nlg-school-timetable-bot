@@ -4,7 +4,9 @@ import { Message, MessageEmbed, MessageReaction, User } from "discord.js";
 
 const cmd: types.Command = {
     func: cmdReport,
-    name: "report"
+    name: "report",
+    usage: "report",
+    examples: [ "" ]
 };
 
 const reactionOptions = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴"];
@@ -36,7 +38,7 @@ const optionsTree: TreeOption[] = [
     ]]
 ];
 
-const neutralColor = 0x009999;
+const neutralColor = 0x008888;
 
 const loadingMsg = new MessageEmbed()
 .setColor(neutralColor)
