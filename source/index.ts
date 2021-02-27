@@ -1,7 +1,7 @@
 import * as Utilz from "./classes/utilz";
 import * as types from "./classes/types";
 import Time from "./classes/time";
-import { createCmdsListeners, setBotOwner } from "./commands";
+import { createCmdsListeners } from "./commands";
 import * as fs from "fs";
 import * as yaml from "yaml";
 import * as DC from "discord.js";
@@ -36,8 +36,6 @@ function main() {
         students: students,
         defaultPrefix: DEFAULT_PREFIX
     };
-
-    setBotOwner(fs.readFileSync(OWNER_FILE).toString().trim());
 
     console.log("-- authenticating bot... --");
     loginBot()

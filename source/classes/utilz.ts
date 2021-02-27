@@ -2,8 +2,11 @@ import * as fs from "fs";
 import * as yaml from "yaml";
 import * as DC from "discord.js";
 import * as types from "./types";
+import * as path from "path";
 
-const prefsDirPath = "prefs";
+const sourceDir = path.join(__dirname, "..", "source");
+const prefsDirPath = path.join(sourceDir, "..", "prefs");
+const ownerPath = path.join(sourceDir, "owner.json");
 
 const studentsAliasesRaw = fs.readFileSync("source/students/aliases.yaml", "utf-8").toString();
 const studentsAliases : {[key: string]: string[]} = yaml.parse(studentsAliasesRaw);
@@ -83,6 +86,22 @@ export function getUserString(user: DC.User) {
     return `${user.username}#${user.discriminator}`;
 }
 
+export function isAdmin(member: DC.GuildMember | undefined | null) {
+    if (!member) return false;
+    return member.hasPermission("MANAGE_GUILD");
+}
+
+const getBotOwnerID = () => JSON.parse(fs.readFileSync(ownerPath).toString()).id;
+
+export function getBotOwner(data: types.Data) {
+    const ownerID = JSON.parse(fs.readFileSync(ownerPath).toString()).id;
+    return data.client.users.fetch(ownerID);        // returns a Promise
+}
+
+export function isBotOwner(user: DC.User) {
+    return user.id === getBotOwnerID();
+}
+
 // specific
 
 export function lookupNameFromAlias(lookupName: string) {
@@ -112,11 +131,6 @@ export const getMeetingURL = (function() {
         return meetingURLs[lesson];
     };
 })();
-
-export function isAdmin(member: DC.GuildMember | undefined | null) {
-    if (!member) return false;
-    return member.hasPermission("MANAGE_GUILD");
-}
 
 // returns a lowercase, accentless string, that is after the specified prefix.
 // returns an emtpy string if there it is incorrect

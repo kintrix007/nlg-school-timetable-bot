@@ -5,7 +5,6 @@ import { Message, MessageEmbed, DMChannel } from "discord.js";
 import * as path from "path";
 
 const cmds: types.Command[] = [];
-let botOwner: string;
 
 function createCmd(command: types.Command): void {
     console.log(`loaded command '${command.name}'`);
@@ -74,7 +73,7 @@ export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
                     msg.channel.send(embed);
                     return;
                 }
-                if (cmd.ownerCommand && Utilz.getUserString(msg.author) !== botOwner) {
+                if (cmd.ownerCommand && !Utilz.isBotOwner(msg.author)) {
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
                         .setDescription(`A \`${cmd.name}\` parancsot csak a bot készítője használhatja.`);
@@ -88,11 +87,6 @@ export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
     });
 
     console.log("-- all message listeners set up --");
-}
-
-export function setBotOwner(newBotOwner: string) {
-    botOwner = newBotOwner;
-    console.log(`-- bot owner is '${botOwner}' --`);
 }
 
 export function getCmdList(adminExcluded = false): types.Command[] {
