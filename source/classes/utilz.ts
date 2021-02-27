@@ -4,7 +4,7 @@ import * as DC from "discord.js";
 import * as types from "./types";
 import * as path from "path";
 
-const sourceDir = path.join(__dirname, "..", "source");
+const sourceDir = path.join(__dirname, "..", "..", "source");
 const prefsDirPath = path.join(sourceDir, "..", "prefs");
 const ownerPath = path.join(sourceDir, "owner.json");
 

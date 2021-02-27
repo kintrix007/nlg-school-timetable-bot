@@ -1,6 +1,6 @@
 import * as Utilz from "../classes/utilz";
 import * as types from "../classes/types";
-import { Message, MessageReaction, User } from "discord.js";
+import { Message, MessageEmbed, MessageReaction, User } from "discord.js";
 
 const cmd: types.Command = {
     func: cmdReport,
@@ -9,13 +9,8 @@ const cmd: types.Command = {
 
 const reactionOptions = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴"];
 
-type OptionPompt = {
-    text?: string;
-    options: TreeOption[];
-}[];
-
 type OptionFunc = (data: types.Data) => TreeOption[] | true;
-type TreeOption = [string, OptionFunc];
+type TreeOption = [string, OptionFunc, string?];
 
 const listLessons = (data: types.Data, dayStr: string) => [
     ...[
@@ -23,10 +18,10 @@ const listLessons = (data: types.Data, dayStr: string) => [
             `${x.start}-${x.end} ║ ${x.subj}${x.elective ? " (fakt)" : ""}`,
             () => true
         ]),
-        ["**missing lesson**", () => true] as TreeOption,
-        ["**lesson incorrectly exists**", () => true] as TreeOption
+        ["missing lesson", () => true] as TreeOption,
+        ["lesson incorrectly exists", () => true] as TreeOption
     ]
-]
+];
 
 const dayLessonList = (dayStr: string): TreeOption => [dayStr, (data: types.Data) => listLessons(data, dayStr)];
 
@@ -41,53 +36,77 @@ const optionsTree: TreeOption[] = [
     ]]
 ];
 
+const neutralColor = 0x009999;
+
+const loadingMsg = new MessageEmbed()
+.setColor(neutralColor)
+.setTitle("Loading...");
+
+
 async function cmdReport({ data, msg }: types.CombinedData) {
-    await msg.channel.send("Loading...")
+    await msg.channel.send(loadingMsg)
     .then(async sentMsg => {
         
-        let tree = optionsTree;
         let problemPath = "errors";
-        let problemDesc: string;
+
+        let tree = optionsTree;
+        let description = "press reaction...";
         while (true) {
-            const answer = await createPoll(sentMsg, tree);
+            const answer = await createPoll(msg, sentMsg, tree, description);
             if (answer === undefined) {
-                sentMsg.edit("Timed out...");
+                sentMsg.edit(new MessageEmbed().setColor(0xbb0000).setTitle("Timed out..."));
                 return;
             }
             
-            problemPath += ` > ${tree[answer][0]}`;
-            const selectedOption = tree[answer][1](data);
+            const option = tree[answer]
+            problemPath += ` > ${option[0]}`;
+            const selectedOption = option[1](data);
+            description = option[2] ?? "";
+
             if (selectedOption === true) {
-                sentMsg.edit("Thank you for reporting a problem with the bot!\nPlease leave a message, describing the rest of it.");
-                
+                sentMsg.edit(new MessageEmbed().setColor(neutralColor).setDescription("Send report text etc..."));
+
                 const filter = (problemMsg: Message) => problemMsg.author.id === msg.author.id;
                 sentMsg.channel.awaitMessages(filter, {max: 1, time: 120000, errors: ["time"]})
-                    .then(collected => {
+                    .then(async collected => {
                         const problemDescMsg = collected.first();
+                        const owner = await Utilz.getBotOwner(data);
+                        const embed = new MessageEmbed()
+                            .setColor(0xbb0000)
+                            .setTitle(`${msg.author.username}#${msg.author.discriminator} reported a problem:`)
+                            .setDescription(`**${msg.author}**\n\n**At:**\n\`${problemPath}\`\n\n**With the description:**\n${problemDescMsg?.content}`);
+                        await owner.send(embed);
+
+                        const replyEmbed = new MessageEmbed()
+                            .setColor(neutralColor)
+                            .setTitle("Successfully reported your problem!")
+                            .setDescription(`With the description: '${problemDescMsg?.content}'`);
+                        msg.channel.send(msg.author, replyEmbed);
                     });
                 return;
             }
 
             tree = selectedOption;
-            sentMsg.edit("Loading...");
+            sentMsg.edit(loadingMsg);
         }
 
     }).catch(console.error);
 }
 
-async function createPoll(msg: Message, tree: TreeOption[]): Promise<number | undefined> {
+async function createPoll(msg: Message, sentMsg: Message, tree: TreeOption[], desc: string): Promise<number | undefined> {
     const options = tree.map(x => x[0]);
     const optionsAmount = options.length;
     const currentReactions = reactionOptions.slice(0, optionsAmount);
-    await addReactions(msg, currentReactions);
+    await addReactions(sentMsg, currentReactions);
     
-    const content = options.reduce((a, b, i) => a + `${currentReactions[i]}   ${b}\n`, "");
-    msg.edit(content);
+    const content = `${desc}\n\n`
+        + options.reduce((a, b, i) => a + `${currentReactions[i]}   ${b}\n`, "");
+    sentMsg.edit(new MessageEmbed().setColor(neutralColor).setTitle("Select One:").setDescription(content));
 
     let result: number | undefined = undefined;
 
     const filter = (reaction: MessageReaction, user: User) => currentReactions.includes(reaction.emoji.name) && user.id === msg.author.id
-    await msg.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
+    await sentMsg.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
         .then(collected => {
             const reaction = collected.first();
             if (reaction === undefined) return;
@@ -100,7 +119,7 @@ async function createPoll(msg: Message, tree: TreeOption[]): Promise<number | un
             result = undefined;
         });
     
-    msg.reactions.removeAll().catch(console.error);
+    sentMsg.reactions.removeAll().catch(console.error);
     
     return result;
 }
