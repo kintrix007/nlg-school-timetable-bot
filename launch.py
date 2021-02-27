@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import os
 from datetime import datetime
-import json
 import time
 
 root = os.path.dirname(os.path.realpath(__file__))
@@ -15,11 +14,10 @@ def main():
     compile()
 
     iter = 0
-    entry_point = find_entry_point()
 
     print("-- launching bot --")
     while True:
-        exit_code = os.system(f"node {entry_point}")
+        exit_code = os.system(f"node .")
         
         if exit_code == 0:
             print("-- bot stopped --")
@@ -49,13 +47,13 @@ def test_token():
             f.write("")
         print("-- TOKEN MISSING --")
         print("Plese put your bot's token into the file 'token.token'")
-        exit(1)
+        exit(41)
     else:
         with open(token_path, "r") as f:
             if not f.read():
                 print("-- TOKEN MISSING --")
                 print("Plese put your bot's token into the file 'token.token'")
-                exit(1)
+                exit(40)
 
 def remove_crash_logs():
     if not os.path.exists(CRASH_LOG_DIR):
@@ -73,13 +71,6 @@ def compile():
         print(f"tsc stopped with a non-zero exit code ({tsc_exit_code})")
         exit(1)
     print("-- compile successful --")
-
-def find_entry_point():
-    print("-- finding entry point... --")
-    with open(PACKAGE, "r") as f:
-        entry_point = json.loads(f.read())["main"]
-    print(f"-- found entry point ('{entry_point}') --")
-    return entry_point
 
 def update():
     # kinda sucks... But it works, at least
