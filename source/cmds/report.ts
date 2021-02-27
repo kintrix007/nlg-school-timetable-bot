@@ -1,6 +1,6 @@
 import * as Utilz from "../classes/utilz";
 import * as types from "../classes/types";
-import { Message, MessageEmbed, MessageReaction, User } from "discord.js";
+import { Collection, Message, MessageEmbed, MessageReaction, User } from "discord.js";
 
 const cmd: types.Command = {
     func: cmdReport,
@@ -69,22 +69,27 @@ async function cmdReport({ data, msg }: types.CombinedData) {
                 sentMsg.edit(new MessageEmbed().setColor(neutralColor).setDescription("Send report text etc..."));
 
                 const filter = (problemMsg: Message) => problemMsg.author.id === msg.author.id;
-                sentMsg.channel.awaitMessages(filter, {max: 1, time: 120000, errors: ["time"]})
-                    .then(async collected => {
-                        const problemDescMsg = collected.first();
-                        const owner = await Utilz.getBotOwner(data);
-                        const embed = new MessageEmbed()
-                            .setColor(0xbb0000)
-                            .setTitle(`${msg.author.username}#${msg.author.discriminator} reported a problem:`)
-                            .setDescription(`**${msg.author}**\n\n**At:**\n\`${problemPath}\`\n\n**With the description:**\n${problemDescMsg?.content}`);
-                        await owner.send(embed);
 
-                        const replyEmbed = new MessageEmbed()
-                            .setColor(neutralColor)
-                            .setTitle("Successfully reported your problem!")
-                            .setDescription(`With the description: '${problemDescMsg?.content}'`);
-                        msg.channel.send(msg.author, replyEmbed);
-                    });
+                const sendReport = async (collected: Collection<string, Message>) => {
+                    const problemDescMsg = collected.first();
+                    const owner = await Utilz.getBotOwner(data);
+                    const embed = new MessageEmbed()
+                        .setColor(0xbb0000)
+                        .setTitle(`${msg.author.username}#${msg.author.discriminator} reported a problem:`)
+                        .setDescription(`**${msg.author}**\n\n**At:**\n\`${problemPath}\`\n\n**With the description:**\n${problemDescMsg?.content}`);
+                    await owner.send(embed);
+
+                    const replyEmbed = new MessageEmbed()
+                        .setColor(neutralColor)
+                        .setTitle("Successfully reported your problem!")
+                        .setDescription(`With the description: '${problemDescMsg?.content}'`);
+                    msg.channel.send(msg.author, replyEmbed);
+                    sentMsg.delete();
+                };
+
+                sentMsg.channel.awaitMessages(filter, {max: 1, time: 120000, errors: ["time"]})
+                    .then(sendReport)
+                    .catch(sendReport);
                 return;
             }
 
