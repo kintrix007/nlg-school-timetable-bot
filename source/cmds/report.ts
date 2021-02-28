@@ -9,7 +9,10 @@ const cmd: types.Command = {
     examples: [ "" ]
 };
 
-const reactionOptions = ["🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴"];
+const reactionOptions = [
+    "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣",
+    "🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴"
+];
 
 type OptionFunc = (data: types.Data) => TreeOption[] | true;
 type TreeOption = [string, OptionFunc, string?];
@@ -25,7 +28,7 @@ const listLessons = (data: types.Data, dayStr: string) => [
     ]
 ];
 
-const dayLessonList = (dayStr: string): TreeOption => [dayStr, (data: types.Data) => listLessons(data, dayStr)];
+const dayLessonList = (dayStr: string): TreeOption => [dayStr, (data: types.Data) => listLessons(data, dayStr), "Which lesson is incorrect?"];
 
 const optionsTree: TreeOption[] = [
     ["timetable error", () => [
@@ -36,6 +39,7 @@ const optionsTree: TreeOption[] = [
         dayLessonList("friday"),
         ["missing day", () => true]
     ]],
+    ["nickname error", () => true],
     ["other", () => true]
 ];
 
@@ -112,25 +116,23 @@ async function createPoll(msg: Message, sentMsg: Message, tree: TreeOption[], de
         + options.reduce((a, b, i) => a + `${currentReactions[i]}   ${b}\n`, "");
     sentMsg.edit(new MessageEmbed().setColor(neutralColor).setTitle(`${Utilz.capitalize(problemPath[problemPath.length-1])}:`).setDescription(content));
 
-    let result: number | undefined = undefined;
-
     const filter = (reaction: MessageReaction, user: User) => currentReactions.includes(reaction.emoji.name) && user.id === msg.author.id
-    await sentMsg.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] })
-        .then(collected => {
-            const reaction = collected.first();
-            if (reaction === undefined) return;
+    
+    try {
+        const collected = await sentMsg.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] });
+        sentMsg.reactions.removeAll().catch(console.error);
 
-            const reactionName = reaction.emoji.name;
-            const reactionIdx = currentReactions.indexOf(reactionName);
-            result = reactionIdx;
-        })
-        .catch(err => {
-            result = undefined;
-        });
-    
-    sentMsg.reactions.removeAll().catch(console.error);
-    
-    return result;
+        const reaction = collected.first();
+        if (reaction === undefined) return undefined;
+
+        const reactionName = reaction.emoji.name;
+        const reactionIdx = currentReactions.indexOf(reactionName);
+        return reactionIdx;
+    }
+    catch (err) {
+        sentMsg.reactions.removeAll().catch(console.error);
+        return undefined;
+    }
 }
 
 async function addReactions(msg: Message, reactions: string[], maxTries = 5) {
