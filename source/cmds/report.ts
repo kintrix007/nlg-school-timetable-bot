@@ -35,7 +35,8 @@ const optionsTree: TreeOption[] = [
         dayLessonList("thursday"),
         dayLessonList("friday"),
         ["missing day", () => true]
-    ]]
+    ]],
+    ["other", () => true]
 ];
 
 const neutralColor = 0x008888;
@@ -49,19 +50,19 @@ async function cmdReport({ data, msg }: types.CombinedData) {
     await msg.channel.send(loadingMsg)
     .then(async sentMsg => {
         
-        let problemPath = "errors";
+        const problemPath = [ "report" ];
 
         let tree = optionsTree;
         let description = "press reaction...";
         while (true) {
-            const answer = await createPoll(msg, sentMsg, tree, description);
+            const answer = await createPoll(msg, sentMsg, tree, description, problemPath);
             if (answer === undefined) {
                 sentMsg.edit(new MessageEmbed().setColor(0xbb0000).setTitle("Timed out..."));
                 return;
             }
             
-            const option = tree[answer]
-            problemPath += ` > ${option[0]}`;
+            const option = tree[answer];
+            problemPath.push(option[0]);
             const selectedOption = option[1](data);
             description = option[2] ?? "";
 
@@ -73,16 +74,17 @@ async function cmdReport({ data, msg }: types.CombinedData) {
                 const sendReport = async (collected: Collection<string, Message>) => {
                     const problemDescMsg = collected.first();
                     const owner = await Utilz.getBotOwner(data);
+                    const problemString = problemDescMsg?.content?.replace(/\n+/, "\n")?.replace(/\t/, " ")?.replace(/ +/, " ");
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
                         .setTitle(`${msg.author.username}#${msg.author.discriminator} reported a problem:`)
-                        .setDescription(`**${msg.author}**\n\n**At:**\n\`${problemPath}\`\n\n**With the description:**\n${problemDescMsg?.content}`);
+                        .setDescription(`**${msg.author}**\n\n**At:**\n\`${problemPath.join(" > ")}\`\n\n**With the description:**\n${problemString}`);
                     await owner.send(embed);
 
                     const replyEmbed = new MessageEmbed()
-                        .setColor(neutralColor)
+                        .setColor(0x00bb00)
                         .setTitle("Successfully reported your problem!")
-                        .setDescription(`With the description: '${problemDescMsg?.content}'`);
+                        .setDescription(`With the description: '${problemDescMsg?.content?.replace(/\s+/g, " ")}'`);
                     msg.channel.send(msg.author, replyEmbed);
                     sentMsg.delete();
                 };
@@ -100,7 +102,7 @@ async function cmdReport({ data, msg }: types.CombinedData) {
     }).catch(console.error);
 }
 
-async function createPoll(msg: Message, sentMsg: Message, tree: TreeOption[], desc: string): Promise<number | undefined> {
+async function createPoll(msg: Message, sentMsg: Message, tree: TreeOption[], desc: string, problemPath: string[]): Promise<number | undefined> {
     const options = tree.map(x => x[0]);
     const optionsAmount = options.length;
     const currentReactions = reactionOptions.slice(0, optionsAmount);
@@ -108,7 +110,7 @@ async function createPoll(msg: Message, sentMsg: Message, tree: TreeOption[], de
     
     const content = `${desc}\n\n`
         + options.reduce((a, b, i) => a + `${currentReactions[i]}   ${b}\n`, "");
-    sentMsg.edit(new MessageEmbed().setColor(neutralColor).setTitle("Select One:").setDescription(content));
+    sentMsg.edit(new MessageEmbed().setColor(neutralColor).setTitle(`${Utilz.capitalize(problemPath[problemPath.length-1])}:`).setDescription(content));
 
     let result: number | undefined = undefined;
 
