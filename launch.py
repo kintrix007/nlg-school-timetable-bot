@@ -71,11 +71,23 @@ def update():
     print("-- updating... --")
     original_dir = os.getcwd()
     os.chdir(root)
+
+    npm_exit_code = os.system("npm install")
+
+    if npm_exit_code != 0:
+        print(f"npm install stupped with a non-zero exit code ({npm_exit_code})")
+        print("-- skipping update --")
+        os.chdir(original_dir)
+        return
+
     pull_exit_code = os.system("git pull")
+
     if pull_exit_code != 0:
         print(f"git pull stopped with a non-zero exit code ({pull_exit_code})")
         print("-- skipping update --")
+        os.chdir(original_dir)
         return
+
     os.chdir(original_dir)
     print("-- update successful --")
 
