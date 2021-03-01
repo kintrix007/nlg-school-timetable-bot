@@ -22,9 +22,6 @@ jspm_packages/
 # Preferences files
 prefs/
 
-# Discord js token files
-*.token
-
 # build directory
 build/
 

@@ -1,18 +1,19 @@
 import * as Utilz from "./classes/utilz";
 import * as types from "./classes/types";
 import Time from "./classes/time";
-import { createCmdsListeners, setBotOwner } from "./commands";
+import { createCmdsListeners } from "./commands";
 import * as fs from "fs";
 import * as yaml from "yaml";
 import * as DC from "discord.js";
 import * as path from "path";
+import { config } from "dotenv";
 
+config();
 const client = new DC.Client();
 
 const DEFAULT_PREFIX = "!";
 const CMDS_DIR = path.join(__dirname, "cmds");
 const SOURCE_DIR = path.join(__dirname, "..", "source");
-const OWNER_FILE = path.join(SOURCE_DIR, "owner.res");
 const TIMETABLE_DIR = path.join(SOURCE_DIR, "timetable");
 const STUDENTS_DIR = path.join(SOURCE_DIR, "students");
 
@@ -37,8 +38,6 @@ function main() {
         defaultPrefix: DEFAULT_PREFIX
     };
 
-    setBotOwner(fs.readFileSync(OWNER_FILE).toString().trim());
-
     console.log("-- authenticating bot... --");
     loginBot()
     .then(async () => {
@@ -47,8 +46,7 @@ function main() {
 }
 
 function loginBot() {
-    const tokenPath = path.join(SOURCE_DIR, "token.token");
-    const token = fs.readFileSync(tokenPath).toString().trim();
+    const token = process.env.TOKEN;
     return client.login(token);
 }
 
