@@ -1,6 +1,7 @@
 import * as Utilz from "../classes/utilz";
 import * as types from "../classes/types";
 import { Collection, Message, MessageEmbed, MessageReaction, User } from "discord.js";
+import { traceDeprecation } from "process";
 
 const cmd: types.Command = {
     func: cmdReport,
@@ -19,20 +20,30 @@ type TreeOption = [string, OptionFunc, string?];
 
 const listLessons = (data: types.Data, dayStr: string) => [
     ...[
-        ...data.timetable[dayStr].map((x): TreeOption => [
-            `${x.start} - ${x.end} ║ ${x.subj}${x.elective ? " (fakt)" : ""}`,
-            () => true
-        ]),
-        ["missing lesson", () => true] as TreeOption,
-        ["lesson incorrectly exists", () => true] as TreeOption
-    ]
+        ...data.timetable[dayStr].map((x) =>
+            `${x.start} - ${x.end} ║ ${x.subj}${x.elective ? " (fakt)" : ""}`
+        ),
+        "missing lesson",
+        "lesson incorrectly exists"
+    ].map((x): TreeOption => [x, () => true])
 ];
 
-const listNames = (data: types.Data) => [
-    ...data.students.roster.map((x): TreeOption => [x, () => true]),
-    ["missing name", () => true] as TreeOption,
-    ["name incorrectly exists", () => true] as TreeOption
-];
+const groupNameList = (groupId = 0, groupSize = 9): OptionFunc => (data: types.Data) => {
+    const roster        = data.students.roster;
+    const groupStartId  = groupId * groupSize;
+    const groupEndId    = (groupId + 1) * groupSize;
+    const rosterGroup   = roster.slice(groupStartId, groupEndId);
+    const islastGroup   = groupEndId >= roster.length-1;
+
+    const rosterOptions: TreeOption[]   = rosterGroup.map((x): TreeOption => [x, () => true]);
+    const bonusOptions:  TreeOption[]   = (
+        islastGroup
+        ? [["missing name", () => true]]
+        : [["next group", groupNameList(groupId + 1, groupSize)]]
+    );
+
+    return [...rosterOptions, ...bonusOptions];
+}
 
 const dayLessonList = (dayStr: string): TreeOption => [dayStr, (data: types.Data) => listLessons(data, dayStr), "Which lesson is incorrect?"];
 
@@ -45,7 +56,7 @@ const optionsTree: TreeOption[] = [
         dayLessonList("friday"),
         ["missing day", () => true]
     ]],
-    ["nickname error", listNames],
+    ["nickname error", groupNameList()],
     ["other", () => true]
 ];
 
@@ -141,7 +152,7 @@ async function createPoll(msg: Message, sentMsg: Message, tree: TreeOption[], de
     }
 }
 
-async function addReactions(msg: Message, reactions: string[], maxTries = 5) {
+async function addReactions(msg: Message, reactions: string[], maxTries = 3) {
     try {
         for (const reaction of reactions) {
             await msg.react(reaction);
