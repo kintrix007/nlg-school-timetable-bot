@@ -9,7 +9,6 @@ config();
 
 const sourceDir = path.join(__dirname, "..", "..", "source");
 const prefsDirPath = path.join(sourceDir, "..", "prefs");
-const ownerPath = path.join(sourceDir, "owner.json");
 
 const studentsAliasesRaw = fs.readFileSync("source/students/aliases.yaml", "utf-8").toString();
 const studentsAliases : {[key: string]: string[]} = yaml.parse(studentsAliasesRaw);
@@ -168,7 +167,7 @@ export function savePrefs(filename: string, saveData: any): void {
         console.log(`created dir '${prefsDirPath}' because it did not exist`);
     }
     fs.writeFileSync(`${prefsDirPath}/${filename}`, JSON.stringify(saveData, undefined, 4));
-    console.log(`saved prefs in '${prefsDirPath}/${filename}'`);
+    console.log(`saved prefs in '${filename}'`);
 }
 
 export function loadPrefs(filename: string, silent = false): {[guildID: string]: any} {
@@ -177,6 +176,6 @@ export function loadPrefs(filename: string, silent = false): {[guildID: string]:
     const loadDataRaw = fs.readFileSync(`${prefsDirPath}/${filename}`).toString();
     const loadData: {[guildID: string]: any} = JSON.parse(loadDataRaw);
     if (!silent)
-        console.log(`loaded prefs from '${prefsDirPath}/${filename}'`);
+        console.log(`loaded prefs from '${filename}'`);
     return loadData;
 }
