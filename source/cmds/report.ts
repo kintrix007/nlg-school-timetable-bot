@@ -1,7 +1,7 @@
 import * as Utilz from "../classes/utilz";
 import * as types from "../classes/types";
 import { Collection, Message, MessageEmbed, MessageReaction, User } from "discord.js";
-import { traceDeprecation } from "process";
+import { getCmdList } from "../commands";
 
 const cmd: types.Command = {
     func: cmdReport,
@@ -30,6 +30,9 @@ const listLessons = (data: types.Data, dayStr: string) => [
     ].map((x): TreeOption => [x, () => true])
 ];
 
+const dayLessonList = (dayStr: string): TreeOption => [dayStr, (data: types.Data) => listLessons(data, dayStr), "Which lesson is incorrect?"];
+
+
 const groupNameList = (groupId = 0, groupSize = 9): OptionFunc => (data: types.Data) => {
     const roster        = data.students.roster;
     const groupStartId  = groupId * groupSize;
@@ -37,17 +40,22 @@ const groupNameList = (groupId = 0, groupSize = 9): OptionFunc => (data: types.D
     const rosterGroup   = roster.slice(groupStartId, groupEndId);
     const islastGroup   = groupEndId >= roster.length-1;
 
-    const rosterOptions: TreeOption[]   = rosterGroup.map((x): TreeOption => [x, () => true]);
-    const bonusOptions:  TreeOption[]   = (
+    const rosterOptions: TreeOption[] = rosterGroup.map((x): TreeOption => [x, () => true]);
+    const bonusOptions:  TreeOption[] = (
         islastGroup
         ? [["missing name", () => true]]
-        : [["next group", groupNameList(groupId + 1, groupSize)]]
+        : [["other names", groupNameList(groupId + 1, groupSize)]]
     );
 
     return [...rosterOptions, ...bonusOptions];
 }
 
-const dayLessonList = (dayStr: string): TreeOption => [dayStr, (data: types.Data) => listLessons(data, dayStr), "Which lesson is incorrect?"];
+const commandList = (data: types.Data): TreeOption[] => {
+    const cmdNames = getCmdList().map(x => x.name);
+    const commandOptions: TreeOption[] = cmdNames.map(x => [x, () => true]);
+    const otherOptions:   TreeOption[] = [["other", () => true]];
+    return [...commandOptions, ...otherOptions];
+}
 
 const optionsTree: TreeOption[] = [
     ["timetable error", () => [
@@ -59,7 +67,7 @@ const optionsTree: TreeOption[] = [
         ["missing day", () => true]
     ]],
     ["nickname error", groupNameList()],
-    ["bot bug", () => true],
+    ["bot bug", commandList],
     ["other", () => true]
 ];
 
@@ -77,7 +85,7 @@ async function cmdReport({ data, msg }: types.CombinedData) {
         const problemPath = [ "report" ];
 
         let tree = optionsTree;
-        let description = "press reaction...";
+        let description = "Choose an option by clicking on the respective reaction.";
         while (true) {
             const answer = await createPoll(msg, sentMsg, tree, description, problemPath);
             if (answer === undefined) {

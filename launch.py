@@ -1,17 +1,24 @@
 #!/usr/bin/python3
-import os
+import os, sys
 import time
 from datetime import datetime
+from functools import reduce
+from typing import List
 
 root = os.path.dirname(os.path.realpath(__file__))
 CRASH_LOG_DIR = os.path.join(root, "crash_logs")
 PACKAGE = os.path.join(root, "package.json")
 
 def main():
-    dotenv_exists()
-    update()
+    args = parse_args(sys.argv)
+    should_up_dependencies = "update-dependencies" in args or "u" in args or "d" in args
+    should_recompile = "recompile" in args or "c" in args
+
+    assert_dotenv_exists()
+    if should_up_dependencies: update_dependencies()
     remove_crash_logs()
-    compile()
+    if should_recompile: update()
+    if should_recompile: compile()
 
     iter = 0
 
@@ -40,7 +47,7 @@ def main():
         time.sleep(5)       # wait 5 seconds before restarting
         print("-- restarting bot... --")
 
-def dotenv_exists():
+def assert_dotenv_exists() -> None:
     dotenv_path = os.path.join(root, ".env")
     if not os.path.exists(dotenv_path):
         with open(dotenv_path, "w") as f:
@@ -49,7 +56,7 @@ def dotenv_exists():
         print("Plese put your bot's token and the owner's user ID into the '.env' file")
         exit(41)
 
-def remove_crash_logs():
+def remove_crash_logs() -> None:
     if not os.path.exists(CRASH_LOG_DIR):
         os.mkdir(CRASH_LOG_DIR)
     
@@ -57,7 +64,7 @@ def remove_crash_logs():
         file = os.path.join(CRASH_LOG_DIR, filename)
         os.remove(file)
 
-def compile():
+def compile() -> None:
     print("-- compiling... --")
     tsc_path = os.path.join(root, "node_modules", "typescript", "bin", "tsc")
     tsc_exit_code = os.system(f"{tsc_path} -p {root}")
@@ -66,19 +73,11 @@ def compile():
         exit(1)
     print("-- compile successful --")
 
-def update():
+def update() -> None:
     # kinda sucks... But it works, at least
     print("-- updating... --")
     original_dir = os.getcwd()
     os.chdir(root)
-
-    npm_exit_code = os.system("npm install")
-
-    if npm_exit_code != 0:
-        print(f"npm install stupped with a non-zero exit code ({npm_exit_code})")
-        print("-- skipping update --")
-        os.chdir(original_dir)
-        return
 
     pull_exit_code = os.system("git pull")
 
@@ -90,6 +89,34 @@ def update():
 
     os.chdir(original_dir)
     print("-- update successful --")
+
+def update_dependencies() -> None:
+    # kinda sucks... But it works, at least
+    print("-- updating dependencies... --")
+    original_dir = os.getcwd()
+    os.chdir(root)
+
+    npm_exit_code = os.system("npm install")
+
+    if npm_exit_code != 0:
+        print(f"npm install stupped with a non-zero exit code ({npm_exit_code})")
+        print("-- skipping dependency update --")
+        os.chdir(original_dir)
+        return
+    
+    os.chdir(original_dir)
+    print("-- dependency update successful --")
+
+def parse_args(args) -> List[str]:
+    _, *args = args
+    
+    if not any(args): return []
+    
+    dash_args = filter(lambda x: x.startswith("-"), args)
+    dash_args = map(lambda x: [y[1:]] if (y := x[1:]).startswith("-") else list(y), dash_args)
+    dash_args = list(reduce(lambda a, b: [*a, *b], dash_args, []))
+
+    return dash_args
 
 if __name__ == "__main__":
     main()
