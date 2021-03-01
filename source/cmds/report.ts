@@ -12,6 +12,8 @@ const cmd: types.Command = {
     examples: [ "" ]
 };
 
+const MAX_DESC_LENGHT = 300;
+
 const reactionOptions = [
     "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣",
     "🇦", "🇧", "🇨", "🇩", "🇪", "🇫", "🇬", "🇭", "🇮", "🇯", "🇰", "🇱", "🇲", "🇳", "🇴"
@@ -79,6 +81,7 @@ const loadingMsg = new MessageEmbed()
 
 
 async function cmdReport({ data, msg }: types.CombinedData) {
+    console.log(`${msg.author.username}#${msg.author.discriminator} started a report session`);
     await msg.channel.send(loadingMsg)
     .then(async sentMsg => {
         
@@ -99,14 +102,16 @@ async function cmdReport({ data, msg }: types.CombinedData) {
             description = option[2] ?? "";
 
             if (selectedOption === true) {
-                sentMsg.edit(new MessageEmbed().setColor(neutralColor).setDescription("Send report text etc..."));
+                sentMsg.edit(new MessageEmbed().setColor(neutralColor)
+                    .setDescription(`Plese send some text further describing your problem.\n(max. ${MAX_DESC_LENGHT} characters)`)
+                );
 
                 const filter = (problemMsg: Message) => problemMsg.author.id === msg.author.id;
 
                 const sendReport = async (collected: Collection<string, Message>) => {
                     const problemDescMsg = collected.first();
                     const owner = await Utilz.getBotOwner(data);
-                    const problemString = problemDescMsg?.content?.replace(/\n+/, "\n")?.replace(/\t/, " ")?.replace(/ +/, " ");
+                    const problemString = problemDescMsg?.content?.slice(0, MAX_DESC_LENGHT)?.replace(/[ \t]+/g, " ")?.replace(/\n+/g, "    ");
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
                         .setTitle(`${msg.author.username}#${msg.author.discriminator} reported a problem:`)
@@ -121,15 +126,16 @@ async function cmdReport({ data, msg }: types.CombinedData) {
                     sentMsg.delete();
                 };
 
-                sentMsg.channel.awaitMessages(filter, {max: 1, time: 120000, errors: ["time"]})
+                await sentMsg.channel.awaitMessages(filter, {max: 1, time: 120000, errors: ["time"]})
                     .then(sendReport)
                     .catch(sendReport);
-                return;
+                break;
             }
 
             tree = selectedOption;
             sentMsg.edit(loadingMsg);
         }
+        console.log(`ended report session with ${msg.author.username}#${msg.author.discriminator}`);
 
     }).catch(console.error);
 }
