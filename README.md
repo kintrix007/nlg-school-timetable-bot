@@ -10,12 +10,15 @@ The bot is made so that it can be easily used with different schools, and timeta
 
 - typescript
 - discord.js
-- node-schedule
+- dotenv
 - yaml
+- node-schedule
 
 Run `npm install` in the project directory to get the required files.
 
 ---
+
+## To be rewrittend for the new version
 
 ### How to use
 
