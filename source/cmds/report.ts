@@ -6,7 +6,9 @@ import { traceDeprecation } from "process";
 const cmd: types.Command = {
     func: cmdReport,
     name: "report",
+    adminCommand: false,
     usage: "report",
+    // description: "",
     examples: [ "" ]
 };
 
@@ -57,6 +59,7 @@ const optionsTree: TreeOption[] = [
         ["missing day", () => true]
     ]],
     ["nickname error", groupNameList()],
+    ["bot bug", () => true],
     ["other", () => true]
 ];
 
