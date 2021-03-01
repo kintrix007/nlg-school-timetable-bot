@@ -3,7 +3,7 @@ import * as types from "../classes/types";
 const cmd: types.Command = {
     func: cmdInfo,
     name: "botinfo",
-    usage: "botinfo",
+    // usage: "botinfo",
     examples: [ "" ]
 }
 
