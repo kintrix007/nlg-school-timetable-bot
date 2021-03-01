@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 import os
-from datetime import datetime
 import time
+from datetime import datetime
 
 root = os.path.dirname(os.path.realpath(__file__))
 CRASH_LOG_DIR = os.path.join(root, "crash_logs")
 PACKAGE = os.path.join(root, "package.json")
 
 def main():
-    test_token()
+    dotenv_exists()
     update()
     remove_crash_logs()
     compile()
@@ -40,20 +40,14 @@ def main():
         time.sleep(5)       # wait 5 seconds before restarting
         print("-- restarting bot... --")
 
-def test_token():
-    token_path = os.path.join(root, "source", "token.token")
-    if not os.path.exists(token_path):
-        with open(token_path, "w") as f:
+def dotenv_exists():
+    dotenv_path = os.path.join(root, ".env")
+    if not os.path.exists(dotenv_path):
+        with open(dotenv_path, "w") as f:
             f.write("")
-        print("-- TOKEN MISSING --")
-        print("Plese put your bot's token into the file 'token.token'")
+        print("-- .ENV FILE MISSING --")
+        print("Plese put your bot's token and the owner's user ID into the '.env' file")
         exit(41)
-    else:
-        with open(token_path, "r") as f:
-            if not f.read():
-                print("-- TOKEN MISSING --")
-                print("Plese put your bot's token into the file 'token.token'")
-                exit(40)
 
 def remove_crash_logs():
     if not os.path.exists(CRASH_LOG_DIR):
