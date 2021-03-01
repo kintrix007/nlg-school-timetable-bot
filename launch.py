@@ -32,6 +32,7 @@ def main():
             print("-- ^C to stop --")
             time.sleep(5)
             update()
+            update_dependencies()
             compile()
         else:
             current_time = datetime.now().strftime("%Y-%m-%d - %H:%M:%S")
