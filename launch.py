@@ -16,8 +16,8 @@ def main():
 
     assert_dotenv_exists()
     if should_up_dependencies: update_dependencies()
-    update()
     remove_crash_logs()
+    if should_recompile: update()
     if should_recompile: compile()
 
     iter = 0
