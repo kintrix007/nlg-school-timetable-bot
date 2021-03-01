@@ -94,7 +94,7 @@ export function isAdmin(member: DC.GuildMember | undefined | null) {
     return member.hasPermission("MANAGE_GUILD");
 }
 
-const getBotOwnerID = () => JSON.parse(fs.readFileSync(ownerPath).toString()).id;
+const getBotOwnerID = () => process.env.OWNER_ID;
 
 export function getBotOwner(data: types.Data) {
     const ownerID = process.env.OWNER_ID;
