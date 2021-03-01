@@ -20,13 +20,15 @@ type TreeOption = [string, OptionFunc, string?];
 const listLessons = (data: types.Data, dayStr: string) => [
     ...[
         ...data.timetable[dayStr].map((x): [string, OptionFunc] => [
-            `${x.start}-${x.end} ║ ${x.subj}${x.elective ? " (fakt)" : ""}`,
+            `${x.start} - ${x.end} ║ ${x.subj}${x.elective ? " (fakt)" : ""}`,
             () => true
         ]),
         ["missing lesson", () => true] as TreeOption,
         ["lesson incorrectly exists", () => true] as TreeOption
     ]
 ];
+
+const listNames = (data: types.Data) => []; // TODO
 
 const dayLessonList = (dayStr: string): TreeOption => [dayStr, (data: types.Data) => listLessons(data, dayStr), "Which lesson is incorrect?"];
 

@@ -3,6 +3,9 @@ import * as yaml from "yaml";
 import * as DC from "discord.js";
 import * as types from "./types";
 import * as path from "path";
+import { config } from "dotenv";
+
+config();
 
 const sourceDir = path.join(__dirname, "..", "..", "source");
 const prefsDirPath = path.join(sourceDir, "..", "prefs");
@@ -94,8 +97,8 @@ export function isAdmin(member: DC.GuildMember | undefined | null) {
 const getBotOwnerID = () => JSON.parse(fs.readFileSync(ownerPath).toString()).id;
 
 export function getBotOwner(data: types.Data) {
-    const ownerID = JSON.parse(fs.readFileSync(ownerPath).toString()).id;
-    return data.client.users.fetch(ownerID);        // returns a Promise
+    const ownerID = process.env.OWNER_ID;
+    return data.client.users.fetch(ownerID ?? "");      // returns a Promise
 }
 
 export function isBotOwner(user: DC.User) {

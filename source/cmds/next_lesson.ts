@@ -43,7 +43,8 @@ function cmdNextLesson({ data, msg, args }: types.CombinedData) {
         next: studentClasses.filter(lesson => currentTime < lesson.start)
     };
     
-    const reduceFunc = (a: string, b: types.Lesson) => a + b.start.toString() + " ║ " + Utilz.capitalize(b.subj) + (b.elective ? " (fakt)" : "") + "\n";
+    const reduceFunc = (a: string, b: types.Lesson) =>
+        a + b.start.toString() + " - " + b.end.toString() + " ║ " + Utilz.capitalize(b.subj) + (b.elective ? " (fakt)" : "") + "\n";
     const currentLessons = lessons.current.reduce(reduceFunc, "");
     const nextLessons = lessons.next.reduce(reduceFunc, "");
 

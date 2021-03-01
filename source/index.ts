@@ -6,7 +6,9 @@ import * as fs from "fs";
 import * as yaml from "yaml";
 import * as DC from "discord.js";
 import * as path from "path";
+import { config } from "dotenv";
 
+config();
 const client = new DC.Client();
 
 const DEFAULT_PREFIX = "!";
@@ -44,8 +46,7 @@ function main() {
 }
 
 function loginBot() {
-    const tokenPath = path.join(SOURCE_DIR, "token.token");
-    const token = fs.readFileSync(tokenPath).toString().trim();
+    const token = process.env.TOKEN;
     return client.login(token);
 }
 

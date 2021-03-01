@@ -46,8 +46,19 @@ async function cmdPingme({ data, msg }: types.CombinedData) {
         const embed = new MessageEmbed()
             .setColor(0xbb0000)
             .setTitle("Hiányzik hozzáférés...")
-            .setDescription("Nincs engedélyezve a `Manage Roles` hozzáférés, így nem fog működni a *rang* adás.");
+            .setDescription("Nincs engedélyezve a `Manage Roles` hozzáférés, így nem fog működni a *role* adás.");
         msg.channel.send(embed);
+        // Do not return
+    }
+
+    const bellData: BellData = Utilz.loadPrefs(BELL_PREFS_FILE);
+    if (bellData[guildID].ringRoleID === undefined) {
+        const embed = new MessageEmbed()
+            .setColor(0xbb0000)
+            .setTitle("Hiányzik hozzáférés...")
+            .setDescription("Nincs kiválasztva csengetési *role*, így nem fog működni a *role* adás.");
+        msg.channel.send(embed);
+        // Do not return
     }
 
     const embed = new MessageEmbed()
@@ -121,6 +132,7 @@ function reactionChange(data: types.Data, isAdd: boolean) {
                 
                 if (member === undefined) return;
                 const bellData: BellData = Utilz.loadPrefs(BELL_PREFS_FILE, true);
+
                 const ringRoleID = bellData[guildID]?.ringRoleID;
                 if (ringRoleID === undefined) {
                     const embed = new MessageEmbed()
