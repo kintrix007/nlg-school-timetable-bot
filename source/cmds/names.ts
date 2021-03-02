@@ -15,7 +15,7 @@ function cmdNames({ data, msg, args }: types.CombinedData) {
 
     if (targetStudent === undefined) {
         const roster = data.students.roster;
-        const reply = roster.reduce((a, b) => a + ", " + b, "");
+        const reply = roster.reduce((a, b) => a + ", " + b);
         const embed = new MessageEmbed()
             .setColor(0x00bb00)
             .setTitle("Névsor:")
@@ -23,7 +23,9 @@ function cmdNames({ data, msg, args }: types.CombinedData) {
         msg.channel.send(embed);
     } else {
         const studentAliases = Utilz.getNameAliases(targetStudent);
-        const reply = studentAliases.reduce((a, b) => a + ", " + b, "") || "Nincsenek becenevek megadva.";
+        const reply = studentAliases.length
+            ? studentAliases.reduce((a, b) => a + ", " + b)
+            : "Nincsenek becenevek megadva.";
         const embed = new MessageEmbed()
             .setColor(0x00bb00)
             .setTitle(targetStudent)
@@ -31,3 +33,5 @@ function cmdNames({ data, msg, args }: types.CombinedData) {
         msg.channel.send(embed);
     }
 }
+
+module.exports = cmd;

@@ -107,17 +107,16 @@ export function isBotOwner(user: DC.User) {
 
 // specific
 
-export function lookupNameFromAlias(lookupName: string) {
+export function lookupNameFromAlias(lookupName: string | undefined) {
+    if (lookupName === undefined) return undefined;
     if (studentsAliases[lookupName] !== undefined) return lookupName;
 
     for (const [name, aliases] of Object.entries(studentsAliases)) {
-        if (removeAccents(name.toLowerCase()) === removeAccents(lookupName.toLowerCase())) {
-            return name;
-        }
         const names = aliases.map(x => removeAccents(x.toLowerCase()));
-        if (names.includes(removeAccents(lookupName.toLowerCase()))) {
-            return name;
-        }
+        if (
+            removeAccents(name.toLowerCase()) === removeAccents(lookupName.toLowerCase()) ||
+            names.includes(removeAccents(lookupName.toLowerCase()))
+        ) return name;
     }
 
     return undefined;

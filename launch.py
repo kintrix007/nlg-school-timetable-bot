@@ -13,13 +13,13 @@ def main():
     args = parse_args(sys.argv)
 
     should_up_dependencies = either_in_list(args, "update", "update-dependencies", "u", "d")
-    should_recompile = either_in_list(args, "recompile", "compile", "c", "r")
+    no_recompile = either_in_list(args, "no-compile", "no-update", "n")
 
     assert_dotenv_exists()
     if should_up_dependencies: update_dependencies()
     remove_crash_logs()
-    if should_recompile: update()
-    if should_recompile: compile()
+    if not no_recompile: update()
+    if not no_recompile: compile()
 
     iter = 0
 
