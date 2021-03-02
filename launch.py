@@ -16,9 +16,9 @@ def main():
     no_recompile = either_in_list(args, "no-compile", "no-update", "n")
 
     assert_dotenv_exists()
-    if should_up_dependencies: update_dependencies()
     remove_crash_logs()
     if not no_recompile: update()
+    if should_up_dependencies: update_dependencies()
     if not no_recompile: compile()
 
     iter = 0
