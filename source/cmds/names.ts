@@ -6,6 +6,7 @@ const cmd: types.Command = {
     name: "nevek",
     func: cmdNames,
     aliases: [ "név", "becenevek", "becenév" ],
+    usage: "nevek [tanuló neve]",
     examples: [ "", "Ábel" ]
 };
 
