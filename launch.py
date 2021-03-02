@@ -11,8 +11,9 @@ PACKAGE = os.path.join(root, "package.json")
 
 def main():
     args = parse_args(sys.argv)
-    should_up_dependencies = "update-dependencies" in args or "u" in args or "d" in args
-    should_recompile = "recompile" in args or "c" in args
+
+    should_up_dependencies = either_in_list(["update", "update-dependencies", "u", "d"], args)
+    should_recompile = either_in_list("recompile", "compile", "c", "r")
 
     assert_dotenv_exists()
     if should_up_dependencies: update_dependencies()
@@ -118,6 +119,10 @@ def parse_args(args) -> List[str]:
     dash_args = list(reduce(lambda a, b: [*a, *b], dash_args, []))
 
     return dash_args
+
+def either_in_list(items, arr) -> bool:
+    return any(filter(lambda x: x in items, arr))
+
 
 if __name__ == "__main__":
     main()

@@ -7,7 +7,8 @@ import { config } from "dotenv";
 
 config();
 
-const sourceDir = path.join(__dirname, "..", "..", "source");
+export const rootDir = path.join(__dirname, "..", "..");
+export const sourceDir = path.join(rootDir, "source");
 const prefsDirPath = path.join(sourceDir, "..", "prefs");
 
 const studentsAliasesRaw = fs.readFileSync("source/students/aliases.yaml", "utf-8").toString();

@@ -13,7 +13,7 @@ const client = new DC.Client();
 
 const DEFAULT_PREFIX = "!";
 const CMDS_DIR = path.join(__dirname, "cmds");
-const SOURCE_DIR = path.join(__dirname, "..", "source");
+const SOURCE_DIR = Utilz.sourceDir;
 const TIMETABLE_DIR = path.join(SOURCE_DIR, "timetable");
 const STUDENTS_DIR = path.join(SOURCE_DIR, "students");
 
