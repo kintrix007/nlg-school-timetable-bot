@@ -59,7 +59,7 @@ export type CommandGroup = "help" | "admin" | "owner" | "moderation" | "roles" |
 
 export interface Command {
     setupFunc?:     (data: Data) => Promise<void>;
-    func:           Function;
+    func:           (combData: CombinedData) => any;
     name:           string;
     group?:         CommandGroup;
     aliases?:       string[];
