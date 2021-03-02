@@ -56,6 +56,7 @@ export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
             data: data,
             msg: msg,
             args: args,
+            cmdStr: commandName,
             argsStr: args.join(" "),
             cont: cont
         }
@@ -69,14 +70,14 @@ export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
                 if (cmd.adminCommand && !Utilz.isAdmin(msg.member)) {
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
-                        .setDescription(`A \`${cmd.name}\` parancsot csak adminok használhatják.`);
+                        .setDescription(`A \`${commandName}\` parancsot csak adminok használhatják.`);
                     msg.channel.send(embed);
                     return;
                 }
                 if (cmd.ownerCommand && !Utilz.isBotOwner(msg.author)) {
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
-                        .setDescription(`A \`${cmd.name}\` parancsot csak a bot készítője használhatja.`);
+                        .setDescription(`A \`${commandName}\` parancsot csak a bot készítője használhatja.`);
                     msg.channel.send(embed);
                     return;
                 }

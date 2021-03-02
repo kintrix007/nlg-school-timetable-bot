@@ -50,6 +50,7 @@ export interface CombinedData {
     data:       Data;
     msg:        DC.Message;
     args:       string[];
+    cmdStr:     string;
     argsStr:    string;
     cont:       string;
 }
