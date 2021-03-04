@@ -43,6 +43,11 @@
   length: 45
   elective: true
 
+- subj: matek
+  start: "12:50"
+  length: 45
+  elective: true
+
 - subj: foci
   start: "13:55"
   length: 45
