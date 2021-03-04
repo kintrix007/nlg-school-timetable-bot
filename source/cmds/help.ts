@@ -68,7 +68,7 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
             .sort()
             .sort(([groupA], [groupB]) => {
                 if (groupA === "help" && groupB !== "help") return -1;
-                if (groupB === "help" && groupA !== "help") return 1;
+                if (groupA !== "help" && groupB === "help") return 1;
                 return 0;
             });
 

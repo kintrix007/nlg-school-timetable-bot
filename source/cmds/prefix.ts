@@ -4,16 +4,16 @@ import { MessageEmbed } from "discord.js";
 import { getHelpCmd } from "../commands"
 
 const description = "Átállítja a *prefix*et, amit a bot használ.\n"
-    + "Az alapértelmezett a `!`, álállítás után azzal fognak működni a parancsok.\n"
+    + "Az alapértelmezett a `{}`, álállítás után azzal fognak működni a parancsok.\n"
     + "Alternatív módon, a bot pingelésével is használhatóak a parancsok.";
 
 const cmd: types.Command = {
+    setupFunc: async data => cmd.description = description.replace(/\{\}/, data.defaultPrefix),
     func: cmdPrefix,
     group: "admin",
     name: "prefix",
     adminCommand: true,
     usage: "prefix [új prefix]",
-    description: description,
     examples: [ "", "!!", "." ],
     aliases: [ "előtag", "hivószó" ]
 };
