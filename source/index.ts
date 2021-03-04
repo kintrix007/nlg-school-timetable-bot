@@ -38,11 +38,11 @@ function main() {
         defaultPrefix: DEFAULT_PREFIX
     };
 
-    console.log("-- authenticating bot... --");
-    loginBot()
-    .then(async () => {
+    (async () => {
+        console.log("-- authenticating bot... --");
+        await loginBot();
         console.log("-- bot successfully authenticated --");
-    }).catch(console.error);
+    })();
 }
 
 function loginBot() {
