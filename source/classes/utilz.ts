@@ -91,6 +91,22 @@ export function isAdmin(member: DC.GuildMember | undefined | null) {
     return member.hasPermission("MANAGE_GUILD");
 }
 
+export function getMessageLink(msg: DC.Message) {
+    const channel = msg.channel;
+
+    if (channel instanceof DC.GuildChannel) {
+        return `https://discord.com/channels/${msg.guild!.id}/${channel.id}/${msg.id}`;
+    } else {
+        return `https://discord.com/channels/@me/${channel.id}/${msg.id}`;
+    }
+}
+
+export function nubBy<T>(arr: T[], isEqual: (a: T, b: T) => boolean): T[] {
+    return arr.filter((x, idx) => arr.findIndex(a => isEqual(a, x)) === idx);
+}
+
+// specific
+
 const getBotOwnerID = () => process.env.OWNER_ID;
 
 export function getBotOwner(data: types.Data) {
@@ -101,8 +117,6 @@ export function getBotOwner(data: types.Data) {
 export function isBotOwner(user: DC.User) {
     return user.id === getBotOwnerID();
 }
-
-// specific
 
 // returns a lowercase, accentless string, that is after the specified prefix.
 // returns an emtpy string if there it is incorrect
@@ -136,14 +150,22 @@ export function savePrefs(filename: string, saveData: any): void {
         fs.mkdirSync(prefsDirPath);
         console.log(`created dir '${prefsDirPath}' because it did not exist`);
     }
-    fs.writeFileSync(`${prefsDirPath}/${filename}`, JSON.stringify(saveData, undefined, 4));
+
+    const filePath = path.join(prefsDirPath, filename);
+    fs.writeFileSync(filePath, JSON.stringify(saveData, undefined, 4));
     console.log(`saved prefs in '${filename}'`);
 }
 
 export function loadPrefs(filename: string, silent = false): {[guildID: string]: any} {
-    if (!fs.existsSync(`${prefsDirPath}/${filename}`)) return {};
+    if (!fs.existsSync(prefsDirPath)) {
+        fs.mkdirSync(prefsDirPath);
+        console.log(`created dir '${prefsDirPath}' because it did not exist`);
+    }
+    
+    const filePath = path.join(prefsDirPath, filename);
+    if (!fs.existsSync(filePath)) return {};
 
-    const loadDataRaw = fs.readFileSync(`${prefsDirPath}/${filename}`).toString();
+    const loadDataRaw = fs.readFileSync(filePath).toString();
     const loadData: {[guildID: string]: any} = JSON.parse(loadDataRaw);
     if (!silent)
         console.log(`loaded prefs from '${filename}'`);
