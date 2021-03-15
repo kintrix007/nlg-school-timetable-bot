@@ -120,7 +120,9 @@ function reactionChange(data: types.Data, isAdd: boolean) {
                 const embed = new MessageEmbed()
                     .setColor(0xbb0000)
                     .setTitle("Nincs engedélyezve a `Manage Roles` hozzáférés!")
-                    .setDescription(`Nem sikerült odaadni a *role*-t ${user} felhasználónak.\nEzügyben keresd a szerver adminokat.`);
+                    .setDescription(`Nem sikerült ${isAdd ? "megadni" : "elvenni"} a *role*-t ${user} felhasználó${isAdd ? "nak" : "tól"}.\n
+                        Ez ügyben keresd a szerver adminokat.`
+                    );
                 reaction.message.channel.send(embed);
                 return;
             };
