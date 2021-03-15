@@ -52,10 +52,10 @@ async function cmdPingme({ data, msg }: types.CombinedData) {
     }
 
     const bellData: BellData = Utilz.loadPrefs(BELL_PREFS_FILE);
-    if (bellData[guildID].ringRoleID === undefined) {
+    if (bellData[guildID]?.ringRoleID === undefined) {
         const embed = new MessageEmbed()
             .setColor(0xbb0000)
-            .setTitle("Hiányzik hozzáférés...")
+            .setTitle("Hiányzik a csengetési *role*...")
             .setDescription("Nincs kiválasztva csengetési *role*, így nem fog működni a *role* adás.");
         msg.channel.send(embed);
         // Do not return
@@ -140,7 +140,9 @@ function reactionChange(data: types.Data, isAdd: boolean) {
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
                         .setTitle("Nincs kiválasztva csengetési *role!*")
-                        .setDescription(`Nem sikerült odaadni a *role*-t ${user} felhasználónak.\nEzügyben keresd a szerver adminokat.`);
+                        .setDescription(`Nem sikerült ${isAdd ? "megadni" : "elvenni"} a *role*-t ${user} felhasználó${isAdd ? "nak" : "tól"}.\n
+                            Ez ügyben keresd a szerver adminokat.`
+                        );
                     reaction.message.channel.send(embed);
                     return;
                 }
