@@ -43,6 +43,10 @@
   length: 45
   elective: false
 
+- subj: fizika
+  start: "12:50"
+  length: 45
+  elective: true
 
 - subj: matek
   start: "13:55"
