@@ -24,6 +24,6 @@
   elective: false
 
 - subj: matek
-  start: "12:05"
+  start: "12:00"
   length: 90
   elective: true
