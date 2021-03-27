@@ -17,13 +17,13 @@ const footerNote = "A [] helyén egy paraméter opcionálisan megadható,\nA <> 
 
 function cmdHelp({ data, msg, args }: types.CombinedData) {
     const targetCommand = args[0];
-    const currentPrefix = Utilz.getPrefix(data, msg.guild!);
+    const currentPrefix = Utilz.getPrefix(data, msg.guild!.id);
     
     const isMemberAdmin = Utilz.isAdmin(msg.member);
-    const cmdList = getCmdList(!isMemberAdmin);
 
     if (targetCommand) {
         // query specific help sheet
+        const cmdList = getCmdList();
         const command = cmdList.find(x => Utilz.removeAccents(x.name.toLowerCase()) === targetCommand
             || x.aliases?.map(x => Utilz.removeAccents(x.toLowerCase()))?.includes(targetCommand));
         if (!command) {
@@ -54,6 +54,7 @@ function cmdHelp({ data, msg, args }: types.CombinedData) {
 
     } else {
         // query general help sheet
+        const cmdList = getCmdList(!isMemberAdmin);
         const commandsInGroups: {[K in types.CommandGroup]?: types.Command[]} = {};
         cmdList.forEach(command => {
             const group = command.group ?? "";

@@ -66,6 +66,8 @@ export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
                 Utilz.removeAccents(cmd.name.toLowerCase()) === commandName ||
                 cmd.aliases?.map(x => Utilz.removeAccents(x.toLowerCase()))?.includes(commandName)
             ) {
+                if (commandName.length === 0) return;
+                
                 // if admin command called by non-admin, return
                 if (cmd.adminCommand && !Utilz.isAdmin(msg.member)) {
                     const embed = new MessageEmbed()
