@@ -24,7 +24,6 @@ Run `npm install` in the project directory to get the required files.
 
 ---
 ### (Very outdated)
----
 
 1. Clone this repo to your computer, then open up the folder you cloned this to.
 1. Open a terminal in that folder (if you `Shift + Right Click` in it, there should be an option for that)
