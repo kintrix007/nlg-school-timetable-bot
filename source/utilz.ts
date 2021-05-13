@@ -6,7 +6,7 @@ import yaml from "yaml";
 export const TIMETABLE_DIR = path.join(CoreTools.ROOT_DIR, "timetable");
 export const STUDENTS_DIR = path.join(CoreTools.ROOT_DIR, "students");
 
-const studentsAliasesRaw = fs.readFileSync("source/students/aliases.yaml", "utf-8").toString();
+const studentsAliasesRaw = fs.readFileSync(path.join(STUDENTS_DIR, "aliases.yaml"), "utf-8").toString();
 const studentsAliases : {[key: string]: string[]} = yaml.parse(studentsAliasesRaw);
 
 export function lookupNameFromAlias(lookupName: string | undefined) {
@@ -29,7 +29,7 @@ export function getNameAliases(name: string) {
 }
 
 export const getMeetingURL = (function() {
-    const meetingURLs = yaml.parse(fs.readFileSync("source/timetable/class_meeting_urls.yaml", "utf-8"));
+    const meetingURLs = yaml.parse(fs.readFileSync(path.join(TIMETABLE_DIR, "class_meeting_urls.yaml"), "utf-8"));
 
     return function(lesson: string): [string?, string?] {
         return meetingURLs[lesson];
@@ -54,13 +54,13 @@ export const getDayStringHun = (function() {
 
 export const translateDayStringToHun = (function() {
     const days: {[key: string]: string} = {
-        "monday"    : "hétfő",
-        "tuesday"   : "kedd",
-        "wednesday" : "szerda",
-        "thursday"  : "csütörtök",
-        "friday"    : "péntek",
-        "saturday"  : "szombat",
-        "sunday"    : "vasárnap"
+        "monday"   : "hétfő",
+        "tuesday"  : "kedd",
+        "wednesday": "szerda",
+        "thursday" : "csütörtök",
+        "friday"   : "péntek",
+        "saturday" : "szombat",
+        "sunday"   : "vasárnap"
     };
     
     return (engDayString: string) => days[engDayString];
