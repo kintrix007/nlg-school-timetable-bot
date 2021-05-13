@@ -1,8 +1,10 @@
-import * as Utilz from "../classes/utilz";
-import Time from "../classes/time";
+import * as CoreTools from "../_core/core_tools";
+import Time from "../time";
 import * as schedule from "node-schedule";
-import * as types from "../classes/types";
+import * as types from "../_core/types";
 import { Message, MessageEmbed, DMChannel } from "discord.js";
+import { Lesson, } from "../custom_types"
+import * as Utilz from "../utilz";
 
 const description = "Be-, illetve kikapcsolja a csengetést az adott szerveren.\n"
     + "Bekapcsolásnál abban a csatornában fog csengetni, amelyikben el lett küldve a parancs.\n"
@@ -12,10 +14,10 @@ const description = "Be-, illetve kikapcsolja a csengetést az adott szerveren.\
 const cmd: types.Command = {
     func: cmdBell,
     setupFunc: setupJobs,
-    group: "admin",
     name: "csengetés",
-    adminCommand: true,
+    permissions: [ types.adminPermission ],
     aliases: [ "csöngetés", "csengő", "csöngő" ],
+    group: "admin",
     usage: "csengetés [be|ki] [role pingelve]",
     description: description,
     examples: [ "", "be", "ki", "be @Csengetes" ]
@@ -65,7 +67,7 @@ async function setupJobs(data: types.Data) {
         const DaysToNum: {[day: string]: number} = {"sunday" : 0, "monday" : 1, "tuesday" : 2, "wednesday" : 3, "thursday" : 4, "friday" : 5, "saturday" : 6};
         const dayNum = DaysToNum[dayStr];
 
-        const uniqueLessons: types.Lesson[] = [];
+        const uniqueLessons: Lesson[] = [];
         lessons.forEach(lesson => {
             if (!uniqueLessons.some(x => x.start.equals(lesson.start))) {
                 uniqueLessons.push(lesson);
@@ -112,11 +114,11 @@ async function setupJobs(data: types.Data) {
                 ? customRingMessages[Math.floor(Math.random() * customRingMessages.length)]
                 : "Csöngő van!");
             const embed = new MessageEmbed()
-                .setColor(0x00bb00)
+                .setColor(CoreTools.messageColors.ok)
                 .setTitle(ringMessage)
                 .setDescription(reply);
     
-            const bell: BellData = Utilz.loadPrefs(PREFS_FILE);
+            const bell: BellData = CoreTools.loadPrefs(PREFS_FILE);
     
             Object.entries(bell).forEach(([guildID, guildData]) => {
                 const channelID = guildData.channelID;
@@ -143,7 +145,7 @@ function setBellActive(msg: Message, active: boolean, ringRoleID?: string): void
     if (msg.channel instanceof DMChannel) return;
     
     const guildID = msg.guild!.id;
-    const bell: BellData = Utilz.loadPrefs(PREFS_FILE, true);
+    const bell: BellData = CoreTools.loadPrefs(PREFS_FILE, true);
     
     if (active) {
 
@@ -154,21 +156,16 @@ function setBellActive(msg: Message, active: boolean, ringRoleID?: string): void
             ringRoleID:          ringRoleID
         }
 
-        Utilz.savePrefs(PREFS_FILE, bell);
+        CoreTools.savePrefs(PREFS_FILE, bell);
         
         const reply = `**Csengetési csatorna kiválasztva: ${msg.channel}**\n`
             + "A csengetési *role*: " + (ringRoleID ? `<@&${ringRoleID}>` : "@everyone");
-        const embed = new MessageEmbed()
-            .setColor(0x00bb00)
-            .setDescription(reply);
-        msg.channel.send(embed);
+        
+        CoreTools.sendEmbed(msg, "ok", reply);
         console.log(`${msg.author.username}#${msg.author.discriminator} set '#${msg.channel.name}' as the ring channel with '${ringRoleID}' as the ring role`);
     } else {
         if (!bell[guildID]) {
-            const embed = new MessageEmbed()
-                .setColor(0xbb0000)
-                .setDescription("Jelenleg nincs bekapcsolva csengetés, így nincs mit kikapcsolni.");
-            msg.channel.send(embed);
+            CoreTools.sendEmbed(msg, "error", "Jelenleg nincs bekapcsolva csengetés, így nincs mit kikapcsolni.");
             return;
         }
 
@@ -176,12 +173,9 @@ function setBellActive(msg: Message, active: boolean, ringRoleID?: string): void
         const channelName = bell[guildID].readableChannelName;
         delete bell[guildID];
 
-        Utilz.savePrefs(PREFS_FILE, bell);
+        CoreTools.savePrefs(PREFS_FILE, bell);
 
-        const embed = new MessageEmbed()
-            .setColor(0x00bb00)
-            .setDescription(`Csengetés leállítva. ~~(<#${channelID}>~~)`);
-        msg.channel.send(embed);
+        CoreTools.sendEmbed(msg, "ok", `Csengetés leállítva. ~~(<#${channelID}>~~)`);
         console.log(`${msg.author.username}#${msg.author.discriminator} stopped the bell in '#${channelName}'`);
     }
 }
@@ -189,7 +183,7 @@ function setBellActive(msg: Message, active: boolean, ringRoleID?: string): void
 function getBellActive(msg: Message): void {
     if (msg.channel instanceof DMChannel) return;
 
-    const bell: BellData = Utilz.loadPrefs(PREFS_FILE);
+    const bell: BellData = CoreTools.loadPrefs(PREFS_FILE);
     const guildID = msg.guild!.id;
 
     const channelID = bell[guildID]?.channelID;
@@ -200,10 +194,7 @@ function getBellActive(msg: Message): void {
         + "Mellé a csengetési *role*: " + (ringRoleID ? `<@&${ringRoleID}>`: "@everyone") + "."
         : "Jelenleg nincs kiválasztva csengetési csatorna.");
     
-    const embed = new MessageEmbed()
-        .setColor(0x00bb00)
-        .setDescription(reply);
-    msg.channel.send(embed);
+    CoreTools.sendEmbed(msg, "neutral", reply);
     console.log(`${msg.author.username}#${msg.author.discriminator} queried the bell channel and the ring role`);
 }
 
