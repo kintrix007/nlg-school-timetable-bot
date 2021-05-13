@@ -1,5 +1,5 @@
 // import * as Utilz from "../classes/utilz";
-import * as types from "../classes/types";
+import * as types from "../_core/types";
 
 const fecoSynonyms = ["miatyank", "feco", "feri", "feci", "feciba", "feriba", "isten", "mester", "fonok", "foni", "nemeth"];
 

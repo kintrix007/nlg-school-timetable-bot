@@ -1,19 +1,15 @@
-import * as types from "./classes/types";
-import * as Utilz from "./classes/utilz";
-import * as fs from "fs";
-import { Message, MessageEmbed, DMChannel } from "discord.js";
-import * as path from "path";
+import * as types from "./types";
+import * as CoreTools from "./core_tools";
+import fs from "fs";
+import path from "path";
+import { Message, MessageEmbed, DMChannel, Collection } from "discord.js";
 
-const cmds: types.Command[] = [];
+const cmds = new Set<types.Command>();
 
 function createCmd(command: types.Command): void {
     console.log(`loaded command '${command.name}'`);
 
-    if (command.group === "help") {
-        cmds.unshift(command);      // unshift = prepend
-    } else {
-        cmds.push(command);
-    }
+    cmds.add(command);
 }
 
 function loadCmds(cmds_dir: string) {
@@ -42,44 +38,38 @@ async function setUpCmds(data: types.Data) {
     console.log("-- finished setting up commands --");
 }
 
-export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
-    loadCmds(cmds_dir);
+export async function createCmdsListeners(data: types.Data, cmds_dirs: string[]) {
+    cmds_dirs.forEach(dir => loadCmds(dir));
+    // console.log(cmds);
     await setUpCmds(data);
 
     data.client.on("message", (msg: Message) => {
         if (msg.channel instanceof DMChannel) return;
         if (msg.author.bot) return;
-        const cont = Utilz.prefixless(data, msg);
+        const cont = CoreTools.prefixless(data, msg);
         if (!cont) return;
         const [commandName, ...args] = cont.trim().split(" ").filter(x => x !== "");
         const combData: types.CombinedData = {
             data: data,
             msg: msg,
+            cmdName: commandName,
             args: args,
-            cmdStr: commandName,
             argsStr: args.join(" "),
             cont: cont
         }
 
         cmds.forEach(cmd => {
             if (
-                Utilz.removeAccents(cmd.name.toLowerCase()) === commandName ||
-                cmd.aliases?.map(x => Utilz.removeAccents(x.toLowerCase()))?.includes(commandName)
+                CoreTools.removeAccents(cmd.name.toLowerCase()) === commandName ||
+                cmd.aliases?.map(x => CoreTools.removeAccents(x.toLowerCase()))?.includes(commandName)
             ) {
-                if (commandName.length === 0) return;
-                
-                // if admin command called by non-admin, return
-                if (cmd.adminCommand && !Utilz.isAdmin(msg.member)) {
+                const notPermitted = cmd.permissions?.find(({ func }) => !func(msg));
+
+                if (notPermitted) {
+                    const description = notPermitted.errorMessage?.(combData) ?? "You do not have permission to use this command.";
                     const embed = new MessageEmbed()
                         .setColor(0xbb0000)
-                        .setDescription(`A \`${commandName}\` parancsot csak adminok használhatják.`);
-                    msg.channel.send(embed);
-                    return;
-                }
-                if (cmd.ownerCommand && !Utilz.isBotOwner(msg.author)) {
-                    const embed = new MessageEmbed()
-                        .setColor(0xbb0000)
-                        .setDescription(`A \`${commandName}\` parancsot csak a bot készítője használhatja.`);
+                        .setDescription(description);
                     msg.channel.send(embed);
                     return;
                 }
@@ -92,10 +82,15 @@ export async function createCmdsListeners(data: types.Data, cmds_dir: string) {
     console.log("-- all message listeners set up --");
 }
 
-export function getCmdList(adminExcluded = false): types.Command[] {
-    return cmds.filter(x => x.usage !== undefined && (adminExcluded && !x.adminCommand || !adminExcluded));
+export function getCmdList(onlyCommandsWithUsage = true) {
+    return Array.from(cmds.values()).filter(x => x.usage || !onlyCommandsWithUsage);
+}
+
+export function getPermittedCmdList(msg: Message, onlyListAvailable = true): types.Command[] {
+    const hasPerms = (x: types.Command) => !x.permissions?.some(({ func }) => !func(msg))
+    return Array.from(cmds.values()).filter(x => x.usage && (hasPerms(x) || !onlyListAvailable));
 }
 
 export function getHelpCmd() {
-    return cmds.find(x => x.group === "help");
+    return Array.from(cmds.values()).find(x => x.group === "help");
 }

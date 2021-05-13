@@ -1,14 +1,14 @@
-import * as Utilz from "../classes/utilz";
-import * as types from "../classes/types";
-import { MessageEmbed, TextChannel, DMChannel, User } from "discord.js";
-import { BellData } from "./bell"
+import * as CoreTools from "../_core/core_tools";
+import * as types from "../_core/types";
+import { TextChannel, DMChannel, User } from "discord.js";
+import { BellData } from "./bell";
 
 const cmd: types.Command = {
     func: cmdPingme,
     setupFunc: setup,
-    group: "admin",
     name: "értesítés",
-    adminCommand: true,
+    permissions: [ types.adminPermission ],
+    group: "admin",
     aliases: [ "reactionmessage", "reaction" ],
     usage: "értesítés",
     // description: "",
@@ -30,7 +30,7 @@ export interface ReactionMessages {
 
 async function cmdPingme({ data, msg }: types.CombinedData) {
     const guildID = msg.guild!.id;
-    const reactionMessages: ReactionMessages = Utilz.loadPrefs(REACTION_PREFS_FILE);
+    const reactionMessages: ReactionMessages = CoreTools.loadPrefs(REACTION_PREFS_FILE);
     if (reactionMessages[guildID] !== undefined) {
         try {
             const channel = await data.client.channels.fetch(reactionMessages[guildID].channelID) as TextChannel;
@@ -43,30 +43,26 @@ async function cmdPingme({ data, msg }: types.CombinedData) {
     }
 
     if (!msg.guild?.member(data.client.user!)?.hasPermission("MANAGE_ROLES")) {
-        const embed = new MessageEmbed()
-            .setColor(0xbb0000)
-            .setTitle("Hiányzik hozzáférés...")
-            .setDescription("Nincs engedélyezve a `Manage Roles` hozzáférés, így nem fog működni a *role* adás.");
-        msg.channel.send(embed);
+        CoreTools.sendEmbed(msg, "error", {
+            title: "Hozzáférés hiányzik!",
+            desc:  "Nincs engedélyezve a `Manage Roles` hozzáférés, így nem fog működni a *role* adás."
+        });
         // Do not return
     }
 
-    const bellData: BellData = Utilz.loadPrefs(BELL_PREFS_FILE);
+    const bellData: BellData = CoreTools.loadPrefs(BELL_PREFS_FILE);
     if (bellData[guildID]?.ringRoleID === undefined) {
-        const embed = new MessageEmbed()
-            .setColor(0xbb0000)
-            .setTitle("Hiányzik a csengetési *role*...")
-            .setDescription("Nincs kiválasztva csengetési *role*, így nem fog működni a *role* adás.");
-        msg.channel.send(embed);
+        CoreTools.sendEmbed(msg, "error", {
+            title: "Csengetési *role* hiányzik!",
+            desc:  "Nincs kiválasztva csengetési *role*, így nem fog működni a *role* adás."
+        });
         // Do not return
     }
 
-    const embed = new MessageEmbed()
-        .setColor(0x00bb00)
-        .setTitle(`Reagálj erre az üzenetre egy ${REACTION_EMOJI}-vel, hogy értesülj a csengetésekről!`)
-        .setDescription("Amennyiben ezt meg akarod szüntetni, csak vondd vissza a reakctiót.");
-    msg.channel.send(embed)
-    .then(sentMsg => {
+    CoreTools.sendEmbed(msg, "neutral", {
+        title: `Reagálj erre az üzenetre egy ${REACTION_EMOJI}-vel, hogy értesülj a csengetésekről!`,
+        desc:  "Amennyiben ezt meg akarod szüntetni, csak vondd vissza a reakctiót."
+    }).then(sentMsg => {
         if (sentMsg.channel instanceof DMChannel) return;       // never happends
 
         sentMsg.react(REACTION_EMOJI);
@@ -76,13 +72,13 @@ async function cmdPingme({ data, msg }: types.CombinedData) {
             readableChannelName: sentMsg.channel.name,
             messageID: sentMsg.id
         };
-        Utilz.savePrefs(REACTION_PREFS_FILE, reactionMessages)
+        CoreTools.savePrefs(REACTION_PREFS_FILE, reactionMessages)
     });
 }
 
 async function setup(data: types.Data) {
     // cache messages
-    const reactionMessages: ReactionMessages = Utilz.loadPrefs(REACTION_PREFS_FILE);
+    const reactionMessages: ReactionMessages = CoreTools.loadPrefs(REACTION_PREFS_FILE);
     for (const [guildID, guildData] of Object.entries(reactionMessages)) {
         try {
             const channel = await data.client.channels.fetch(guildData.channelID) as TextChannel;
@@ -112,38 +108,35 @@ function reactionChange(data: types.Data, isAdd: boolean) {
         const guildID = reaction.message.guild!.id;
         const messageID = reaction.message.id;
 
+        const missingManageRolesText = `Nem sikerült ${isAdd ? "megadni" : "elvenni"} a *role*-t '${user}' felhasználó${isAdd ? "nak" : "tól"}.\n`
+            + "Ez ügyben keresd a szerver adminokat.";
+
         try {
             const guild = await data.client.guilds.fetch(guildID)
             const botMember = guild.member(data.client.user!);
 
             if (!botMember?.hasPermission("MANAGE_ROLES")) {
-                const embed = new MessageEmbed()
-                    .setColor(0xbb0000)
-                    .setTitle("Nincs engedélyezve a `Manage Roles` hozzáférés!")
-                    .setDescription(`Nem sikerült ${isAdd ? "megadni" : "elvenni"} a *role*-t ${user} felhasználó${isAdd ? "nak" : "tól"}.\n
-                        Ez ügyben keresd a szerver adminokat.`
-                    );
-                reaction.message.channel.send(embed);
+                CoreTools.sendEmbed(reaction.message, "error", {
+                    title: "Nincs engedélyezve a `Manage Roles` hozzáférés!",
+                    desc:  missingManageRolesText
+                });
                 return;
             };
 
-            const reactionMessages: ReactionMessages = Utilz.loadPrefs(REACTION_PREFS_FILE, true);
+            const reactionMessages: ReactionMessages = CoreTools.loadPrefs(REACTION_PREFS_FILE, true);
 
             if (reactionMessages[guildID]?.messageID === messageID) {
                 const member = await getMember(data, guildID, user)
                 
                 if (member === undefined) return;
-                const bellData: BellData = Utilz.loadPrefs(BELL_PREFS_FILE, true);
+                const bellData: BellData = CoreTools.loadPrefs(BELL_PREFS_FILE, true);
 
                 const ringRoleID = bellData[guildID]?.ringRoleID;
                 if (ringRoleID === undefined) {
-                    const embed = new MessageEmbed()
-                        .setColor(0xbb0000)
-                        .setTitle("Nincs kiválasztva csengetési *role!*")
-                        .setDescription(`Nem sikerült ${isAdd ? "megadni" : "elvenni"} a *role*-t ${user} felhasználó${isAdd ? "nak" : "tól"}.\n
-                            Ez ügyben keresd a szerver adminokat.`
-                        );
-                    reaction.message.channel.send(embed);
+                    CoreTools.sendEmbed(reaction.message, "error", {
+                        title: "Nincs kiválasztva csengetési *role!*",
+                        desc:  missingManageRolesText
+                    });
                     return;
                 }
 

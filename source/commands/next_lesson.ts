@@ -1,7 +1,8 @@
-import * as Utilz from "../classes/utilz";
-import * as types from "../classes/types";
-import Time from "../classes/time";
-import { MessageEmbed } from "discord.js";
+import * as CoreTools from "../_core/core_tools";
+import * as types from "../_core/types";
+import Time from "../time";
+import { Lesson, TimetableDay } from "../custom_types";
+import * as Utilz from "../utilz";
 
 const description = "Kilistázza egy adott diák jelenleg tartó, illetve a még aznap következő óráit.\n"
     + "Ha nincs megadva név, akkor a küldő Discord felhasználónevét fogja használni.";
@@ -16,8 +17,8 @@ const cmd: types.Command = {
 };
 
 interface Lessons {
-    current: types.Lesson[];
-    next:    types.Lesson[];
+    current: Lesson[];
+    next:    Lesson[];
 }
 
 function cmdNextLesson({ data, msg, args }: types.CombinedData) {
@@ -25,10 +26,7 @@ function cmdNextLesson({ data, msg, args }: types.CombinedData) {
     const targetStudent = Utilz.lookupNameFromAlias(targetStudentStr);
     
     if (targetStudent === undefined) {
-        const embed = new MessageEmbed()
-            .setColor(0xbb0000)
-            .setDescription(`Nincs rögzítve '${targetStudentStr}' nevű tagja az osztálynak.`);
-        msg.channel.send(embed);
+        CoreTools.sendEmbed(msg, "error", `Nincs rögzítve '${targetStudentStr}' nevű tagja az osztálynak.`);
         return;
     }
 
@@ -43,23 +41,20 @@ function cmdNextLesson({ data, msg, args }: types.CombinedData) {
         next: studentClasses.filter(lesson => currentTime < lesson.start)
     };
     
-    const reduceFunc = (a: string, b: types.Lesson) =>
+    const reduceFunc = (a: string, b: Lesson) =>
         a + b.start.toString() + " - " + b.end.toString() + " ║ " + b.subj + (b.elective ? " (fakt)" : "") + "\n";
     const currentLessons = lessons.current.reduce(reduceFunc, "");
     const nextLessons = lessons.next.reduce(reduceFunc, "");
 
     const reply = (currentLessons ? "**Jelenleg tart:**\n" + "```c\n" + currentLessons + "```" : "")
         + (nextLessons ? "**Következik:**\n" + "```c\n" + nextLessons + "```" : "")
-        ?? "Nincsenek...";
-    const embed = new MessageEmbed()
-        .setColor(0x00bb00)
-        .setTitle(targetStudent)
-        .setDescription(reply || "A mai tanításnak már vége van.");
-    msg.channel.send(embed);
+        || "A mai tanításnak már vége van.";
+    
+    CoreTools.sendEmbed(msg, "neutral", reply);
     console.log(`${msg.author.username}#${msg.author.discriminator} queried ${targetStudent}'s next classes`);
 }
 
-function getStudentClassesOnDay(data: types.Data, today: types.TimetableDay, targetStudent: string): types.Lesson[] {
+function getStudentClassesOnDay(data: types.Data, today: TimetableDay, targetStudent: string): Lesson[] {
     const studentClasses = data.students.studentsLessons[targetStudent];
     return today.filter(lesson => studentClasses.some(x => x.subj == lesson.subj && x.elective === lesson.elective));
 }

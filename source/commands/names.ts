@@ -1,6 +1,6 @@
-import * as Utilz from "../classes/utilz";
-import * as types from "../classes/types";
-import { MessageEmbed } from "discord.js";
+import * as CoreTools from "../_core/core_tools";
+import * as types from "../_core/types";
+import * as Utilz from "../utilz";
 
 const cmd: types.Command = {
     name: "nevek",
@@ -17,21 +17,19 @@ function cmdNames({ data, msg, args }: types.CombinedData) {
     if (targetStudent === undefined) {
         const roster = data.students.roster;
         const reply = roster.reduce((a, b) => a + ", " + b);
-        const embed = new MessageEmbed()
-            .setColor(0x00bb00)
-            .setTitle("Névsor:")
-            .setDescription(reply);
-        msg.channel.send(embed);
+        CoreTools.sendEmbed(msg, "neutral", {
+            title: "Névsor:",
+            desc:  reply
+        });
     } else {
         const studentAliases = Utilz.getNameAliases(targetStudent);
         const reply = studentAliases.length
             ? studentAliases.reduce((a, b) => a + ", " + b)
             : "Nincsenek becenevek megadva.";
-        const embed = new MessageEmbed()
-            .setColor(0x00bb00)
-            .setTitle(targetStudent)
-            .setDescription(reply);
-        msg.channel.send(embed);
+        CoreTools.sendEmbed(msg, "neutral", {
+            title: targetStudent,
+            desc: reply
+        });
     }
 }
 

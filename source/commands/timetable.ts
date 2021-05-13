@@ -1,7 +1,9 @@
-import * as Utilz from "../classes/utilz";
-import Time from "../classes/time";
-import * as types from "../classes/types";
-import { Message, MessageEmbed } from "discord.js";
+import * as CoreTools from "../_core/core_tools";
+import * as types from "../_core/types";
+import Time from "../time";
+import * as Utilz from "../utilz";
+import { Message } from "discord.js";
+import { report } from "node:process";
 
 const description = "Megadja egy adott napra rögzített órarendet.\n"
     + "Ez lehet relatív is, mint `holnap`, vagy `tegnap`.\n"
@@ -17,7 +19,7 @@ const cmd: types.Command = {
 };
 
 function cmdTimetable({ data, msg, args }: types.CombinedData) {
-    const targetDayStr = Utilz.removeAccents(args[0]?.toLowerCase() ?? "ma");
+    const targetDayStr = CoreTools.removeAccents(args[0]?.toLowerCase() ?? "ma");
     const hunDaysToNum: {[day: string]: number} = {"vasarnap" : 0, "hetfo" : 1, "kedd" : 2, "szerda" : 3, "csutortok" : 4, "pentek" : 5, "szombat" : 6};
     console.log(`querying for '${targetDayStr}'...`);
 
@@ -33,10 +35,7 @@ function cmdTimetable({ data, msg, args }: types.CombinedData) {
         break;
     default: {
         if (!Object.keys(hunDaysToNum).includes(targetDayStr)) {
-            const embed = new MessageEmbed()
-                .setColor(0xbb0000)
-                .setDescription(`Nincs rögzítve órarend a '${targetDayStr}' nevű napra.`);
-            msg.channel.send(embed);
+            CoreTools.sendEmbed(msg, "error", `Nincs rögzítve órarend a '${targetDayStr}' nevű napra.`);
             return;
         }
         
@@ -58,11 +57,7 @@ function sendTimetableOfDay(data: types.Data, msg: Message, targetDate: Date) {
     // const currentTime = new Time(8, 0);
     
     if (!day) {
-        const embed = new MessageEmbed()
-            .setColor(0xbb0000)
-            .setDescription("Erre a napra nincsenek rögzítve órák.");
-        msg.channel.send(embed);
-        console.log(`${msg.author.username}#${msg.author.discriminator} tried to query the timetable for ${dayString}`);
+        CoreTools.sendEmbed(msg, "error", "Erre a napra nincsenek rögzítve órák.");
         return;
     }    
     const table = day.map(lesson => {
@@ -89,11 +84,10 @@ function sendTimetableOfDay(data: types.Data, msg: Message, targetDate: Date) {
             .reduce((a, b) => a + "\n" + b)
     + "\n```";
 
-    const embed = new MessageEmbed()
-        .setColor(0x00bb00)
-        .setTitle(`**${Utilz.capitalize(hunDayString)}:**`)
-        .setDescription(reply);
-    msg.channel.send(embed);
+    CoreTools.sendEmbed(msg, "ok", {
+        title: `**${CoreTools.capitalize(hunDayString)}:**`,
+        desc:  reply
+    });
     console.log(`${msg.author.username}#${msg.author.discriminator} queried the timetable for ${dayString}`);
 }
 

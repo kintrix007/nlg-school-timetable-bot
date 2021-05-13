@@ -1,12 +1,12 @@
-import * as Utilz from "../classes/utilz";
-import * as types from "../classes/types";
-import { Collection, Message, MessageEmbed, MessageReaction, User } from "discord.js";
-import { getCmdList } from "../commands";
+import * as CoreTools from "../_core/core_tools";
+import * as types from "../_core/types";
+import { getCmdList } from "../_core/commands";
+import { Collection, Message, MessageReaction, User } from "discord.js";
 
 const cmd: types.Command = {
     func: cmdReport,
     name: "report",
-    adminCommand: false,
+    // permissions: [ types.adminPermission ],
     usage: "report",
     // description: "",
     examples: [ "" ]
@@ -34,7 +34,6 @@ const listLessons = (data: types.Data, dayStr: string) => [
 
 const dayLessonList = (dayStr: string): TreeOption => [dayStr, (data: types.Data) => listLessons(data, dayStr), "Which lesson is incorrect?"];
 
-
 const groupNameList = (groupId = 0, groupSize = 9): OptionFunc => (data: types.Data) => {
     const roster        = data.students.roster;
     const groupStartId  = groupId * groupSize;
@@ -52,7 +51,7 @@ const groupNameList = (groupId = 0, groupSize = 9): OptionFunc => (data: types.D
     return [...rosterOptions, ...bonusOptions];
 }
 
-const commandList = (data: types.Data): TreeOption[] => {
+function commandList(data: types.Data): TreeOption[] {
     const cmdNames = getCmdList().map(x => x.name);
     const commandOptions: TreeOption[] = cmdNames.map(x => [x, () => true]);
     const otherOptions:   TreeOption[] = [["other", () => true]];
@@ -73,16 +72,13 @@ const optionsTree: TreeOption[] = [
     ["other", () => true]
 ];
 
-const neutralColor = 0x008888;
-
-const loadingMsg = new MessageEmbed()
-.setColor(neutralColor)
-.setTitle("Loading...");
+const loadingMsg = (msg: Message) =>
+    CoreTools.createEmbed(msg, "neutral", "Loading...");
 
 
 async function cmdReport({ data, msg }: types.CombinedData) {
     console.log(`${msg.author.username}#${msg.author.discriminator} started a report session`);
-    await msg.channel.send(loadingMsg)
+    await msg.channel.send(loadingMsg(msg))
     .then(async sentMsg => {
         
         const problemPath = [ "report" ];
@@ -92,7 +88,7 @@ async function cmdReport({ data, msg }: types.CombinedData) {
         while (true) {
             const answer = await createPoll(msg, sentMsg, tree, description, problemPath);
             if (answer === undefined) {
-                sentMsg.edit(new MessageEmbed().setColor(0xbb0000).setTitle("Timed out..."));
+                sentMsg.edit(CoreTools.createEmbed(msg, "error", "Timed out..."));
                 return;
             }
             
@@ -102,27 +98,25 @@ async function cmdReport({ data, msg }: types.CombinedData) {
             description = option[2] ?? "";
 
             if (selectedOption === true) {
-                sentMsg.edit(new MessageEmbed().setColor(neutralColor)
-                    .setDescription(`Plese send some text further describing your problem.\n(max. ${MAX_DESC_LENGHT} characters)`)
-                );
+                sentMsg.edit(CoreTools.createEmbed(msg, "neutral", `Plese send some text further describing your problem.\n(max. ${MAX_DESC_LENGHT} characters)`));
 
                 const filter = (problemMsg: Message) => problemMsg.author.id === msg.author.id;
 
                 const sendReport = async (collected: Collection<string, Message>) => {
                     const problemDescMsg = collected.first();
-                    const owner = await Utilz.getBotOwner(data);
+                    const owner = await CoreTools.getBotOwner(data);
                     const problemString = problemDescMsg?.content?.slice(0, MAX_DESC_LENGHT)?.replace(/[ \t]+/g, " ")?.replace(/\n+/g, "    ");
-                    const embed = new MessageEmbed()
-                        .setColor(0xbb0000)
-                        .setTitle(`${msg.author.username}#${msg.author.discriminator} (from '${msg.guild?.name}') reported a problem:`)
-                        .setDescription(`**${msg.author}**\n\n**At:**\n\`${problemPath.join(" > ")}\`\n\n**With the description:**\n${problemString}`);
-                    await owner.send(embed);
+                    await CoreTools.sendEmbed(owner, "neutral", {
+                        title: `${msg.author.username}#${msg.author.discriminator} (from '${msg.guild?.name}') reported a problem:`,
+                        desc:  `**${msg.author}**\n\n**At:**\n\`${problemPath.join(" > ")}\`\n\n**With the description:**\n${problemString}`
+                    });
 
-                    const replyEmbed = new MessageEmbed()
-                        .setColor(0x00bb00)
-                        .setTitle("Successfully reported your problem!")
-                        .setDescription(`With the description: '${problemDescMsg?.content?.replace(/\s+/g, " ")}'`);
-                    msg.channel.send(msg.author, replyEmbed);
+                    const replyEmbed = CoreTools.createEmbed(msg, "ok", {
+                        title: "Successfully reported your problem!",
+                        desc:  `With the description: '${problemDescMsg?.content?.replace(/\s+/g, " ")}'`
+                    });
+                    if (typeof replyEmbed === "string") msg.channel.send(`${msg.author}\n${replyEmbed}`);
+                    else                                msg.channel.send(msg.author, replyEmbed);
                     sentMsg.delete();
                 };
 
@@ -133,7 +127,7 @@ async function cmdReport({ data, msg }: types.CombinedData) {
             }
 
             tree = selectedOption;
-            sentMsg.edit(loadingMsg);
+            sentMsg.edit(loadingMsg(msg));
         }
         console.log(`ended report session with ${msg.author.username}#${msg.author.discriminator}`);
 
@@ -148,9 +142,9 @@ async function createPoll(msg: Message, sentMsg: Message, tree: TreeOption[], de
     
     const content = `${desc}\n\n`
         + options.reduce((a, b, i) => a + `${currentReactions[i]}   ${b}\n`, "");
-    sentMsg.edit(new MessageEmbed().setColor(neutralColor).setTitle(`${Utilz.capitalize(problemPath[problemPath.length-1])}:`).setDescription(content));
+    sentMsg.edit(CoreTools.createEmbed(msg, "ok", {title: `${CoreTools.capitalize(problemPath[problemPath.length-1])}:`, desc: content}));
 
-    const filter = (reaction: MessageReaction, user: User) => currentReactions.includes(reaction.emoji.name) && user.id === msg.author.id
+    const filter = (reaction: MessageReaction, user: User) => currentReactions.includes(reaction.emoji.name) && user.id === msg.author.id;
     
     try {
         const collected = await sentMsg.awaitReactions(filter, { max: 1, time: 60000, errors: ["time"] });
