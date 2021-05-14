@@ -22,6 +22,9 @@ Run `npm install` in the project directory to get the required files.
 
 ### How to use
 
+---
+### (The following text is outdated)
+
 1. Clone this repo to your computer, then open up the folder you cloned this to.
 1. Open a terminal in that folder (if you `Shift + Right Click` in it, there should be an option for that)
 1. Type `npm install` into the command line, then press enter.
@@ -46,5 +49,3 @@ There is optionally a python *launcher* to be used. If launched with it, it will
 - You need to always follow the format `"HH:MM"` for the start time.
 - The length can be any whole number, this tells the length of the lesson in minutes.
 - The elective just signifies whether or not a class is elective. Can be ignored completely, and just set to `false` (recommended)
-
-~~TO DO: Finish writing this...~~
