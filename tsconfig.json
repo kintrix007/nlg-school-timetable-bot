@@ -10,6 +10,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "strictNullChecks": true,
+        "noEmitOnError": true,
         "removeComments": true
     }
 }

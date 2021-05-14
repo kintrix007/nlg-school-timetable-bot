@@ -56,7 +56,7 @@ function cmdNextLesson({ data, msg, args }: types.CombinedData) {
 
 function getStudentClassesOnDay(data: types.Data, today: TimetableDay, targetStudent: string): Lesson[] {
     const studentClasses = data.students.studentsLessons[targetStudent];
-    return today.filter(lesson => studentClasses.some(x => x.subj == lesson.subj && x.elective === lesson.elective));
+    return today.filter(lesson => studentClasses.some(x => x.subj === lesson.subj && x.elective === lesson.elective));
 }
 
 module.exports = cmd;
